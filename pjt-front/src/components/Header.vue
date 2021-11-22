@@ -47,9 +47,14 @@
 						</li>
 					</ul>
 					<ul class="nav navbar-nav flex-child-menu menu-right">
-	
-						<li class="loginLink"><a href="#">LOG In</a></li>
-						<li class="btn signupLink"><a href="#">sign up</a></li>
+					
+						<li v-if="!isLogin" class="loginLink"><a href="#">LOG In</a></li>
+						<li v-if="!isLogin" class="btn signupLink"><a href="#">sign up</a></li>
+					
+						<li v-if="isLogin"><a @click.prevent="logout" href="#">My Page</a></li>
+						<li v-if="isLogin"><a @click.prevent="logout" href="#">Logout</a></li>
+
+					
 					</ul>
 				</div>
 			<!-- /.navbar-collapse -->
@@ -65,7 +70,27 @@
 import TopSearchForm from './Header/TopSearchForm.vue'
 export default {
   components: { TopSearchForm },
-  name: 'Header'
+  name: 'Header',
+	data () {
+		return {
+			isLogin: false
+		}
+	},
+	methods: {
+		logout () {
+			this.isLogin = false
+      localStorage.removeItem('jwt')
+      this.$router.go()
+		}
+	},
+	created () {
+		const token = localStorage.getItem('jwt')
+
+    if (token) {
+      this.isLogin = true
+    }
+
+	}
 }
 </script>
 

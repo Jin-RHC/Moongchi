@@ -8,26 +8,26 @@
         	<div class="row">
         		 <label for="username">
                     Username:
-                    <input type="text" name="username" id="username" placeholder="Hugh Jackman" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{8,20}$" required="required" />
+                    <input v-model="credentials.username" type="text" name="username" id="username" placeholder="" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{8,20}$" required="required" />
                 </label>
         	</div>
            
             <div class="row">
             	<label for="password">
                     Password:
-                    <input type="password" name="password" id="password" placeholder="******" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required="required" />
+                    <input v-model="credentials.password" type="password" name="password" id="password" placeholder="" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required="required" />
                 </label>
             </div>
             <div class="row">
             	<div class="remember">
 					<div>
-						<input type="checkbox" name="remember" value="Remember me"><span>Remember me</span>
+						<input @keyup.enter="login" type="checkbox" name="remember" value="Remember me"><span>Remember me</span>
 					</div>
             		<a href="#">Forget password ?</a>
             	</div>
             </div>
            <div class="row">
-           	 <button type="submit">Login</button>
+           	 <button @click="login" type="submit">Login</button>
            </div>
         </form>
         <div class="row">
@@ -43,8 +43,35 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
-  name: 'LoginForm'
+  name: 'LoginForm',
+  data () {
+    return {
+      credentials: {
+        username: null,
+        password: null,
+      }
+    }
+  },
+  methods: {
+    login: function () {
+      axios({
+        method: 'post',
+        url: 'http://127.0.0.1:8000/api/v1/accounts/api/token/',
+        data: this.credentials,
+      })
+        .then(res => {
+          console.log(res)
+          localStorage.setItem('jwt', res.data.access)          
+          this.$router.go()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }
+
 }
 </script>
 
