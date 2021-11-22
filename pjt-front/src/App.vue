@@ -29,8 +29,10 @@ export default {
     SignupForm, 
     LoginForm, 
     Footer 
-  },
+  },  
 }
+
+
 
 </script>
 

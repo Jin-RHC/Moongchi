@@ -8,30 +8,33 @@
             <div class="row">
                  <label for="username-2">
                     Username:
-                    <input type="text" name="username" id="username-2" placeholder="Hugh Jackman" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{8,20}$" required="required" />
+                    <input v-model="credentials.username" type="text" name="username" id="username-2" placeholder="사용자 이름" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{8,20}$" required="required" />
                 </label>
             </div>
            
             <div class="row">
                 <label for="email-2">
-                    your email:
-                    <input type="password" name="email" id="email-2" placeholder="" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required="required" />
+                    your Nickname:
+                    <input v-model="credentials.nickname" type="text" name="nickname" id="email-2" placeholder="" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required="required" />
                 </label>
             </div>
              <div class="row">
                 <label for="password-2">
                     Password:
-                    <input type="password" name="password" id="password-2" placeholder="" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required="required" />
+                    <input v-model="credentials.password" type="password" name="password" id="password-2" placeholder="" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required="required" />
                 </label>
             </div>
              <div class="row">
                 <label for="repassword-2">
                     re-type Password:
-                    <input type="password" name="password" id="repassword-2" placeholder="" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required="required" />
+                    <input
+                        @keyup.enter="signup" 
+                        v-model="credentials.passwordConfirmation" 
+                        type="password" name="password" id="repassword-2" placeholder="" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required="required" />
                 </label>
             </div>
            <div class="row">
-             <button type="submit">sign up</button>
+             <button @click="signup" type="submit">sign up</button>
            </div>
         </form>
     </div>
@@ -40,8 +43,38 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
-  name: 'SignupForm'
+  name: 'SignupForm',  
+  data () {
+      return {
+       credentials: {
+        username: null,
+        nickname: null,
+        password: null,
+        passwordConfirmation: null,
+      }
+   
+      }
+  },
+  methods: {
+    signup: function () {
+      axios({
+        method: 'post',
+        url: 'http://127.0.0.1:8000/api/v1/accounts/signup/',
+        data: this.credentials
+      })
+        .then((res) => {
+          console.log(res)
+          this.$router.push({name: 'Home'})
+        //   this.$router.push({ name: 'Login'})
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        
+    }
+  },
 }
 </script>
 

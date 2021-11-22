@@ -7,6 +7,7 @@ class User(AbstractUser):
     nickname_validator = UnicodeUsernameValidator()
     followers = models.ManyToManyField('self', symmetrical=False, related_name='followings')
     nickname = models.CharField(
+        default = 2,
         max_length=30,
         unique=True,
         help_text= '필수 항목이며 중복은 불가능합니다. 글자, 숫자, @/./+/-/_만 사용 가능합니다.',
