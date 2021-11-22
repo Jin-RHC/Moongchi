@@ -1,6 +1,2 @@
 # Moongchi
-
-
-
 Movie review site
-
