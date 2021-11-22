@@ -22,6 +22,8 @@ with open('movies/recommendations.p', 'rb') as file:
 
 
 # Create your views here.
+
+#장르 받아오기. 초기 사용으로만!!!
 def initialize_genres(request):
     initialize_url = f'https://api.themoviedb.org/3/genre/movie/list?api_key={A_K}&language=ko-KR'
     res = requests.get(initialize_url)
@@ -34,6 +36,7 @@ def initialize_genres(request):
     
     pprint(Genre.objects.all())
 
+# 영화 데이터 받아오기. 초기 사용으로만!!!
 def initialize_movies(request):
 
     # for page in range(1, 501):
