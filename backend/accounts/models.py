@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from movies.models import Movie
+from django.conf import settings
+
 
 # Create your models here.
 class User(AbstractUser):
@@ -17,3 +20,14 @@ class User(AbstractUser):
     )
     def __str__(self): 
         return f'{self.username}, {self.nickname}'
+
+
+class Playlist(models.Model):
+    title = models.CharField(max_length=100)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    movies = models.ManyToManyField(Movie)
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_playlists')
+    dlike_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dlike_playlists')
+    
+    def __str__(self): 
+        return f'{self.title}, {self.movies}'

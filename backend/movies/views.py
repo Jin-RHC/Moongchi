@@ -3,10 +3,43 @@ from .models import Movie, Genre, Director, Actor
 from community.models import Rating
 from pprint import pprint
 from accounts.models import User
-import requests
 from justwatch import JustWatch
 from moongchi.my_settings import MY_SECRET
+from .serializers import MovieListSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+import requests
 import pickle
+
+
+@api_view(['GET',])
+def movie_list(request):
+    page = 3
+    try:
+        movies = Movie.objects.all().order_by('popularity')[60 * (page - 1): 60 * page]
+
+    except:
+        movies = Movie.objects.all()[-40:]
+
+    movie_list = MovieListSerializer(movies, many=True)
+    return Response(movie_list.data)
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 A_K = MY_SECRET['TMDB_KEY']
