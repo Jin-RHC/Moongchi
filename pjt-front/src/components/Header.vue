@@ -40,7 +40,7 @@
 							Community</a>
 							
 						</li>
-						<li @click.prevent="$router.push({name: 'UserProfile'})" class="dropdown first">
+						<li @click.prevent="" class="dropdown first">
 							<a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
 							User Profile</a>
 	
@@ -48,8 +48,8 @@
 					</ul>
 					<ul class="nav navbar-nav flex-child-menu menu-right">
 					
-						<li v-if="!isLogin" class="loginLink"><a href="#">LOG In</a></li>
-						<li v-if="!isLogin" class="btn signupLink"><a href="#">sign up</a></li>
+						<li @click.prevent="showModal" v-if="!isLogin" class=""><a href="#">LOG In</a></li>
+						<li @click.prevent="showModal" v-if="!isLogin" class="btn signupLink"><a href="#">sign up</a></li>
 					
 						<li v-if="isLogin"><a @click.prevent="logout" href="#">My Page</a></li>
 						<li v-if="isLogin"><a @click.prevent="logout" href="#">Logout</a></li>
@@ -67,6 +67,7 @@
 </template>
 
 <script>
+import LoginForm2 from './Account/LoginForm2.vue'
 import TopSearchForm from './Header/TopSearchForm.vue'
 export default {
   components: { TopSearchForm },
@@ -81,7 +82,20 @@ export default {
 			this.isLogin = false
       localStorage.removeItem('jwt')
       this.$router.go()
-		}
+		},
+		showModal () {
+      this.$modal.show(
+      LoginForm2,  
+      { text: 'This text is passed as a property' },
+      { name: 'loginModal',
+				draggable: true,
+        adaptive: true,
+        resizable: true,
+        width: '400',
+        height: '620',
+        },
+      )
+    },	
 	},
 	created () {
 		const token = localStorage.getItem('jwt')

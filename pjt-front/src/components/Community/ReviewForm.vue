@@ -98,7 +98,7 @@ export default {
         this.reviewTitle = null
         this.reviewContent = null
         this.liked = null
-        this.$router.push({ name: 'Community', params: { datas: reviewData }})
+        this.$router.push({ name: 'Community'})
 
       }
     }

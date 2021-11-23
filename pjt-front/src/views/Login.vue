@@ -1,4 +1,5 @@
 <template>
+
 <div class="buster-light">
 
 <div class="hero common-hero">
@@ -50,29 +51,46 @@
 </div>
 <!--end of  blog grid section-->
 		</div>
+
+
+
 </template>
 
 <script>
-import CommunitySidebar from '../components/Community/CommunitySidebar.vue'
-import ReviewItem from '../components/Community/ReviewItem.vue'
-
+import axios from 'axios'
 export default {
-  components: { 
-    CommunitySidebar,
-    ReviewItem 
-  },
-  name: 'Community',
+  name: 'LoginForm',
   data () {
     return {
-      reviews: 10,
+      credentials: {
+        username: null,
+        password: null,
+      }
     }
   },
-	// created () {		
-	// 	this.reviews.push()
-	// }
+  methods: {
+    login: function () {
+      axios({
+        method: 'post',
+        url: 'http://127.0.0.1:8000/api/v1/accounts/api/token/',
+        data: this.credentials,
+      })
+        .then(res => {
+          console.log(res)
+          localStorage.setItem('jwt', res.data.access)          
+          this.$router.go()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }
+
 }
 </script>
 
-<style>
+<style scoped>
+
+
 
 </style>

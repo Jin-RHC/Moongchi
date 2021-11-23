@@ -3,9 +3,11 @@
     <h4>Leave a comment</h4>
     <form action="#">
       <div class="row">
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <input v-model.trim="author" type="text" placeholder="Your name">
-        </div>
+        </div> -->
+
+
         <!-- <div class="col-md-4">
           <input type="text" placeholder="Your email">
         </div> -->
@@ -15,10 +17,12 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-          <textarea v-model.trim="message" name="message" id="" placeholder="Message"></textarea>
+          <textarea v-model.trim="message" name="message" id="" placeholder="주제와 무관한 댓글, 악플은 삭제될 수 있습니다."></textarea>
         </div>
       </div>
-      <input @click.prevent="leaveComment" class="submit" type="submit" placeholder="submit">
+      <div style="display: flex; justify-content: end;">
+        <input @click.prevent="leaveComment" class="submit" type="submit" placeholder="submit" value="등록">
+      </div>
     </form>
   </div>
 </template>
@@ -35,7 +39,7 @@ export default {
   methods: {
     leaveComment () {
       if (this.author && this.message) {
-        this.$emit('get-message', {author: this.author, message: this.message})
+        this.$emit('get-message', {message: this.message})
         this.author = null
         this.message = null
       }

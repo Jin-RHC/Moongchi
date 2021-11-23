@@ -75,19 +75,17 @@ export default {
   data () {
     return {
       movies: [],
-      page: 1
     }
   },
   methods: {
     getMovies () {      
-      const API_KEY = 'e856b3ac18eec7abd7cf6099f977bbff'
       axios({
       method: 'get',
-      url: `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=ko-KR&page=${this.page}`
+      url: `http://127.0.0.1:8000/api/v1/movies/movielist/`
     })
       .then(res => {
-        this.page += 1
-        this.movies.push(...res.data.results)
+				console.log(res.data)
+        this.movies.push(...res.data)
       })
     }
   },

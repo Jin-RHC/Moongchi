@@ -13,6 +13,7 @@
           name: 'MovieDetail',
           params: { 
             id: `${movie.id}`,
+            data: movie,
           }
         }"
       >Read more<i class="ion-android-arrow-dropright"></i></router-link>
