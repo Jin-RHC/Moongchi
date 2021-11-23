@@ -1,31 +1,49 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
+from rest_framework.serializers import Serializer
 from .models import Movie, Genre, Director, Actor
 from community.models import Rating
 from pprint import pprint
 from accounts.models import User
 from justwatch import JustWatch
 from moongchi.my_settings import MY_SECRET
-from .serializers import MovieListSerializer
+from .serializers import MovieListSerializer, MovieDetailSerializer, MovieSearchListSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.db.models import Q
 import requests
 import pickle
 
 
 @api_view(['GET',])
-def movie_list(request):
-    page = 3
+def movie_list(request, page):
     try:
-        movies = Movie.objects.all().order_by('popularity')[60 * (page - 1): 60 * page]
+        movies = Movie.objects.all().order_by('-popularity')[60 * (page - 1): 60 * page]
 
     except:
         movies = Movie.objects.all()[-40:]
 
-    movie_list = MovieListSerializer(movies, many=True)
-    return Response(movie_list.data)
+    serializer = MovieListSerializer(movies, many=True)
+
+    return Response(serializer.data)
 
 
-    
+# 영화 상세 조회
+@api_view(['GET',])
+def movie_detail(request, movie_id):
+
+    movie = get_object_or_404(Movie, pk=movie_id)
+    serializer = MovieDetailSerializer(movie)
+
+    return Response(serializer.data)
+
+
+@api_view(['GET',])
+def movie_search(request, title):
+
+    movie_list = Movie.objects.filter(Q(title__istartswith=title) | Q(title__icontains=title))
+    serializer = MovieSearchListSerializer(movie_list, many=True)
+
+    return Response(serializer.data)
 
 
 
@@ -58,6 +76,7 @@ with open('movies/recommendations.p', 'rb') as file:
 
 #장르 받아오기. 초기 사용으로만!!!
 def initialize_genres(request):
+    raise
     initialize_url = f'https://api.themoviedb.org/3/genre/movie/list?api_key={A_K}&language=ko-KR'
     res = requests.get(initialize_url)
     data = res.json()
@@ -71,7 +90,7 @@ def initialize_genres(request):
 
 # 영화 데이터 받아오기. 초기 사용으로만!!!
 def initialize_movies(request):
-
+    raise
     # for page in range(1, 501):
     #     list_url = f'https://api.themoviedb.org/3/movie/popular?api_key={A_K}&language=ko-KR&page={page}'
     #     res = requests.get(list_url).json().get('results')

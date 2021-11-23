@@ -155,5 +155,6 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'SLIDING_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('JWT', 'Bearer',),
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=3),
 }

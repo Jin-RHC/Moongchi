@@ -11,8 +11,8 @@ class Review(models.Model):
     content = models.TextField()
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_reviews')
-    dlike_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dlike_reviews')
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='like_reviews')
+    dlike_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='dlike_reviews')
     updated_at = models.DateTimeField(auto_now=True)
     reported_users = models.ManyToManyField(settings.AUTH_USER_MODEL,
         related_name='reported_reviews',
@@ -23,8 +23,8 @@ class Comment(models.Model):
     content = models.CharField(max_length=200)
     review = models.ForeignKey(Review, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_comments')
-    dlike_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dlike_comments')
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='like_comments')
+    dlike_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='dlike_comments')
     created_at = models.DateTimeField(auto_now_add=True)
     reported_users = models.ManyToManyField(settings.AUTH_USER_MODEL, 
         related_name='reported_comments', 
@@ -35,8 +35,8 @@ class NestedComment(models.Model):
     content = models.CharField(max_length=200)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_nested_comments')
-    dlike_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dlike_nested_comments')
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='like_nested_comments')
+    dlike_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='dlike_nested_comments')
     created_at = models.DateTimeField(auto_now_add=True)
     reported_users = models.ManyToManyField(settings.AUTH_USER_MODEL, 
         related_name='reported_nested_comments',
@@ -48,8 +48,8 @@ class Rating(models.Model):
     content = models.CharField(max_length=30)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_ratings')
-    dlike_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dlike_ratings')
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='like_ratings')
+    dlike_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='dlike_ratings')
     created_at = models.DateTimeField(auto_now_add=True)
     reported_users = models.ManyToManyField(settings.AUTH_USER_MODEL, 
         related_name='reported_ratings',

@@ -5,7 +5,7 @@ from django.conf import settings
 # Create your models here.
 class ReviewReport(models.Model):
     content = models.CharField(max_length=200)
-    review_pk = models.ForeignKey('community.Review', on_delete=models.CASCADE)
+    review = models.ForeignKey('community.Review', on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
         related_name='review_reports')
