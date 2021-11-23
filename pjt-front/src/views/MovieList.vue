@@ -45,8 +45,9 @@
 						<option value="range">20 Movies</option>
 						<option value="saab">10 Movies</option>
 					</select>
-					
-					<div class="pagination2">
+					  
+
+					<!-- <div class="pagination2">
 						<span>Page 1 of 2:</span>
 						<a class="active" href="#">1</a>
 						<a href="#">2</a>
@@ -55,7 +56,7 @@
 						<a href="#">78</a>
 						<a href="#">79</a>
 						<a href="#"><i class="ion-arrow-right-b"></i></a>
-					</div>
+					</div> -->
 				</div>
 
 				
@@ -63,44 +64,54 @@
 		</div>
 	</div>
 </div>
+		  <infinite-loading @infinite="getMovies"></infinite-loading>
 		</div>
+
 </template>
 
 <script>
+import InfiniteLoading from 'vue-infinite-loading';
+
 import axios from 'axios'
 import MovieListItem from '../components/MovieList/MovieListItem.vue'
+
+const api = 'http://127.0.0.1:8000/api/v1/movies/movielist/'
 export default {
-  components: { MovieListItem },
+  components: { 
+		MovieListItem, 
+		InfiniteLoading,
+	},
   name: 'MovieList',
   data () {
     return {
+			page: 1,
       movies: [],
     }
   },
   methods: {
-    getMovies () {      
+    getMovies ($state) {      
       axios({
-      method: 'get',
-      url: `http://127.0.0.1:8000/api/v1/movies/movielist/`
-    })
-      .then(res => {
-				console.log(res.data)
-        this.movies.push(...res.data)
-      })
+				method: 'get',
+				url: api + `${this.page}`
+			})
+				
+				.then((res) => {
+        
+   
+        console.log(res)
+        if (res.data.length) {
+          this.page += 1;
+
+          // this.$store.dispatch('getMovies', this.page)
+          this.movies.push(...res.data)
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+
+      });
     }
-  },
-  created () {    
-    this.getMovies()
-      
-       
-  },
-  watch: {
-    page () {
-      if (this.page < 5) {        
-        this.getMovies()
-      }
-    }
-  }
+  },  
 }
 </script>
 
