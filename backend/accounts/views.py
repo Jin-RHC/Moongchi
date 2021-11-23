@@ -1,12 +1,13 @@
-from django.shortcuts import render
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404, render
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .serializers import UserSerializer, MyTokenObtainPairSerializer
+from .serializers import UserSerializer, MyTokenObtainPairSerializer, UserReportListSerializer
 
 # Create your views here.
 
@@ -36,3 +37,13 @@ def signup(request):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+
+# 사용자의 신고 내역을 보여줍니다.
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def report_list(request, username):
+    user = get_object_or_404(get_user_model(), username=username)
+    serializer = UserReportListSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+    
