@@ -15,8 +15,8 @@ class Genre(models.Model):
 class Movie(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=50)
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_movies')
-    dlike_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dlike_movies')
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='like_movies')
+    dlike_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='dlike_movies')
     genres = models.ManyToManyField(Genre, related_name='movies')
     overview = models.TextField()
     poster_path = models.CharField(max_length=200, default='', null=True, blank=True)
