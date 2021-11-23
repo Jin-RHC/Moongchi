@@ -12,7 +12,7 @@
           <div class="movie-item" style="width: 100%;">
             <img :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="`https://image.tmdb.org/t/p/original${slide.poster_path}`">
             <div class="hvr-inner">
-              <a @click.prevent="$router.push({ name: 'MovieDetail', params: { id: `${slide.id}`}})" href="moviesingle.html"> Read more <i class="ion-android-arrow-dropright"></i> </a>
+              <a @click.prevent="$router.push({ name: 'MovieDetail', params: { id: `${slide.id}` }})" href="moviesingle.html"> Read more <i class="ion-android-arrow-dropright"></i> </a>
             </div>
           
             <div class="title-in" style="margin-bottom: 40px;">    

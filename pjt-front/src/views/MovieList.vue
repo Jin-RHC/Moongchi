@@ -45,8 +45,9 @@
 						<option value="range">20 Movies</option>
 						<option value="saab">10 Movies</option>
 					</select>
-					
-					<div class="pagination2">
+					  
+
+					<!-- <div class="pagination2">
 						<span>Page 1 of 2:</span>
 						<a class="active" href="#">1</a>
 						<a href="#">2</a>
@@ -55,7 +56,7 @@
 						<a href="#">78</a>
 						<a href="#">79</a>
 						<a href="#"><i class="ion-arrow-right-b"></i></a>
-					</div>
+					</div> -->
 				</div>
 
 				
@@ -63,46 +64,54 @@
 		</div>
 	</div>
 </div>
+		  <infinite-loading @infinite="getMovies"></infinite-loading>
 		</div>
+
 </template>
 
 <script>
+import InfiniteLoading from 'vue-infinite-loading';
+
 import axios from 'axios'
 import MovieListItem from '../components/MovieList/MovieListItem.vue'
+
+const api = 'http://127.0.0.1:8000/api/v1/movies/movielist/'
 export default {
-  components: { MovieListItem },
+  components: { 
+		MovieListItem, 
+		InfiniteLoading,
+	},
   name: 'MovieList',
   data () {
     return {
+			page: 1,
       movies: [],
-      page: 1
     }
   },
   methods: {
-    getMovies () {      
-      const API_KEY = 'e856b3ac18eec7abd7cf6099f977bbff'
+    getMovies ($state) {      
       axios({
-      method: 'get',
-      url: `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=ko-KR&page=${this.page}`
-    })
-      .then(res => {
-        this.page += 1
-        this.movies.push(...res.data.results)
-      })
+				method: 'get',
+				url: api + `${this.page}`
+			})
+				
+				.then((res) => {
+        
+   
+        console.log(res)
+        if (res.data.length) {
+          this.page += 1;
+
+          // this.$store.dispatch('getMovies', this.page)
+          this.movies.push(...res.data)
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+
+      });
     }
-  },
-  created () {    
-    this.getMovies()
-      
-       
-  },
-  watch: {
-    page () {
-      if (this.page < 5) {        
-        this.getMovies()
-      }
-    }
-  }
+  },  
 }
 </script>
 

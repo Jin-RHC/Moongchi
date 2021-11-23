@@ -35,11 +35,14 @@
 			</div>
 			<div class="col-md-8 col-sm-12 col-xs-12">
 				<div class="movie-single-ct main-content">
-					<h1 class="bd-hd">{{ movie.title }}<span>{{ movie.release_date.slice(0, 4) }}</span></h1>
-					<div class="social-btn">
-						<a href="#" class="parent-btn"><i class="ion-heart"></i> Add to Favorite</a>
+					<h1 class="bd-hd">{{ movie.title }}<span>{{ movie.release_date.slice(0, 4) }}</span> </h1>
+					
+					<div class="social-btn" style="overflow: hidden;">
+					
+						<a href="#" class="parent-btn"><i class="ion-heart"></i> Add to Playlist</a>
 						<div class="hover-bnt">
-							<a href="#" class="parent-btn"><i class="ion-android-share-alt"></i>share</a>
+							<a href="#" class="parent-btn"><i class="ion-android-share-alt"></i>share</a>																					
+
 							<div class="hvr-item">
 								<a href="#" class="hvr-grow"><i class="ion-social-facebook"></i></a>
 								<a href="#" class="hvr-grow"><i class="ion-social-twitter"></i></a>
@@ -132,7 +135,10 @@ export default {
 			tabs: ['overview', 'review', 'cast & crew', 'media', 'related movies']
     }
   },
-  created () {
+	props: {
+		data: Object
+	},
+  beforeCreate () {
   const id = this.$route.params.id
   const API_KEY = 'e856b3ac18eec7abd7cf6099f977bbff'
   // console.log(id)
