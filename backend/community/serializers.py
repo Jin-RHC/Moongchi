@@ -1,5 +1,8 @@
+from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import requires_csrf_token
 from rest_framework import serializers
+
+from movies.models import Movie
 from .models import Review, Comment, NestedComment, Rating
 
 
@@ -21,6 +24,21 @@ class ReviewListSerializer(serializers.ModelSerializer):
             fields = ('content', 'user', 'like_users', 'dlike_users', 'created_at', 
                 'nestedcomment_set')
 
+    # 해당 리뷰의 영화를 보여주기 위한 serializer
+    class MovieSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Movie
+            fields = ('title', 'poster_path', 'id')
+
+
+    # 해당 리뷰의 사용자를 보여주기 위한 serializer
+    class UserSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = get_user_model()
+            fields = ('id', 'username', 'nickname')
+
+    user = UserSerializer(read_only=True)
+    movie = MovieSerializer(read_only=True)
     comment_set = CommentSerializer(many=True, read_only=True)
 
     like_users_count = serializers.IntegerField(
@@ -35,7 +53,7 @@ class ReviewListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ('id', 'title', 'content', 'updated_at', 'like_users', 
+        fields = ('id', 'movie', 'user', 'title', 'content', 'updated_at', 'like_users', 
             'dlike_users', 'like_users_count', 'dlike_users_count', 'comment_set')
 
 

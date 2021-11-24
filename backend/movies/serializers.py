@@ -7,14 +7,14 @@ from django.contrib.auth import get_user_model
 
 class MovieListSerializer(serializers.ModelSerializer):
 
-    rate = serializers.SerializerMethodField()
+    # rate = serializers.SerializerMethodField()
 
     class Meta:
         model = Movie
-        fields = ('title', 'id', 'poster_path', 'is_netflix', 'rate')
+        fields = ('title', 'id', 'poster_path', 'is_netflix', 'rating_average', 'release_date')
 
-    def get_rate(self, instance):
-        return instance.rating_set.aggregate(rate=Avg('rating'))
+    # def get_rate(self, instance):
+    #     return instance.rating_set.aggregate(rate=Avg('rating'))
 
 
 class MovieDetailSerializer(serializers.ModelSerializer):
@@ -39,7 +39,7 @@ class MovieDetailSerializer(serializers.ModelSerializer):
 
         class Meta:
             model = Rating
-            exclude = ('reported_users', 'like_users', 'dlike_users', 'movie')
+            exclude = ('reported_users', 'movie')
 
     
     directors = DirectorSerializer(many=True, read_only=True)
