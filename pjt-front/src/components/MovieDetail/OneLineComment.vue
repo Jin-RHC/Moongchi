@@ -17,10 +17,10 @@
         <div>
 
           <a @click.prevent="likeOneLineComment" href="" class="time" style="border: solid; border-width: thin; border-radius: 2px; margin-right: 5px;"><font-awesome-icon :icon="['far', 'thumbs-up']" size="1x" style="margin-left: 7px; margin-right: 7px;" />
-            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineCommentLike }}</strong> 
+            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineCommentLike.length }}</strong> 
           </a>
           <a @click.prevent="dislikeOneLineComment" href="" class="time" style="font-weight: bolder; border: solid; border-width: thin; border-radius: 2px;"><font-awesome-icon :icon="['far', 'thumbs-down']" size="1x" style=" margin-right: 7px; margin-left: 7px;" />
-            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineCommentDislike }}</strong> 
+            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineCommentDislike.length }}</strong> 
           </a>
         </div>
         </div>
@@ -51,7 +51,7 @@
 <script>
 import axios from 'axios'
 import StarRating from 'vue-star-rating';
-const api = 'http://127.0.0.1:8000/api/v1/'
+const api = 'http://127.0.0.1:8000/api/v1/community/'
 export default {
   name: 'OneLineComment',
   components: {
@@ -64,8 +64,8 @@ export default {
   },
   data () {
     return {
-      oneLineCommentLike: 0,
-      oneLineCommentDislike: 0,
+      oneLineCommentLike: this.oneLineComment.like_users,
+      oneLineCommentDislike: this.oneLineComment.dlike_users,
       
     }
   },
@@ -81,22 +81,33 @@ export default {
     likeOneLineComment () {
       axios({
           method: 'post',
-          url: api + `${this.$route.params.id}/rating/${this.oneLineComment.id}/`,
-          // data: this.oneLineCommentLike,
+          url: api + `${this.$route.params.id}/rating/${this.oneLineComment.id}/like/`,
           headers: this.setToken()
         })
           .then(res => {
             console.log(res)
-            
+            this.$emit('get-one-line-comment-like')
           })
           .catch(err => {
             console.log(err)
           })
-        }
-
-      // this.oneLineCommentLike += 1
     },
-
+    dislikeOneLineComment () {
+      axios({
+          method: 'post',
+          url: api + `${this.$route.params.id}/rating/${this.oneLineComment.id}/dlike/`,
+          headers: this.setToken()
+        })
+          .then(res => {
+            console.log(res)
+            this.$emit('get-one-line-comment-dislike')
+          })
+          .catch(err => {
+            console.log(err)
+          })
+    },   
+  },
+  
   
   computed: {
     createdAt () {

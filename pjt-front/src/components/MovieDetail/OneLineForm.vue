@@ -19,7 +19,7 @@
 <script>
 import axios from 'axios'
 import StarRating from 'vue-star-rating';
-const api = 'http://127.0.0.1:8000/api/v1/community/'
+const api = 'http://127.0.0.1:8000/api/v1/'
 export default {
   name: 'OneLineForm',
   components: {
@@ -48,7 +48,7 @@ export default {
         }
         axios({
           method: 'post',
-          url: api + `${this.$route.params.id}/rating/`,
+          url: api + `community/${this.$route.params.id}/rating/`,
           data: oneLineCommentData,
           headers: this.setToken()
         })
@@ -56,7 +56,7 @@ export default {
             this.$emit('noti-one-line-comment')
             this.rating = null
             this.content = null
-            console
+            console.log('한줄평 작성 신호 보냄')
           })
 
       }

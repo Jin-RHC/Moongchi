@@ -47,7 +47,13 @@
         </span>
         <span v-else>
           <ul>
-            <one-line-comment v-for="(oneLineComment, index) in oneLineComments" :key="index" :oneLineComment="oneLineComment" :movie="movie"></one-line-comment>
+            <one-line-comment 
+              v-for="(oneLineComment, index) in oneLineComments" 
+              :key="index" :oneLineComment="oneLineComment" 
+              :movie="movie"
+              @get-one-line-comment-like="getData"
+              @get-one-line-comment-dislike="getData"
+            ></one-line-comment>
           </ul>
         </span>
       </div>
@@ -180,8 +186,7 @@ export default {
         })
     },
     getComment () {
-      this.$emit('noti-one-line-comment')
-
+      this.getData()
 
       console.log('오버뷰에서 한줄평 작성 신호 받음', this.oneLineComments)
       
@@ -194,9 +199,10 @@ export default {
 			.then(res => {
 				this.like = res.data.like_users
         this.dislike = res.data.dlike_users
-				// console.log(this.movie)
+        this.oneLineComments = res.data.rating_set
+				console.log(this.oneLineComments, '데이터 갱신 완료!')
 			})
-		},
+		},    
   },
   computed: {
 
