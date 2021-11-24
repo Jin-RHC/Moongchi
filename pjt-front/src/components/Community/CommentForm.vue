@@ -32,15 +32,13 @@ export default {
   name: 'CommentForm',
   data () {
     return {
-      author: null,
       message: null,
     }
   },
   methods: {
     leaveComment () {
-      if (this.author && this.message) {
+      if (this.message) {
         this.$emit('get-message', {message: this.message})
-        this.author = null
         this.message = null
       }
 

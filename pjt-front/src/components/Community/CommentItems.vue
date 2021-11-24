@@ -1,11 +1,31 @@
 <template>
   <!-- comment items -->
   <div class="comments">
+    
     <h4 v-show="messageInfo.length">{{ messageInfo.length }} Comments</h4>
 
-    <div class="cmt-item" v-for="(data, index) in messageInfo" :key="index">
+    <div class="" v-for="(data, index) in messageInfo" :key="index">
       <!-- <img src="images/uploads/author.png" alt=""> -->
-      <div class="author-infor">
+      <div style="display: flex;">
+
+        <div style="margin-right: 50px; width: 0px;">
+          <p>user</p>
+        </div>
+        <p style="white-space: pre-line; width: 600px; text-align: center;">내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요 내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요내용을 씁니다. 영화 참 재밌네요. 꼭 추천합니다 재밌어요</p>
+        <div style="">
+          <span style="">11.23 23:55:48</span>
+          <div style=";">
+          <a @click.prevent="likeOneLineComment" href="" class="time" style="border: solid; border-width: thin; border-radius: 2px; margin-right: 5px;"><font-awesome-icon :icon="['far', 'thumbs-up']" size="1x" style="margin-left: 7px; margin-right: 7px;" />
+            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineCommentLike }}</strong> 
+          </a>
+          <a @click.prevent="dislikeOneLineComment" href="" class="time" style="font-weight: bolder; border: solid; border-width: thin; border-radius: 2px;"><font-awesome-icon :icon="['far', 'thumbs-down']" size="1x" style=" margin-right: 7px; margin-left: 7px;" />
+            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineCommentDislike }}</strong> 
+          </a>
+        </div>
+        </div>
+        
+      </div>
+      <!-- <div class="author-infor">
         <div class="flex-it2">
           <h6><a href="#">user</a></h6> <span class="time"> - 27 Mar 2017</span>
         </div>
@@ -20,7 +40,9 @@
         <div class="row">
           <p><a @click.prevent="isCommentForm = !isCommentForm" class="rep-btn" href="#">+ Reply</a></p>
         </div>
-      </div>
+      </div> -->
+
+
       <div v-if="commentChild">
         <div v-for="i in 2" :key="i.i" class="reply" style="">
           <!-- <img src="images/uploads/author2.png" alt=""> -->
