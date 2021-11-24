@@ -6,7 +6,7 @@
           <h2>Skyfall: Quantum of Spectre</h2>
           </div> -->
           <div style="display: flex; flex-direction: row-reverse; margin-bottom: 1em;">
-            <!-- <a @click.prevent="$router.push({ name: 'ReviewForm'})" href="#" class="redbtn">Write Review</a> -->
+            <a @click.prevent="$router.push({ name: 'ReviewForm', params:{title: movie.title, id: movie.id }})" href="#" class="redbtn">Write Review</a>
             <!-- <router-link :to="{ name: 'ReviewForm', params: { title: `${movie.title}`, movieId: `${movie.id}` }}" class="redbtn">Write Reivew</router-link> -->
           </div>
         </div>
@@ -66,6 +66,9 @@ export default {
     return {
       review: null,
     }
+  },
+  props: {
+    movie: Object
   },
   methods: {
     setToken: function () {

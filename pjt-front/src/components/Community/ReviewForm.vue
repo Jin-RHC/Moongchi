@@ -36,7 +36,7 @@
             <textarea style="overflow-y: scroll;height: 250px; resize: none; font-size: 18px font-weight:500;" class="form-control" id="exampleFormControlTextarea1" rows="3" v-model.trim="reviewContent" placeholder="리뷰 내용"></textarea>
           </div>
           <br>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <div class="form-check">
               <input class="form-check-input" type="radio" v-model="liked" value="true" name="liked_radio" id="defaultCheck1">
               <label class="form-check-label" for="defaultCheck1" >
@@ -51,7 +51,7 @@
                 비추!!
               </label>
             </div>
-          </div>
+          </div> -->
           <div class="modal-footer rv-hd">
             <a @click.prevent="$router.go(-1)" href="#" class="redbtn" style="background-color: #666;" >Close</a>
             <a @click.prevent="addReview" href="#" class="redbtn" style="background-color: #3b4890; margin-left: 5px;">Save</a>
@@ -72,8 +72,10 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 import CommunitySidebar from './CommunitySidebar.vue'
+
+const api = 'http://127.0.0.1:8000/api/v1/'
 export default {
   components: { CommunitySidebar, },
   name: 'ReviewForm',
@@ -81,23 +83,39 @@ export default {
     return {      
       reviewTitle: null,
       reviewContent: null,
-      liked: null,
     }
   },
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+
     addReview () {
-      if (this.reviewTitle && this.reviewContent && this.liked) {
+      if (this.reviewTitle && this.reviewContent) {
         const reviewData = {
           title: this.reviewTitle,
-          content: this.reviewContent,
-          liked: this.liked,
-          movieId: this.$route.params.movieId
+          content: this.reviewContent,          
         }
-        // console.log(this.$route.params)
-        this.$emit('deliver-review-data', reviewData)
+        axios({
+          method: 'post',
+          url: api + `community/${this.$route.params.id}/review/`,
+          data: reviewData,
+          headers: this.setToken()
+        })
+          .then(res => {
+            console.log(res, '작성 성공!')
+          })
+          .catch(err => {
+            console.log(err)
+          })
+        
         this.reviewTitle = null
         this.reviewContent = null
-        this.liked = null
+        
         this.$router.push({ name: 'Community'})
 
       }

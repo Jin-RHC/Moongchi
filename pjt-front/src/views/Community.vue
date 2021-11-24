@@ -72,7 +72,7 @@ export default {
     }
   },
 	methods: {
-    getReiviews ($state) {      
+    getReiviews () {      
       axios({
 				method: 'get',
 				url: api
@@ -83,11 +83,11 @@ export default {
         if (res.data.length) {
           // this.page += 1;
           // this.$store.dispatch('getMovies', this.page)
-          this.reviews.push(...res.data)
+          this.reviews = res.data
 					console.log(this.reviews)
-          $state.loaded();
+          // $state.loaded();
         } else {
-          $state.complete();
+          // $state.complete();
         }
 
       });
