@@ -21,6 +21,14 @@ def review_lists(request):
     reviews = Review.objects.all()
     serializer = ReviewListSerializer(reviews, many=True)
     return Response(serializer.data)
+
+
+# 리뷰 상세 페이지를 불러옵니다.
+@api_view(['GET'])
+def review_detail(request, review_id):
+    review = get_object_or_404(Review, pk=review_id)
+    serializer = ReviewListSerializer(review)
+    return Response(serializer.data)
     
 
 # 영화 좋아요
