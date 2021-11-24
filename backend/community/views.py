@@ -66,12 +66,13 @@ def movie_dlike(request, movie_id):
 # 리뷰 검색 기능입니다.
 @api_view(['GET',])
 def review_search(request, query):
-    reviews = Review.objects.filter(Q(title__icontains=query)|Q(content__icontains=query))
-    serializer = ReviewListSerializer(reviews, many=True)
-    if reviews:
-        return Response(serializer.data)
-    else:
-        return Response({"message":"검색 결과가 없습니다ㅠ"}, status=status.HTTP_200_OK)
+    if query:
+        reviews = Review.objects.filter(Q(title__icontains=query)|Q(content__icontains=query))
+        serializer = ReviewListSerializer(reviews, many=True)
+        if reviews:
+            return Response(serializer.data)
+        
+    return Response({"message":"검색 결과가 없습니다ㅠ"}, status=status.HTTP_200_OK)
 
 # 특정 영화의 리뷰 목록을 보여주거나 등록합니다
 @api_view(['GET', 'POST'])
