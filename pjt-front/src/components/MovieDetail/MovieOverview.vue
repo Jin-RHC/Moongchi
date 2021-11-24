@@ -51,7 +51,7 @@
           </ul>
         </span>
       </div>
-     <one-line-form></one-line-form>
+     <one-line-form @noti-one-line-comment="getComment"></one-line-form>
   </div>
 
 
@@ -119,9 +119,10 @@
 </template>
 
 <script>
+import axios from 'axios'
 import OneLineComment from './OneLineComment.vue'
 import OneLineForm from './OneLineForm.vue'
-
+const api = 'http://127.0.0.1:8000/api/v1/'
 export default {
   name: 'MovieOverview',
   components: {
@@ -142,24 +143,67 @@ export default {
     }
   },
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+
     addLike () {
-      this.like += 1
+      axios({
+        method: 'post',
+        url: api + `community/${this.$route.params.id}/like/`,
+        headers: this.setToken()
+      })
+        .then(res => {
+          console.log(res, '데이터 전송 성공')
+          this.getData()
+        })
+        .cactch(err => {
+          console.log(err)
+        })
     },
     addDislike () {
-      this.dislike += 1
+      axios({
+        method: 'post',
+        url: api + `community/${this.$route.params.id}/dlike/`,
+        headers: this.setToken()
+      })
+        .then(res => {          
+          console.log(res, '데이터 전송 성공')
+          this.getData()
+        })
+        .cactch(err => {
+          console.log(err)
+        })
     },
-    getOneLine (data) {
-      this.oneLineComments.push(data)
-      console.log('댓글 작성', this.oneLineComments)
+    getComment () {
+      this.$emit('noti-one-line-comment')
+
+
+      console.log('오버뷰에서 한줄평 작성 신호 받음', this.oneLineComments)
       
-    }
+    },
+    getData () {
+			axios({
+			method: 'get',
+			url: api + `movies/movie/${this.$route.params.id}/`
+		})
+			.then(res => {
+				this.like = res.data.like_users
+        this.dislike = res.data.dlike_users
+				// console.log(this.movie)
+			})
+		},
   },
   computed: {
 
     percentage () {
-      return Math.round((this.like / (this.like + this.dislike)) * 100)
+      return Math.round((this.like.length / (this.like.length + this.dislike.length)) * 100)
     },
-    
+ 
   },
 
 }

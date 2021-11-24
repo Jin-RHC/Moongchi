@@ -55,9 +55,9 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
-const api = 'http://127.0.0.1:8000/api/v1/community/'
+// const api = 'http://127.0.0.1:8000/api/v1/community/'
 // const id = this.$route.params.id
 
 export default {
@@ -76,25 +76,7 @@ export default {
       return config
     },
 
-    getReview () {
-      
-      axios({
-        method: 'get',
-        url: api + `${this.$route.params.id}/review/`,
-        headers: this.setToken()
-      })
-        .then(res => {
-          console.log(res)
-          this.review = res.data
-        })
-        .catch(err => {
-          console.log(err)
-        })
-      },  
-  },
-  created () {
-    this.getReview()
-  }
+  } 
 }
 </script>
 

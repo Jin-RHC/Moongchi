@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import "@/fontAwesomeIcon.js";
 import VModal from 'vue-js-modal'
+import store from './store'
 
 Vue.config.productionTip = false
 Vue.use(VModal)
@@ -15,5 +16,6 @@ Vue.use(VModal)
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')

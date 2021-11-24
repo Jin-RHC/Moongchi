@@ -13,7 +13,6 @@
       <div style="margin: 2em 1em; width: 100%">
         
         <p style="white-space: pre-line;">{{ oneLineComment.content }}</p>
-        
         <div style="display: flex; justify-content: end;">
         <div>
 
@@ -78,12 +77,12 @@ export default {
       }
       return config
     },
-
+    // 한줄평 좋아요 싫어요 미구현 
     likeOneLineComment () {
       axios({
           method: 'post',
-          url: api + `${this.$route.params.id}/rating/`,
-          data: this.oneLineCommentLike,
+          url: api + `${this.$route.params.id}/rating/${this.oneLineComment.id}/`,
+          // data: this.oneLineCommentLike,
           headers: this.setToken()
         })
           .then(res => {

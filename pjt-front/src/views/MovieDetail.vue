@@ -82,7 +82,7 @@
 
 									<!-- 줄거리 -->
 									<div v-show="currentTab == 0" id="overview" class="">							
-										<movie-overview :movie="movie"></movie-overview>
+										<movie-overview :movie="movie" @noti-one-line-comment="regetMovie"></movie-overview>
 									</div>
 
 
@@ -127,7 +127,6 @@ import MovieMedia from '../components/MovieDetail/MovieMedia.vue'
 import MovieRelated from '../components/MovieDetail/MovieRelated.vue'
 
 const api = 'http://127.0.0.1:8000/api/v1/movies/movie/'
-// const id = this.$route.params.id
 
 export default {
   components: { MovieOverview, MovieReview, MovieCast, MovieMedia, MovieRelated },
@@ -138,18 +137,32 @@ export default {
 			currentTab: 0,
 			tabs: ['overview', 'review', 'cast & crew', 'media', 'related movies'],
     }
-  },	
+  },
+	methods: {
+		getMovie () {
+			axios({
+			method: 'get',
+			url: api + `${this.$route.params.id}/`
+		})
+			.then(res => {
+				this.movie = res.data
+				// console.log(this.movie)
+			})
+			.catch(err => {
+				console.log(err)
+			})
+
+		},
+		regetMovie () {
+			console.log('디테일에서 한줄평 작성 신호 받음', this.oneLineComments)
+
+			this.getMovie()
+		}
+
+	},
+		
   created () {
-  const id = this.$route.params.id
-  console.log(id)
-  axios({
-    method: 'get',
-    url: api + `${id}/`
-  })
-    .then(res => {
-      this.movie = res.data
-			console.log(this.movie)
-    })
+		this.getMovie()
 	},
 	// methods: {
 	// 	getReview () {      
