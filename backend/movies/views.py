@@ -1,3 +1,4 @@
+from django.db.models.aggregates import Avg
 from django.shortcuts import get_object_or_404, render
 from rest_framework.serializers import Serializer
 from .models import Movie, Genre, Director, Actor
@@ -12,6 +13,16 @@ from rest_framework.decorators import api_view
 from django.db.models import Q
 import requests
 import pickle
+import datetime
+
+with open('movies/recommendations.p', 'rb') as file:
+    recommendations = pickle.load(file)
+A_K = MY_SECRET['TMDB_KEY']
+
+
+
+
+
 
 
 @api_view(['GET',])
@@ -26,6 +37,16 @@ def movie_list(request, page):
 
     return Response(serializer.data)
 
+@api_view(['GET',])
+def mainmovies(request):
+    now_movies = Movie.objects.order_by('-release_date')[:10]
+    high_rating_movies = Movie.objects.annotate(avg_rate=Avg('rating')).order_by('avg_rate')[:10]
+    print(Movie.objects.annotate(avg_rate=Avg('rating')).order_by('-avg_rate')[:10])
+
+    now_serializer = MovieListSerializer(now_movies, many=True)
+    high_rating_serializer = MovieListSerializer(high_rating_movies, many=True)
+
+    return Response({"now-playing": now_serializer.data, "high-rates": now_serializer.data})
 
 # 영화 상세 조회
 @api_view(['GET',])
@@ -68,11 +89,18 @@ NATION_CODE = {'KR': '대한민국', 'JP': '일본', 'US': '미국', 'GB': '영�
     'DK': '덴마크', 'MX': '멕시코', 'NZ': '뉴질랜드', 'IT': '이탈리아', 'PT': '포르투갈',
     'BR': '브라질', 'AR': '아르헨티나', 'PE': '페루', 'CO': '콜롬비아'}
 
-with open('movies/recommendations.p', 'rb') as file:
-    recommendations = pickle.load(file)
+
 
 
 # Create your views here.
+
+
+# 평점 평균 만들기. 초기 사용으로만!!
+def making_rating_average(request):
+    for movie in Movie.objects.all():
+        movie.rating_average = movie.rating_set.first().rating
+        movie.save()
+
 
 #장르 받아오기. 초기 사용으로만!!!
 def initialize_genres(request):

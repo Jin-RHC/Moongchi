@@ -4,7 +4,10 @@ from django.urls import path, include
 app_name = 'movies'
 
 urlpatterns = [
-    # 영화 리스트 조회
+    # 메인에 뜰 추천 영화 리스트 반환(현재 상영작, 평점순, 인기순(요새 평점이 많이 달린 순으로))
+    path('mainmovies/', views.mainmovies, name='mainmovies'),
+
+    # 영화 리스트(그냥 전부 다) 조회
     path('movielist/<int:page>/', views.movie_list, name='movie_list'),
 
     # 영화 상세 조회
@@ -12,6 +15,10 @@ urlpatterns = [
 
     # 영화 검색
     path('moviesearch/<str:title>/', views.movie_search, name='movie_search'),
+
+
+    # get 요청으로 딱 한 번 실행하면 되는!!! rating_average 추가 코드(실행 후 다시 각주 처리 바랍니다...)
+    # path('making-rating-average/', views.making_rating_average, name='making_rating_average')
 
     
     # path('initializemovies/', views.initialize_movies, name='initialize_movies'),
