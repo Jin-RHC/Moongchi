@@ -82,10 +82,13 @@ export default {
       })
         .then(res => {
           console.log(res)
-          localStorage.setItem('jwt', res.data.access)          
-          this.$router.go()
+          localStorage.setItem('jwt', res.data.access)
+					this.$store.dispatch('loginCompleted', res) 
+          // this.$router.push({name: 'Home'})
+					this.$router.go()
         })
         .catch(err => {
+					alert('존재하지 않는 계정이거나 비밀번호가 틀립니다.')
           console.log(err)
         })
     },

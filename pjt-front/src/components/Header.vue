@@ -12,7 +12,8 @@
             <span></span>
           </div>
           </div>
-          <a @click.prevent="$router.push({name: 'Home'})" href="index_light.html"><img class="logo" src="images/logo1.png" alt="" width="119" height="58"></a>
+					<a @click.prevent="$router.push({name: 'Home'})" href="index_light.html"><img class="logo" src="../assets/뭉치.png" alt="" style="border-radius : 30%" width="119" height="58"></a>
+          <!-- <a @click.prevent="$router.push({name: 'Home'})" href="index_light.html"><img class="logo" src="images/logo1.png" alt="" width="119" height="58"></a> -->
         </div>
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse flex-parent" id="bs-example-navbar-collapse-1">
@@ -46,12 +47,12 @@
 	
 						</li>
 					</ul>
-					<ul class="nav navbar-nav flex-child-menu menu-right">
+					<ul @user-login="getUsername" class="nav navbar-nav flex-child-menu menu-right">
 					
-						<li @click.prevent="showModal" v-if="!isLogin" class=""><a href="#">LOG In</a></li>
+						<li @click.prevent="showModal" v-if="!isLogin" class=""><a href="#">Log in</a></li>
 						<li @click.prevent="showModal" v-if="!isLogin" class="btn signupLink"><a href="#">sign up</a></li>
 					
-						<li v-if="isLogin"><a @click.prevent="logout" href="#">My Page</a></li>
+						<li v-if="isLogin"><a @click.prevent="$router.push({name: 'UserProfile', params: {username: username}})" href="#">My Page</a></li>
 						<li v-if="isLogin"><a @click.prevent="logout" href="#">Logout</a></li>
 
 					
@@ -67,6 +68,7 @@
 </template>
 
 <script>
+import jwt_decode from "jwt-decode";
 import LoginForm2 from './Account/LoginForm2.vue'
 import TopSearchForm from './Header/TopSearchForm.vue'
 export default {
@@ -74,7 +76,7 @@ export default {
   name: 'Header',
 	data () {
 		return {
-			isLogin: false
+			isLogin: false,
 		}
 	},
 	methods: {
@@ -95,8 +97,22 @@ export default {
         height: '620',
         },
       )
-    },	
+    },
+		getUsername (username) {
+			this.username = username
+			console.log('드디어!!!!', username)
+		},	
 	},
+	computed:{
+    token : function () {
+      return this.$store.state.token
+    },
+    username : function(){
+			// throw new Error(`${this.token}`)
+			console.log(this.token)
+      return jwt_decode(this.token).username
+    }
+  },
 	created () {
 		const token = localStorage.getItem('jwt')
 
