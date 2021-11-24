@@ -6,10 +6,10 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="hero-ct">
-					<h1>Edward kennedy’s profile</h1>
+					<h1>{{ $route.params.username }}님의 프로필</h1>
 					<ul class="breadcumb">
 						<li class="active"><a href="#">Home</a></li>
-						<li> <span class="ion-ios-arrow-right"></span>Profile</li>
+						<li> <span class="ion-ios-arrow-right"></span>프로필</li>
 					</ul>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 				<div class="user-information">
 					<div class="user-img">
 						<a href="#"><img src="images/uploads/user-img.png" alt=""><br></a>
-						<a href="#" class="redbtn">Change avatar</a>
+						<a href="#" class="redbtn">프로필 바꾸기</a>
 					</div>
 					<div class="user-fav">
 						<p>Account Details</p>

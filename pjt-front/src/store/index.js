@@ -1,15 +1,29 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+// import { createStore } from "vuex";
+import createPersistedState from "vuex-persistedstate";
 // import axios from 'axios'
 Vue.use(Vuex)
 // const api = 'http://127.0.0.1:8000/api/v1/'
 export default new Vuex.Store({
+  plugins: [createPersistedState()],
   state: {
+    token: '',
   },
   mutations: {
-
+    LOGIN_COMPLETED: function (state, res) {
+      const token = res.data.access
+      console.log(token)
+      state.token = token
+      // throw new Error(`${state.token}`)
+    },
   },
   actions: {
+    loginCompleted: function (context, res) {
+      context.commit('LOGIN_COMPLETED', res)
+      // console.log(username)
+      // console.log(context)
+    },
     // addOneLineComments ({commit}, item) {
     //   axios({
     //     url: api + ''
@@ -18,5 +32,14 @@ export default new Vuex.Store({
     // }
   },
   modules: {
-  }
+  },
+  // update () {
+	// 	const token = localStorage.getItem('jwt')
+
+  //   if (token) {
+  //     this.isLogin = true
+  //     this.$store.state.token = token
+  //   }
+
+	// },
 })
