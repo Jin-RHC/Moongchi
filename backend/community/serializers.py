@@ -15,13 +15,13 @@ class ReviewListSerializer(serializers.ModelSerializer):
         class NestedCommentSerializer(serializers.ModelSerializer):
             class Meta:
                 model = NestedComment
-                fields = ('content', 'user', 'like_users', 'dlike_users', 'created_at')
+                fields = ('id', 'content', 'user', 'like_users', 'dlike_users', 'created_at')
 
         nestedcomment_set = NestedCommentSerializer(many=True, read_only=True)
         
         class Meta:
             model = Comment
-            fields = ('content', 'user', 'like_users', 'dlike_users', 'created_at', 
+            fields = ('id', 'content', 'user', 'like_users', 'dlike_users', 'created_at', 
                 'nestedcomment_set')
 
     # 해당 리뷰의 영화를 보여주기 위한 serializer
