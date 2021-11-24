@@ -4,7 +4,7 @@ from django.conf import settings
 
 # Create your models here.
 class ReviewReport(models.Model):
-    content = models.CharField(max_length=200)
+    content = models.CharField(max_length=200, blank=True, default='')
     review = models.ForeignKey('community.Review', on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
@@ -13,7 +13,7 @@ class ReviewReport(models.Model):
 
 
 class CommentReport(models.Model):
-    content = models.CharField(max_length=200)
+    content = models.CharField(max_length=200, blank=True, default='')
     comment = models.ForeignKey('community.Comment' ,on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
@@ -22,7 +22,7 @@ class CommentReport(models.Model):
 
 
 class NestedCommentReport(models.Model):
-    content = models.CharField(max_length=200)
+    content = models.CharField(max_length=200, blank=True, default='')
     nested_comment = models.ForeignKey('community.NestedComment', on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
@@ -31,7 +31,7 @@ class NestedCommentReport(models.Model):
 
 
 class RatingReport(models.Model):
-    content = models.CharField(max_length=200)
+    content = models.CharField(max_length=200, blank=True, default='')
     rating = models.ForeignKey('community.Rating', on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 

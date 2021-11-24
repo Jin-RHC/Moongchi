@@ -47,4 +47,10 @@ urlpatterns = [
     path('<int:movie_id>/rating/<int:rating_id>/', views.rating_delete, name='rating_delete'),
     path('<int:movie_id>/rating/<int:rating_id>/like/', views.rating_like, name='rating_like'),
     path('<int:movie_id>/rating/<int:rating_id>/dlike/', views.rating_dlike, name='rating_dlike'),
+
+    # 사이드바에 들어갈 리뷰 추천순 3개 반환
+    path('sidebar-reviews/', views.sidebar_reviews, name='sidebar_reviews'),
+
+    # 사이드바에 들어갈 영화 3개 반환
+    path('sidebar-movies/', views.sidebar_movies, name='sidebar_movies'),
 ]

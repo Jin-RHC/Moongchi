@@ -7,7 +7,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .serializers import UserSerializer, MyTokenObtainPairSerializer, UserReportListSerializer
+from .models import User
+
+from .serializers import UserSerializer, MyTokenObtainPairSerializer, UserReportListSerializer, UserProfileSerializer
 
 # Create your views here.
 
@@ -37,6 +39,36 @@ def signup(request):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+
+# 해당 유저를 팔로우합니다.
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def follow(request, username):
+    # 상대방
+    target = get_object_or_404(get_user_model(), username=username)
+
+    # 본인
+    user = request.user
+    if user == target:
+        return Response({'message': '본인은 팔로우할 수 없어요ㅠ'}, status=status.HTTP_403_FORBIDDEN)
+    else:
+        if user.followings.filter(pk=target.pk).exists():
+            user.followings.remove(target)
+            return Response({'message': '언팔로우 하였습니다.'}, status=status.HTTP_201_CREATED)
+        else:
+            user.followings.add(target)
+            return Response({'message': '팔로우 되었습니다.'}, status=status.HTTP_201_CREATED)
+        
+
+# 해당 유저의 프로필을 조회합니다.
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def profile(request, username):
+    user = get_object_or_404(get_user_model(), username=username)
+    serializer = UserProfileSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 # 사용자의 신고 내역을 보여줍니다.

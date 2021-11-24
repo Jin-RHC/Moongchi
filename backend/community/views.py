@@ -1,3 +1,4 @@
+from django.db.models.aggregates import Count
 from django.shortcuts import render
 from .models import Review, Comment, NestedComment, Rating
 from rest_framework import serializers, status
@@ -7,7 +8,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 from django.shortcuts import get_object_or_404
 from .serializers import (ReviewListSerializer, ReviewCreateSerializer, ReviewUpdateSerializer, 
-    CommentCreateSerializer, NestedCommentCreateSerializer, RatingSerializer)
+    CommentCreateSerializer, NestedCommentCreateSerializer, RatingSerializer, SidebarReviewSerializer)
+from movies.serializers import MovieListSerializer
 from movies.models import Movie
 from django.db.models import Q
 
@@ -233,15 +235,15 @@ def nestedcomment_delete(request, comment_id, nestedcomment_id):
 @permission_classes([IsAuthenticated])
 def nestedcomment_like(request, comment_id, nestedcomment_id):
     nestedcomment = get_object_or_404(NestedComment, pk=nestedcomment_id)
-    if not request.user.like_nestedcomments.filter(pk=nestedcomment_id).exists():
+    if not request.user.like_nested_comments.filter(pk=nestedcomment_id).exists():
         nestedcomment.like_users.add(request.user)
     else:
         nestedcomment.like_users.remove(request.user)
 
-    if request.user.dlike_nestedcomments.filter(pk=nestedcomment_id).exists():
+    if request.user.dlike_nested_comments.filter(pk=nestedcomment_id).exists():
         nestedcomment.dlike_users.remove(request.user)
     
-    return Response({'is_like': request.user.like_nestedcomments.filter(pk=nestedcomment_id).exists()}, status=status.HTTP_201_CREATED)
+    return Response({'is_like': request.user.like_nested_comments.filter(pk=nestedcomment_id).exists()}, status=status.HTTP_201_CREATED)
 
 
 # 대댓글 싫어요 기능
@@ -249,15 +251,15 @@ def nestedcomment_like(request, comment_id, nestedcomment_id):
 @permission_classes([IsAuthenticated])
 def nestedcomment_dlike(request, comment_id, nestedcomment_id):
     nestedcomment = get_object_or_404(NestedComment, pk=nestedcomment_id)
-    if not request.user.dlike_nestedcomments.filter(pk=nestedcomment_id).exists():
+    if not request.user.dlike_nested_comments.filter(pk=nestedcomment_id).exists():
         nestedcomment.dlike_users.add(request.user)
     else:
         nestedcomment.dlike_users.remove(request.user)
 
-    if request.user.like_nestedcomments.filter(pk=nestedcomment_id).exists():
+    if request.user.like_nested_comments.filter(pk=nestedcomment_id).exists():
         nestedcomment.like_users.remove(request.user)
     
-    return Response({'is_dlike': request.user.dlike_nestedcomments.filter(pk=nestedcomment_id).exists()}, status=status.HTTP_201_CREATED)
+    return Response({'is_dlike': request.user.dlike_nested_comments.filter(pk=nestedcomment_id).exists()}, status=status.HTTP_201_CREATED)
 
 
 
@@ -319,3 +321,19 @@ def rating_dlike(request, movie_id, rating_id):
         rating.like_users.remove(request.user)
     
     return Response({'is_dlike': request.user.dlike_ratings.filter(pk=rating_id).exists()}, status=status.HTTP_201_CREATED)
+
+
+# 사이드바에 들어갈 추천 많은 리뷰 3개를 반환합니다.
+@api_view(['GET'])
+def sidebar_reviews(request):
+    reviews = Review.objects.annotate(like_count=Count('like_users')).order_by('-like_count')[:3]
+    serializer = SidebarReviewSerializer(reviews, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# 사이드바에 들어갈 추천영화(한줄평이 많은 영화 중 평점이 높은 순서로)
+@api_view(['GET'])
+def sidebar_movies(request):
+    popular_movies = Movie.objects.annotate(ratings_count=Count('rating')).order_by('-ratings_count')[:3]
+    serializer = MovieListSerializer(popular_movies, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
