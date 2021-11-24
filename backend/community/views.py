@@ -76,7 +76,7 @@ def review_list_create(request, movie_id):
         serializer = ReviewListSerializer(reviews, many=True)
         return Response(serializer.data)
 
-    # 리뷰를 작성합니다.
+    # 리뷰를 작성합니다. (title, content) 필요!
     elif request.method == 'POST':
         serializer = ReviewCreateSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -85,6 +85,7 @@ def review_list_create(request, movie_id):
 
 
 # 특정 리뷰를 업데이트하거나 삭제합니다.
+# content만 수정할 수 있음!
 @api_view(['PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def review_update_delete(request, movie_id, review_id):
@@ -137,6 +138,7 @@ def review_dlike(request, movie_id, review_id):
 
 
 # 댓글 작성 기능
+# content만 있으면 됩니다.
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def comment_create(request, review_id):
