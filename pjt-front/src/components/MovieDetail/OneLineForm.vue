@@ -2,7 +2,7 @@
   <div class="comment-box ml-2">
     <hr>
     <h4 style="margin-bottom: 10px;">Add a comment</h4>
-    <star-rating :star-size="15" v-model.trim="rating"></star-rating>
+    <star-rating :max-rating=10 :star-size="15" v-model.trim="rating"></star-rating>
     <div class="comment-area"> <textarea @keyup.enter="addOneLineComment" class="form-control" placeholder="한줄평을 작성하세요" rows="4" v-model.trim="oneLineComment"></textarea> </div>
           
     
@@ -17,8 +17,9 @@
 </template>
 
 <script>
+import axios from 'axios'
 import StarRating from 'vue-star-rating';
-
+const api = 'http://127.0.0.1:8000/api/v1/community/'
 export default {
   name: 'OneLineForm',
   components: {
@@ -31,16 +32,33 @@ export default {
     }
   },
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+
     addOneLineComment () {
       if (this.rating && this.oneLineComment) {
         const oneLineCommentData = {
           rating: this.rating,
           content: this.oneLineComment,
-          author: 'user' 
         }
-        this.$emit('pass-one-line', oneLineCommentData)
-        this.rating = null
-        this.oneLineComment = null
+        axios({
+        method: 'post',
+        url: api + `${this.$route.params.id}/review/`,
+        data: oneLineCommentData,
+        headers: this.setToken() // Authorization: JWT tokensdjiadnoiqwnd
+      })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+
       }
     }
   }

@@ -20,7 +20,8 @@
     "vue-infinite-loading": "^2.4.5",
     "vue-js-modal": "^2.0.1",
     "vue-router": "^3.2.0",
-    "vue-star-rating": "^1.7.0"
+    "vue-star-rating": "^1.7.0",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",

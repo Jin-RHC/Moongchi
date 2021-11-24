@@ -53,8 +53,12 @@
 </template>
 
 <script>
+import axios from 'axios'
 import CommunitySidebar from '../components/Community/CommunitySidebar.vue'
 import ReviewItem from '../components/Community/ReviewItem.vue'
+
+const api = 'http://127.0.0.1:8000/api/v1/community/review/'
+
 
 export default {
   components: { 
@@ -64,12 +68,34 @@ export default {
   name: 'Community',
   data () {
     return {
-      reviews: 10,
+      reviews: [],
     }
   },
-	// created () {		
-	// 	this.reviews.push()
-	// }
+	methods: {
+    getReiviews ($state) {      
+      axios({
+				method: 'get',
+				url: api
+			})
+				
+				.then((res) => {   
+        
+        if (res.data.length) {
+          // this.page += 1;
+          // this.$store.dispatch('getMovies', this.page)
+          this.reviews.push(...res.data)
+					console.log(this.reviews)
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+
+      });
+    }
+  },
+	created () {
+		this.getReiviews()
+	}
 }
 </script>
 

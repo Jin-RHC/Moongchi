@@ -24,7 +24,7 @@
 					<div class="movie-btn">	
 						<div class="btn-transform transform-vertical red">
 							<div><a href="#" class="item item-1 redbtn"> <i class="ion-play"></i> Watch Trailer</a></div>
-							<div><a href="https://www.youtube.com/embed/o-0hcF97wy0" class="item item-2 redbtn fancybox-media hvr-grow"><i class="ion-play"></i></a></div>
+							<div><a :href="`https://www.youtube.com/embed/${movie.video_path}`" class="item item-2 redbtn fancybox-media hvr-grow"><i class="ion-play"></i></a></div>
 						</div>
 						<!-- <div class="btn-transform transform-vertical">
 							<div><a href="#" class="item item-1 yellowbtn"> <i class="ion-card"></i> Buy ticket</a></div>
@@ -54,14 +54,14 @@
 					<div class="movie-rate">
 						<div class="rate">
 							<i class="ion-android-star"></i>
-							<p><span>{{ movie.vote_average }}</span> /10<br>
-								<span class="rv">56 Reviews</span>
+							<p><span>{{ movie.rate.rate }}</span> /10<br>
+								<span class="rv">{{ movie.rating_set.length }} Reviews</span>
 							</p>
 						</div>
 						<div class="rate-star">
 							<p>Rate This Movie:  </p>
-							<i v-for="(star1, index) in Math.round(movie.vote_average)" :key="index + 'b'" class="ion-ios-star"></i>	
-							<i v-for="(star2, index) in 10 - Math.round(movie.vote_average)" :key="index + 'c'" class="ion-ios-star-outline"></i>
+							<i v-for="(star1, index) in Math.round(movie.rate.rate)" :key="index + 'b'" class="ion-ios-star"></i>	
+							<i v-for="(star2, index) in 10 - Math.round(movie.rate.rate)" :key="index + 'c'" class="ion-ios-star-outline"></i>
 						</div>
 					</div>
 
@@ -93,7 +93,7 @@
 
 									<!-- 배우 -->
 										<div v-show="currentTab == 2" id="cast" class="">
-							        <movie-cast></movie-cast>
+							        <movie-cast :movie="movie"></movie-cast>
 					       	 	</div>
 
 									<!-- 미디어 -->
@@ -125,6 +125,10 @@ import MovieReview from '../components/MovieDetail/MovieReview.vue'
 import MovieCast from '../components/MovieDetail/MovieCast.vue'
 import MovieMedia from '../components/MovieDetail/MovieMedia.vue'
 import MovieRelated from '../components/MovieDetail/MovieRelated.vue'
+
+const api = 'http://127.0.0.1:8000/api/v1/movies/movie/'
+// const id = this.$route.params.id
+
 export default {
   components: { MovieOverview, MovieReview, MovieCast, MovieMedia, MovieRelated },
   name: 'Detail',
@@ -132,24 +136,36 @@ export default {
     return {
       movie: null,
 			currentTab: 0,
-			tabs: ['overview', 'review', 'cast & crew', 'media', 'related movies']
+			tabs: ['overview', 'review', 'cast & crew', 'media', 'related movies'],
     }
-  },
-	props: {
-		data: Object
-	},
-  beforeCreate () {
+  },	
+  created () {
   const id = this.$route.params.id
-  const API_KEY = 'e856b3ac18eec7abd7cf6099f977bbff'
-  // console.log(id)
+  console.log(id)
   axios({
     method: 'get',
-    url: `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=ko&KR`
+    url: api + `${id}/`
   })
     .then(res => {
-      this.movie = res.data			  
+      this.movie = res.data
+			console.log(this.movie)
     })
 	},
+	// methods: {
+	// 	getReview () {      
+	// 		axios({
+	// 			method: 'get',
+	// 			url: api + `${id}/review/`
+	// 		})
+	// 			.then(res => {
+	// 				this.review = res.data
+	// 				console.log(this.review)
+	// 			})
+	// 			.catch(err => {
+	// 				console.log(err)
+	// 			})
+	// 		},  
+	// }
 }
 </script>
 

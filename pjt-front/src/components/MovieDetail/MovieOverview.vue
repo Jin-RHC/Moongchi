@@ -24,8 +24,8 @@
 
   <div class="charts">
     <div style="display: flex; justify-content: space-between;">
-      <a @click.prevent="addLike" style="" href="" title="좋아요"><font-awesome-icon :icon="['far', 'thumbs-up']" size="2x" color="#DB4455" /><span style="font-size: 2em;">{{like}}</span></a>
-      <a @click.prevent="addDislike" style="" href="" title="글쎄요"><font-awesome-icon :icon="['far', 'thumbs-down']" size="2x" color="#0679C0"  /><span style="font-size: 2em;">{{dislike}}</span></a>
+      <a @click.prevent="addLike" style="" href="" title="좋아요"><font-awesome-icon :icon="['far', 'thumbs-up']" size="2x" color="#DB4455" /><span style="font-size: 2em;">{{like.length}}</span></a>
+      <a @click.prevent="addDislike" style="" href="" title="글쎄요"><font-awesome-icon :icon="['far', 'thumbs-down']" size="2x" color="#0679C0"  /><span style="font-size: 2em;">{{dislike.length}}</span></a>
     </div>
     <div class="charts__chart chart--p100 chart--blue chart--sm" style="position: relative;">
       <div :class="`charts__chart chart--p${percentage} chart--red`">      
@@ -38,7 +38,7 @@
   
   <div class="title-hd-sm" style="margin-top: 100px;">
     <h3 style="font-family: sans-serif;">한줄평 </h3>
-    <a href="#" class="time">총 <span>120</span> 건 <i class="ion-ios-arrow-right"></i></a>
+    <a href="#" class="time">총 <span>{{ oneLineComments.length }}</span> 건 <i class="ion-ios-arrow-right"></i></a>
   </div>
   <!-- movie user review -->
       <div class="mv-user-review-item" >
@@ -47,11 +47,11 @@
         </span>
         <span v-else>
           <ul>
-            <one-line-comment v-for="(oneLineComment, index) in oneLineComments" :key="index" :oneLineComment="oneLineComment"></one-line-comment>
+            <one-line-comment v-for="(oneLineComment, index) in oneLineComments" :key="index" :oneLineComment="oneLineComment" :movie="movie"></one-line-comment>
           </ul>
         </span>
       </div>
-     <one-line-form @pass-one-line="getOneLine"></one-line-form>
+     <one-line-form></one-line-form>
   </div>
 
 
@@ -59,26 +59,30 @@
 
       <div class="col-md-4 col-xs-12 col-sm-12">
         <div class="ads">
-        <div class="sb-it">
+        <div class="sb-it" v-show="movie.is_netflix">
           <h6>Now in Netflix</h6>
           <img src="../../assets/Netflix-new-icon.png" alt="" style="width: 50%;">
         </div>
         </div>
-        <div class="sb-it">
+        <!-- <div class="sb-it">
           <h6>Director: </h6>
           <p><a href="#">Joss Whedon</a></p>
         </div>
         <div class="sb-it">
           <h6>Writer: </h6>
           <p><a href="#">Joss Whedon,</a> <a href="#">Stan Lee</a></p>
-        </div>
+        </div> -->
         <div class="sb-it">
           <h6>Stars: </h6>
-          <p><a href="#">Robert Downey Jr,</a> <a href="#">Chris Evans,</a> <a href="#">Mark Ruffalo,</a><a href="#"> Scarlett Johansson</a></p>
+          <p>
+            <a href="" v-for="actor in movieActors" :key="actor.id">{{ actor.name }}, </a> 
+          </p>
         </div>
         <div class="sb-it">
           <h6>Genres:</h6>
-          <p><a href="#">Action, </a> <a href="#"> Sci-Fi,</a> <a href="#">Adventure</a></p>
+          <p> 
+            <a href="" v-for="genre in movieGenres" :key="genre.id">{{ genre }}, </a>
+          </p>
         </div>
         <div class="sb-it">
           <h6>Release Date:</h6>
@@ -86,13 +90,18 @@
           <!-- <p>May 1, 2015 (U.S.A)</p> -->
         </div>
         <div class="sb-it">
-          <h6>Run Time:</h6>
-          <p>{{ movie.runtime }} min</p>
+          <h6> Country:</h6>
+          <p>{{ movie.country}}</p>
         </div>
         <div class="sb-it">
-          <h6>MMPA Rating:</h6>
-          <p>PG-13</p>
+          <h6>Run Time:</h6>
+          <!-- <p>{{ movie.runtime }} min</p> -->
         </div>
+        <div class="sb-it">
+          <h6>Popularity:</h6>
+          <p>{{ movie.popularity }}</p>
+        </div>
+
         <!-- <div class="sb-it">
           <h6>Plot Keywords:</h6>
           <p class="tags">
@@ -125,9 +134,11 @@ export default {
   },
   data () {
     return {      
-      like: 0,
-      dislike: 0,
-      oneLineComments: [],
+      like: this.movie.like_users,
+      dislike: this.movie.dlike_users,
+      oneLineComments: this.movie.rating_set,
+      movieGenres: this.movie.genres,
+      movieActors: this.movie.actors
     }
   },
   methods: {
@@ -139,13 +150,18 @@ export default {
     },
     getOneLine (data) {
       this.oneLineComments.push(data)
+      console.log('댓글 작성', this.oneLineComments)
+      
     }
   },
   computed: {
+
     percentage () {
       return Math.round((this.like / (this.like + this.dislike)) * 100)
-    }
-  },  
+    },
+    
+  },
+
 }
 </script>
 

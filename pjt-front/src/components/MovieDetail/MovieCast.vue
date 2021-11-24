@@ -4,7 +4,7 @@
       <h2>Avengers: Age of Ultron</h2> -->
 
   <!-- //== -->
-      <div class="title-hd-sm">
+      <!-- <div class="title-hd-sm">
     <h4>Directors & Credit Writers</h4>
   </div>
   <div class="mvcast-item">											
@@ -15,10 +15,10 @@
       </div>
       <p>...  Director</p>
     </div>
-  </div>
+  </div> -->
 
   <!-- //== -->
-  <div class="title-hd-sm">
+  <!-- <div class="title-hd-sm">
     <h4>Directors & Credit Writers</h4>
   </div>
   <div class="mvcast-item">											
@@ -64,21 +64,29 @@
       </div>
       <p>...  (character created by: Ultron, Vision)</p>
     </div>
-  </div>
+  </div> -->
   <!-- //== -->
 
   <div class="title-hd-sm">
     <h4>Cast</h4>
   </div>
-  <div class="mvcast-item">											
+  <div class="mvcast-item" v-for="actor in actors" :key="actor.id">
     <div class="cast-it">
+      <div class="cast-left">
+        <img :src="`https://image.tmdb.org/t/p/w45${actor.profile_path}`" alt="">
+        <a href="#">{{ actor.name }}</a>
+      </div>
+      <p>...  {{ actor.name }}</p>
+    </div>											
+    <!-- <div class="cast-it">
       <div class="cast-left">
         <img src="images/uploads/cast1.jpg" alt="">
         <a href="#">Robert Downey Jr.</a>
       </div>
       <p>...  Robert Downey Jr.</p>
-    </div>
-    <div class="cast-it">
+    </div> -->
+
+    <!-- <div class="cast-it">
       <div class="cast-left">
         <img src="images/uploads/cast2.jpg" alt="">
         <a href="#">Chris Hemsworth</a>
@@ -126,11 +134,11 @@
         <a href="#">Don Cheadle</a>
       </div>
       <p>...  James Rhodes/ War Machine</p>
-    </div>
+    </div> -->
   </div>
 
   <!-- //== -->
-  <div class="title-hd-sm">
+  <!-- <div class="title-hd-sm">
     <h4>Produced by</h4>
   </div>
   <div class="mvcast-item">											
@@ -190,13 +198,21 @@
       </div>
       <p>...  associate producer</p>
     </div>
-  </div>
+  </div> -->
       </div>
 </template>
 
 <script>
 export default {
-  name: 'MovieCast'
+  name: 'MovieCast',
+  props: {
+    movie: Object
+  },
+  computed: {
+    actors () {
+      return this.movie.actors
+    }
+  }
 }
 </script>
 

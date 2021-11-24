@@ -2,9 +2,9 @@
 <div class="col-md-4 col-sm-12 col-xs-12">
   <div class="blog-item-style-2" style="margin-bottom: auto;">
     <a href="blogdetail.html">
-      <img :src="`https://image.tmdb.org/t/p/original${movie.poster_path}`" alt=""></a>
+      <img :src="`https://image.tmdb.org/t/p/original${review.poster_path}`" alt=""></a>
     <div class="blog-it-infor">
-      <h3><a href="blogdetail.html"> 영화 제목: King Of The Monsters Adds O’Shea Jackson Jr</a></h3>
+      <h3><a href="blogdetail.html"> 영화 제목: {{review.title}}</a></h3>
       <div style="display: flex; justify-content: space-between;">
         <span class="time">27 Mar 2017</span>
         <span class="" style="font-family: serif; font-weight: light; font-size: 1em;">user</span>

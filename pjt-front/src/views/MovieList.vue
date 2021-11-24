@@ -95,15 +95,14 @@ export default {
 				url: api + `${this.page}`
 			})
 				
-				.then((res) => {
+				.then((res) => {   
         
-   
-        console.log(res)
         if (res.data.length) {
           this.page += 1;
 
           // this.$store.dispatch('getMovies', this.page)
           this.movies.push(...res.data)
+					console.log(this.movies)
           $state.loaded();
         } else {
           $state.complete();
