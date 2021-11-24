@@ -48,15 +48,18 @@ export default {
         }
         axios({
         method: 'post',
-        url: api + `${this.$route.params.id}/review/`,
+        url: api + `${this.$route.params.id}/rating/`,
         data: oneLineCommentData,
         headers: this.setToken() // Authorization: JWT tokensdjiadnoiqwnd
       })
         .then(res => {
           console.log(res)
+          this.rating = null
+          this.content = null
         })
         .catch(err => {
           console.log(err)
+          alert('한줄평을 작성할 수 없습니다.')
         })
 
       }

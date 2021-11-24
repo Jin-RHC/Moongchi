@@ -4,7 +4,7 @@
 
       <div style="display: flex;">        
         <star-rating :max-rating=10	:rating="oneLineComment.rating" :star-size="15" :read-only="true"></star-rating>
-        
+
         <p class="time" >
           <a href="#" style="margin: 0 5px"> {{ oneLineComment.user.nickname }} </a> | <span style="margin: 0 5px;"> {{ createdAt }} </span> | <a href="#" style="margin: 0 5px;">신고</a>
         </p>
@@ -50,8 +50,9 @@
 </template>
 
 <script>
+import axios from 'axios'
 import StarRating from 'vue-star-rating';
-
+const api = 'http://127.0.0.1:8000/api/v1/'
 export default {
   name: 'OneLineComment',
   components: {
@@ -70,13 +71,34 @@ export default {
     }
   },
   methods: {
-    likeOneLineComment () {
-      this.oneLineCommentLike += 1
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
     },
-    dislikeOneLineComment () {
-      this.oneLineCommentDislike += 1
-    }
-  },
+
+    likeOneLineComment () {
+      axios({
+          method: 'post',
+          url: api + `${this.$route.params.id}/rating/`,
+          data: this.oneLineCommentLike,
+          headers: this.setToken()
+        })
+          .then(res => {
+            console.log(res)
+            
+          })
+          .catch(err => {
+            console.log(err)
+          })
+        }
+
+      // this.oneLineCommentLike += 1
+    },
+
+  
   computed: {
     createdAt () {
       return this.oneLineComment.created_at.slice(0, 10) + '   ' + this.oneLineComment.created_at.slice(11, 19)
