@@ -4,8 +4,10 @@ import Home from '../views/Home.vue'
 import MovieList from '../views/MovieList.vue'
 import MovieDetail from '../views/MovieDetail.vue'
 import Community from '../views/Community.vue'
+import CommunitySearch from '../views/CommunitySearch.vue'
 import ReviewForm from '@/components/Community/ReviewForm.vue'
 import ReviewDetail from '../views/ReviewDetail.vue'
+import CommingSoon from '../views/CommingSoon.vue'
 import UserProfile from '../views/UserProfile.vue'
 import NotFoundComponent from '../views/NotFoundComponent.vue'
 Vue.use(VueRouter)
@@ -34,6 +36,11 @@ const routes = [
     props: true
   },
   {
+    path: '/comunitysearch',
+    name: 'CommunitySearch',
+    component: CommunitySearch
+  },
+  {
     path: '/review-create',
     name: 'ReviewForm',
     component: ReviewForm
@@ -42,6 +49,11 @@ const routes = [
     path: '/review/:reviewId',
     name: 'ReviewDetail',
     component: ReviewDetail
+  },
+  {
+    path: '/celebrities',
+    name: 'CommingSoon',
+    component: CommingSoon,
   },
   {
     path: '/profile/:username',

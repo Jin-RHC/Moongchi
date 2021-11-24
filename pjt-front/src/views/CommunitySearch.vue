@@ -45,7 +45,7 @@ import axios from 'axios'
 import CommunitySidebar from '../components/Community/CommunitySidebar.vue'
 import ReviewItem from '../components/Community/ReviewItem.vue'
 
-const api = 'http://127.0.0.1:8000/api/v1/community/review/'
+const api = 'http://127.0.0.1:8000/api/v1/community/reviewsearch/'
 
 
 export default {
@@ -54,37 +54,37 @@ export default {
     ReviewItem,
 		// InfiniteLoading 
   },
-  name: 'Community',
+  name: 'CommunitySearch',
   data () {
     return {
       reviews: [],
     }
   },
 	methods: {
-    getReviews () {      
+    getReview () {      
       axios({
 				method: 'get',
-				url: api
+				url: api + `${this.$route.query.keyword}/`
 			})
 				
 				.then((res) => {   
-        
-        if (res.data.length) {
-          // this.page += 1;
-          // this.$store.dispatch('getMovies', this.page)
-					// console.log(res.data)
+          console.log(res.data.message)
+          if (res.data.message === '검색 결과가 없습니다ㅠ') {
+            alert(`${res.data.message}`)
+            this.$router.push('Community')
+          }        
           this.reviews = res.data
-          // $state.loaded();
-        } else {
-          // $state.complete();
-        }
+        
+        
 
-      });
-    }
+      })
+        
+
+    },
   },
-	created () {
-		this.getReviews()
-	}
+  created () {
+    this.getReview()
+  }
 }
 </script>
 

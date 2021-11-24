@@ -2,7 +2,7 @@
   <div class="sidebar">
     <div class="sb-search sb-it">
       <h4 class="sb-title">Search</h4>
-      <input type="text" placeholder="Enter keywords">
+      <input @keydown.enter="searchReview" :value="searchKeyword" @input="changeKeyword" type="text" placeholder="Enter keywords">
     </div>
     <div class="sb-cate sb-it">
       <h4 class="sb-title">Categories</h4>
@@ -26,27 +26,46 @@
         <span>03</span><h6><a href="#">Fate of the Furious Reviews What the Critics Saying</a></h6>
       </div>
     </div>
-    <!-- <div class="sb-tags sb-it">
-      <h4 class="sb-title">tags</h4>
-      <ul class="tag-items">
-        <li><a href="#">Batman</a></li>
-        <li><a href="#">film</a></li>
-        <li><a href="#">homeland</a></li>
-        <li><a href="#">Fast & Furious</a></li>
-        <li><a href="#">Dead Walker</a></li>
-        <li><a href="#">King</a></li>
-        <li><a href="#">Beauty</a></li>
-      </ul>
-    </div>
-    <div class="ads">
-      <img src="images/uploads/ads1.png" alt="">
-    </div> -->
+  
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+const api = 'http://127.0.0.1:8000/api/v1/community/'
 export default {
-  name: 'CommunitySidebar'
+  name: 'CommunitySidebar',
+  data () {
+    return {
+      searchKeyword: null,
+    }
+  },
+  methods: {
+    searchReview () {
+      if (this.searchKeyword.length) {
+        this.$router.push({ name: 'CommunitySearch', query: {keyword: `${this.searchKeyword}` }}).catch(()=>{})
+      }      
+      
+    },
+    getTopReview () {
+      axios({
+        method: 'get',
+        url: api + `review/`,
+      })
+      .then(res => {
+        console.log(res)
+        const topReview = res.data
+        this.$emit('noti-community', topReview)
+      })
+      .catch(err => {
+        console.log(err)
+        // alert('검색에 실패했습니다.')
+      })
+    },
+    changeKeyword (e) {
+      this.searchKeyword = e.target.value
+    }
+  }
 }
 </script>
 

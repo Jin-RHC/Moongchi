@@ -108,6 +108,7 @@ export default {
         })
           .then(res => {
             console.log(res, '작성 성공!')
+            this.$router.push({name: 'ReviewDetail', params: {reviewId: res.data.id}})
           })
           .catch(err => {
             console.log(err)

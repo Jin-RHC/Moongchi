@@ -9,30 +9,12 @@
       <comment-item 
         v-for="(comment, index) in comments" 
         :key="index" 
-        :comment="comment"
+        :comment="comment"        
         @noti-like-comment="getReviewData"
         @noti-dislike-comment="getReviewData"
+        @noti-nested-comment-like-dislike="getReviewData"
       ></comment-item>
-
-
-      <!-- <div v-if="comment.nestedcomment_set.length">
-        <div v-for="(nestedcomment, i) in comment.nestedcomment_set" :key="i" class="reply" style="">
-          <div class="author-infor" style="display: flex; justify-content: space-between;">
-            <h6><a href="#">{{ nestedcomment.user }}</a></h6>
-            <p style="white-space: pre-line; width: 500px;">{{ nestedcomment.content }}</p>
-
-            <div class="flex-it2">
-               <span class="time"> {{ nestedcomment.created_at.slice(0, 10) + '   ' + nestedcomment.created_at.slice(11, 19)}}</span>
-              <a @click.prevent="likeOneLineComment" href="" class="time" style="border: solid; border-width: thin; border-radius: 2px; margin-right: 5px;"><font-awesome-icon :icon="['far', 'thumbs-up']" size="1x" style="margin-left: 7px; margin-right: 7px;" />
-                <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineCommentLike }}</strong> 
-              </a>
-              <a @click.prevent="dislikeOneLineComment" href="" class="time" style="font-weight: bolder; border: solid; border-width: thin; border-radius: 2px;"><font-awesome-icon :icon="['far', 'thumbs-down']" size="1x" style=" margin-right: 7px; margin-left: 7px;" />
-                <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineCommentDislike }}</strong> 
-              </a>
-            </div>                    
-          </div>
-        </div>
-      </div> -->
+      
       <div v-if="isCommentForm">
         <comment-form></comment-form>  
       </div>   
@@ -62,6 +44,7 @@ export default {
     return {      
       commentChild: true,
       isCommentForm: false,
+      
     }
   },
   methods: {

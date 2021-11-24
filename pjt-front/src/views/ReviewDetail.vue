@@ -26,7 +26,7 @@
           <div style="display: flex; justify-content: space-between;">
 						        <star-rating :rating="3" :star-size="15" :read-only="true"></star-rating>
 
-						<span class="right-it time" style="font-weight: bold; font-size: 1em;">조회 0 | 추천 0 | 댓글 0 </span>
+						<span class="right-it time" style="font-weight: bold; font-size: 1em;">조회 0 | 추천 {{ item.like_users_count }} | 댓글 {{ item.comment_set.length }} </span>
           </div>
           <hr>
 					<div style="display: flex; justify-content: space-between;">
