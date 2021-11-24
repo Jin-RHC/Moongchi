@@ -14,6 +14,9 @@ urlpatterns = [
     # 해당 영화의 리뷰리스트, 작성
     path('<int:movie_id>/review/', views.review_list_create, name='review_list_create'),
 
+    # 리뷰 검색
+    path('reviewsearch/<str:query>/', views.review_search, name='review_search'),
+
     # 리뷰 수정, 삭제, 좋아요, 싫어요
     path('<int:movie_id>/review/<int:review_id>/', views.review_update_delete, name='review_update_delete'),
     path('<int:movie_id>/review/<int:review_id>/like/', views.review_like, name='review_like'),
