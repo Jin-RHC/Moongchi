@@ -57,7 +57,7 @@
           </ul>
         </span>
       </div>
-     <one-line-form @noti-one-line-comment="getComment"></one-line-form>
+     <one-line-form @noti-one-line-comment="getData"></one-line-form>
   </div>
 
 
@@ -140,12 +140,13 @@ export default {
     movie: Object
   },
   data () {
-    return {      
+    return {
       like: this.movie.like_users,
       dislike: this.movie.dlike_users,
       oneLineComments: this.movie.rating_set,
       movieGenres: this.movie.genres,
-      movieActors: this.movie.actors
+      movieActors: this.movie.actors,
+      // movieData: null,
     }
   },
   methods: {
@@ -168,6 +169,7 @@ export default {
           this.getData()
         })
         .cactch(err => {
+          alert('좋아요를 누를 수 없습니다')
           console.log(err)
         })
     },
@@ -182,21 +184,18 @@ export default {
           this.getData()
         })
         .cactch(err => {
+          alert('싫어요를 누를 수 없습니다.')
           console.log(err)
         })
     },
-    getComment () {
-      this.getData()
 
-      console.log('오버뷰에서 한줄평 작성 신호 받음', this.oneLineComments)
-      
-    },
     getData () {
 			axios({
 			method: 'get',
 			url: api + `movies/movie/${this.$route.params.id}/`
 		})
 			.then(res => {
+        // this.movieData = res.data
 				this.like = res.data.like_users
         this.dislike = res.data.dlike_users
         this.oneLineComments = res.data.rating_set
@@ -209,8 +208,12 @@ export default {
     percentage () {
       return Math.round((this.like.length / (this.like.length + this.dislike.length)) * 100)
     },
- 
+    // oneLineComments () {
+    //   return this.movieData.rating_set
+    // }
+  
   },
+  
 
 }
 </script>

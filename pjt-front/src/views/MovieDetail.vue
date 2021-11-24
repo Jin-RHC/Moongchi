@@ -82,7 +82,7 @@
 
 									<!-- 줄거리 -->
 									<div v-show="currentTab == 0" id="overview" class="">							
-										<movie-overview :movie="movie" @noti-one-line-comment="regetMovie"></movie-overview>
+										<movie-overview :movie="movie"></movie-overview>
 									</div>
 
 
@@ -151,14 +151,7 @@ export default {
 			.catch(err => {
 				console.log(err)
 			})
-
 		},
-		regetMovie () {
-			console.log('디테일에서 한줄평 작성 신호 받음', this.oneLineComments)
-
-			this.getMovie()
-		}
-
 	},
 		
   created () {

@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+const api = 'http://127.0.0.1:8000/api/v1/community/'
 export default {
   name: 'CommentForm',
   data () {
@@ -36,10 +38,33 @@ export default {
     }
   },
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
     leaveComment () {
       if (this.message) {
-        this.$emit('get-message', {message: this.message})
-        this.message = null
+        const comment = {
+          content: this.message
+        }
+        axios({
+          method: 'post',
+          url: api + `${this.$route.params.reviewId}/comment/`,
+          data: comment,
+          headers: this.setToken()
+        })
+          .then(res => {
+            console.log(res)
+            this.$emit('noti-comment')
+            this.message = null
+          })
+          .catch(err => {
+            console.log(err)
+            // alert('댓글을 작성할 수 없습니다.')
+          })
       }
 
     }

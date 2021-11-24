@@ -1,10 +1,11 @@
 <template>
 <div class="col-md-4 col-sm-12 col-xs-12">
   <div class="blog-item-style-2" style="margin-bottom: auto;">
-    <a href="blogdetail.html">
+    <a @click.prevent="$router.push({ name: 'ReviewDetail', params: {reviewId: review.id }})" href="blogdetail.html">
       <img :src="`https://image.tmdb.org/t/p/original${review.movie.poster_path}`" alt=""></a>
     <div class="blog-it-infor">
-      <h3><a href="blogdetail.html"> {{ review.movie.title }}: {{review.title}}</a></h3>
+      {{ review.id }}
+      <h3><a @click.prevent="$router.push({ name: 'ReviewDetail', params: {reviewId: review.id }})" href="blogdetail.html"> {{ review.movie.title }}: {{review.title}}</a></h3>
       <div style="display: flex; justify-content: space-between;">
         <span class="time">{{ review.updated_at.slice(0, 10)}} {{review.updated_at.slice(11, 16)}}</span>
         <span class="" style="font-family: serif; font-weight: light; font-size: 1em;">{{ review.user.nickname }}</span>

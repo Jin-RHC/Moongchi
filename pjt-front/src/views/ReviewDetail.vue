@@ -22,7 +22,7 @@
 		<div class="row">
 			<div class="col-md-9 col-sm-12 col-xs-12">
 				<div class="blog-detail-ct">
-					<h1> 리뷰 제목 </h1>
+					<h1> {{ item.title }} </h1>
           <div style="display: flex; justify-content: space-between;">
 						        <star-rating :rating="3" :star-size="15" :read-only="true"></star-rating>
 
@@ -30,25 +30,25 @@
           </div>
           <hr>
 					<div style="display: flex; justify-content: space-between;">
-						<span class="time" style=" font-weight: bold; font-size: 1em;">user</span><span class="time">2021-11-23</span>						
+						<span class="time" style=" font-weight: bold; font-size: 1em;">{{ item.user.username }}</span><span class="time">{{ createdAt }}</span>						
 					</div>
 					<br>
 
-					<p>관련 영화: </p>
-					<img src="images/uploads/blog-detail.jpg" alt="">
+					<p>관련 영화: <a @click.prevent="$router.push({ name: 'MovieDetail', params: {id: item.movie.id }})" href=""> {{ item.movie.title }} </a></p>
+					<img :src="`https://image.tmdb.org/t/p/original${item.movie.poster_path}`" alt="">
 					<!-- <a href=""><font-awesome-icon :icon="['fas', 'thumbs-up']" /></a>
 					<a href=""><font-awesome-icon :icon="['fas', 'thumbs-down']" /></a> -->
-					
+					<p>{{ item.content }}</p>
 
 					<!-- <a href=""><font-awesome-icon :icon="['fas', 'star']" size="3x" :style="{ color: '' }" /></a> -->
 					<div style="display: flex; justify-content: center;">
 						<div style="display: flex; flex-direction: column;">
-								<a href="" style=""><font-awesome-icon icon='arrow-up' size="3x" :style="{ color: '' }"/></a>
-								<div style="display: inline; margin-left: 13px; font-size: 1.5em;">0</div>
+								<a @click.prevent="addReviewLike" href="" style=""><font-awesome-icon icon='arrow-up' size="3x" :style="{ color: '' }"/></a>
+								<div style="display: inline; margin-left: 13px; font-size: 1.5em;">{{item.like_users.length}}</div>
 						</div>
 						<div style="display: flex; flex-direction: column;">
-								<a href="" style="margin-left: 20px;"><font-awesome-icon icon='arrow-down' size="3x" :style="{ color: '' }"/></a>
-								<div style="display: inline; margin-left: 33px; font-size: 1.5em;">0</div>
+								<a @click.prevent="addReviewDislike" href="" style="margin-left: 20px;"><font-awesome-icon icon='arrow-down' size="3x" :style="{ color: '' }"/></a>
+								<div style="display: inline; margin-left: 33px; font-size: 1.5em;">{{item.dlike_users.length}}</div>
 						</div>
 							
 						
@@ -71,9 +71,9 @@
 						</div> -->
 					</div>
 					<!-- comment items -->
-					<comment-items :messageInfo="messageInfo"></comment-items>
+					<comment-items :comments="comments"></comment-items>
 					<!-- comment form -->
-          <comment-form @get-message="deliverMessage"></comment-form>
+          <comment-form @noti-comment="getData"></comment-form>
 					
 					
 				</div>
@@ -90,25 +90,80 @@
 
 <script>
 import StarRating from 'vue-star-rating';
-
+import axios from 'axios'
 
 import CommentForm from '../components/Community/CommentForm.vue'
 import CommentItems from '../components/Community/CommentItems.vue'
 import CommunitySidebar from '../components/Community/CommunitySidebar.vue'
+
+const api = 'http://127.0.0.1:8000/api/v1/community/'
 export default {
   components: { CommunitySidebar, CommentItems, CommentForm, StarRating },
   name: 'ReviewDetail',
   data () {
     return {
-      messageInfo: [],
-			data: null,
+      comments: null,
+			item: null,
     }
   },
-  methods: {
-    deliverMessage (messageInfo) {
-      this.messageInfo.push(messageInfo)
+  methods: {    
+		setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+		addReviewLike () {
+			 axios({
+        method: 'post',
+        url: api + `${this.item.movie.id}/review/${this.$route.params.reviewId}/like/`,        
+        headers: this.setToken()
+      })
+				.then(res => {
+					console.log(res)
+					this.getData()
+				})
+				.catch(err => {
+					console.log(err)
+				})
+
+		},
+		addReviewDislike () {
+			axios({
+        method: 'post',
+        url: api + `${this.item.movie.id}/review/${this.$route.params.reviewId}/dlike/`,        
+        headers: this.setToken()
+      })
+				.then(res => {
+					console.log(res)
+					this.getData()
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		},
+		getData () {
+			axios({
+				method: 'get',
+				url: api + `review/${this.$route.params.reviewId}/`				
+			})
+				.then(res => {
+					this.item = res.data
+					this.comments = res.data.comment_set
+				})
+		},
+
+
+  },
+	created () {
+		this.getData()
+	},
+	computed: {
+    createdAt () {
+      return this.item.updated_at.slice(0, 10) + '   ' + this.item.updated_at.slice(11, 19)
     }
-  },	
+  }
 }
 </script>
 

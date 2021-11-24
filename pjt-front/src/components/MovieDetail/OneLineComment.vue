@@ -17,10 +17,10 @@
         <div>
 
           <a @click.prevent="likeOneLineComment" href="" class="time" style="border: solid; border-width: thin; border-radius: 2px; margin-right: 5px;"><font-awesome-icon :icon="['far', 'thumbs-up']" size="1x" style="margin-left: 7px; margin-right: 7px;" />
-            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineCommentLike.length }}</strong> 
+            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineComment.like_users.length }}</strong> 
           </a>
           <a @click.prevent="dislikeOneLineComment" href="" class="time" style="font-weight: bolder; border: solid; border-width: thin; border-radius: 2px;"><font-awesome-icon :icon="['far', 'thumbs-down']" size="1x" style=" margin-right: 7px; margin-left: 7px;" />
-            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineCommentDislike.length }}</strong> 
+            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineComment.dlike_users.length }}</strong> 
           </a>
         </div>
         </div>
