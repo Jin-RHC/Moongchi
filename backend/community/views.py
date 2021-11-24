@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from .serializers import (ReviewListSerializer, ReviewCreateSerializer, ReviewUpdateSerializer, 
     CommentCreateSerializer, NestedCommentCreateSerializer, RatingSerializer)
 from movies.models import Movie
+from django.db.models import Q
 
 
 
@@ -53,6 +54,16 @@ def movie_dlike(request, movie_id):
     
     return Response({'is_dlike': request.user.dlike_movies.filter(pk=movie_id).exists()}, status=status.HTTP_201_CREATED)
 
+
+# 리뷰 검색 기능입니다.
+@api_view(['GET',])
+def review_search(request, query):
+    reviews = Review.objects.filter(Q(title__icontains=query)|Q(content__icontains=query))
+    serializer = ReviewListSerializer(reviews, many=True)
+    if reviews:
+        return Response(serializer.data)
+    else:
+        return Response({"message":"검색 결과가 없습니다ㅠ"}, status=status.HTTP_200_OK)
 
 # 특정 영화의 리뷰 목록을 보여주거나 등록합니다
 @api_view(['GET', 'POST'])
@@ -249,6 +260,8 @@ def rating_list_create(request, movie_id):
     serializer = RatingSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user, movie=movie)
+        movie.rating_average = (movie.rating_average * (movie.rating_set.count() - 1) + serializer.data.get('rating', 8)) / movie.rating_set.count()
+        movie.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
