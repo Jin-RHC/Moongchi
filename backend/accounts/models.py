@@ -8,7 +8,7 @@ from django.conf import settings
 # Create your models here.
 class User(AbstractUser):
     nickname_validator = UnicodeUsernameValidator()
-    followers = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='followings')
+    followings = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='followers')
     nickname = models.CharField(
         max_length=30,
         unique=True,

@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db.models import fields
 from django.views.decorators.csrf import requires_csrf_token
 from rest_framework import serializers
 
@@ -13,9 +14,23 @@ class ReviewListSerializer(serializers.ModelSerializer):
         
         # 해당 댓글에 작성된 대댓글을 위한 serializer
         class NestedCommentSerializer(serializers.ModelSerializer):
+            class UserSerializer(serializers.ModelSerializer):
+                class Meta:
+                    model = get_user_model()
+                    fields = ('id', 'username', 'nickname')
+
+            user = UserSerializer(read_only=True)
+            
             class Meta:
                 model = NestedComment
                 fields = ('id', 'content', 'user', 'like_users', 'dlike_users', 'created_at')
+        
+        class UserSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = get_user_model()
+                fields = ('id', 'username', 'nickname')
+
+        user = UserSerializer(read_only=True)
 
         nestedcomment_set = NestedCommentSerializer(many=True, read_only=True)
         
@@ -93,6 +108,20 @@ class RatingSerializer(serializers.ModelSerializer):
         model = Rating
         fields = ('rating', 'content')
         extra_kwargs = {'rating': {'required': True}}
+
+
+# 추천순 리뷰 3개 보여줄 때 이용하는 serializer
+class SidebarReviewSerializer(serializers.ModelSerializer):
+    like_users_count = serializers.IntegerField(
+        source='like_users.count',
+        read_only=True
+    )
+
+    class Meta:
+        model = Review
+        fields = ('id', 'title', 'user', 'like_users_count')
+
+
 
 
 

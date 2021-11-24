@@ -8,48 +8,48 @@ class ReviewReportSerializer(serializers.ModelSerializer):
     class ReviewContentSerializer(serializers.ModelSerializer):
         class Meta:
             model = Review
-            fields = ('content',)
+            fields = ('id','content',)
 
     review = ReviewContentSerializer(read_only=True)
 
     class Meta:
         model = ReviewReport
-        fields = ('content', 'review', 'created_at')
+        fields = ('review', 'created_at')
 
 
 class CommentReportSerializer(serializers.ModelSerializer):
     class CommentContentSerializer(serializers.ModelSerializer):
         class Meta:
             model = Comment
-            fields = ('content',)
+            fields = ('id', 'content',)
 
     comment = CommentContentSerializer(read_only=True)
     # serializers.DateTimeField
 
     class Meta:
         model = CommentReport
-        fields = ('content', 'comment', 'created_at')
+        fields = ('comment', 'created_at')
 
 
 class NestedCommentReportSerializer(serializers.ModelSerializer):
     class NestedCommentContentSerializer(serializers.ModelSerializer):
         class Meta:
             model = NestedComment
-            fields = ('content',)
+            fields = ('id', 'content',)
 
     nestedcomment = NestedCommentContentSerializer(read_only=True)
     class Meta:
         model = NestedCommentReport
-        fields = ('content', 'nestedcomment', 'created_at')
+        fields = ('nestedcomment', 'created_at')
 
 
 class RatingReportSerializer(serializers.ModelSerializer):
     class RatingContentSerializer(serializers.ModelSerializer):
         class Meta:
             model = Rating
-            fields = ('content',)
+            fields = ('id', 'content',)
 
     rating = RatingContentSerializer(read_only=True)
     class Meta:
         model = RatingReport
-        fields = ('content', 'rating', 'created_at')
+        fields = ('rating', 'created_at')
