@@ -1,3 +1,4 @@
+from django.db.models.aggregates import Avg, Count
 from django.shortcuts import get_object_or_404, render
 from rest_framework.serializers import Serializer
 from .models import Movie, Genre, Director, Actor
@@ -7,12 +8,84 @@ from accounts.models import User
 from justwatch import JustWatch
 from moongchi.my_settings import MY_SECRET
 from .serializers import MovieListSerializer, MovieDetailSerializer, MovieSearchListSerializer
+from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
+from collections import Counter
 import requests
 import pickle
+import datetime
 
+
+with open('movies/recommendations.p', 'rb') as file:
+    recommendations = pickle.load(file)
+A_K = MY_SECRET['TMDB_KEY']
+
+
+# 메인페이지 영화
+@api_view(['GET',])
+def mainmovies(request):
+    # 현재 상영중인 영화
+    now_movies = Movie.objects.filter(release_date__gte=datetime.datetime.now() - datetime.timedelta(days=60)).filter(
+        release_date__lte=datetime.datetime.now().date()).order_by('-popularity')[:10]
+    
+    # 높은 평점 영화
+    high_rating_movies = Movie.objects.order_by('-rating_average')[:10]
+    
+    # 평점이 많은 영화
+    popular_movies = Movie.objects.annotate(ratings_count=Count('rating')).order_by('-ratings_count')[:10]
+
+    now_serializer = MovieListSerializer(now_movies, many=True)
+    high_rating_serializer = MovieListSerializer(high_rating_movies, many=True)
+    popular_serializer = MovieListSerializer(popular_movies, many=True)
+
+    return Response({"now-playing": now_serializer.data, "high-rates": high_rating_serializer.data,
+        "popular": popular_serializer.data})
+
+
+# 사용자 맞춤 추천 리스트
+@api_view(['GET',])
+@permission_classes([IsAuthenticated])
+def recommended_movie_list(request):
+    good_movie_set = set()
+    for rating in request.user.rating_set.all():
+        if rating.rating >= 7:
+            good_movie_set.add(rating.movie.pk)
+    for movie in request.user.like_movies.all():
+        good_movie_set.add(movie.pk)
+    
+    if len(good_movie_set) < 2  or len(good_movie_set) > 50:
+        recommended_movies = Movie.objects.filter(release_date__gte=datetime.datetime.now() - datetime.timedelta(days=150)).filter(
+            release_date__lte=datetime.datetime.now().date()).order_by('-ratings_count')[:10]
+        serializer = MovieListSerializer(recommended_movies[:10])
+        return Response(serializer.data)
+            
+    else:
+        temp = []
+        for id in good_movie_set:
+            temp += recommendations[id]
+        good_movie_counter = Counter(temp)
+
+        temp_chosen_movie_set = set()
+        for key, value in good_movie_counter.items():
+            if value >= 2:
+                temp_chosen_movie_set.add(key)
+        recommended_movies = Movie.objects.filter(pk__in=temp_chosen_movie_set).order_by('-rating_average')
+        if len(temp_chosen_movie_set) >= 10:
+            serializer = MovieListSerializer(recommended_movies[:10], many=True)
+            return Response(serializer.data)
+        
+        else:
+            number = 10 - len(temp_chosen_movie_set)
+            temp_another_set = set(temp) - temp_chosen_movie_set # 2번 이상 추천되지 않은 영화들을 추가합니다.
+            other_recommended_movies = Movie.objects.filter(pk__in=temp_another_set).order_by('-rating_average')[:number]
+            result = recommended_movies | other_recommended_movies
+            result = Movie.objects.filter(pk__in=result)
+            serializer = MovieListSerializer(result, many=True)
+            return Response(serializer.data)
+            
 
 @api_view(['GET',])
 def movie_list(request, page):
@@ -25,6 +98,7 @@ def movie_list(request, page):
     serializer = MovieListSerializer(movies, many=True)
 
     return Response(serializer.data)
+
 
 
 # 영화 상세 조회
@@ -68,11 +142,18 @@ NATION_CODE = {'KR': '대한민국', 'JP': '일본', 'US': '미국', 'GB': '영�
     'DK': '덴마크', 'MX': '멕시코', 'NZ': '뉴질랜드', 'IT': '이탈리아', 'PT': '포르투갈',
     'BR': '브라질', 'AR': '아르헨티나', 'PE': '페루', 'CO': '콜롬비아'}
 
-with open('movies/recommendations.p', 'rb') as file:
-    recommendations = pickle.load(file)
+
 
 
 # Create your views here.
+
+
+# 평점 평균 만들기. 초기 사용으로만!!
+def making_rating_average(request):
+    for movie in Movie.objects.all():
+        movie.rating_average = movie.rating_set.first().rating
+        movie.save()
+
 
 #장르 받아오기. 초기 사용으로만!!!
 def initialize_genres(request):

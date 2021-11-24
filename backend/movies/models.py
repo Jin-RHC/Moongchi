@@ -25,6 +25,7 @@ class Movie(models.Model):
     country = models.CharField(max_length=70, blank=True, null=True)
     popularity = models.FloatField()
     is_netflix = models.BooleanField(default=False)
+    rating_average = models.FloatField(blank=True)
 
     def __str__(self):
         return f'{self.title}, {len(self.overview)}'
