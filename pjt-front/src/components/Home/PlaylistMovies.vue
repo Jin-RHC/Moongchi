@@ -7,7 +7,7 @@
 	</div>
 	<div class="row">
 		<carousel-3d :disable3d="true" :space="395" :autoplay="true" :autoplay-timeout="5000" :display="20" :controlsVisible="true" :height="500" :clickable="false">
-			<slide v-for="(slide, i) in movieItems" :index="i" :key="i">
+			<slide v-for="(slide, i) in slides" :index="i" :key="i">
 				<template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">												
           <div class="movie-item" style="width: 100%;">
             <img :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="`https://image.tmdb.org/t/p/original${slide.poster_path}`">
@@ -32,14 +32,12 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 import { Carousel3d, Slide } from 'vue-carousel-3d';
-// import TheaterMovieItem from './TheaterMovieItem.vue'
-
+const api = 'http://127.0.0.1:8000/api/v1/movies/mainmovies/'
 
 export default {
   components: {
-    // TheaterMovieItem 
 		Carousel3d,
     Slide
   },
@@ -49,20 +47,19 @@ export default {
   },
   data () {
     return {
-      movieItems: null,
       slides: 20,
 			
     }
   },
   created () {
-    // const API_KEY = 'e856b3ac18eec7abd7cf6099f977bbff'
-    // axios({
-    //   method: 'get',
-    //   url: `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=ko-KR&page=1`
-    // })
-    //   .then(res => {
-    //     this.popularMovies = res.data.results
-    //   })    
+    axios({
+        method: 'get',
+        url: api 
+      })
+        .then(res => {          
+          this.slides = res.data['high-rates']
+          console.log(this.slides)
+        })
   },
 }
 </script>

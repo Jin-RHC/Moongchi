@@ -19,7 +19,7 @@ urlpatterns = [
     path('<int:movie_id>/review/', views.review_list_create, name='review_list_create'),
 
     # 리뷰 검색
-    path('reviewsearch/<str:query>/', views.review_search, name='review_search'),
+    path('reviewseach/<str:query>/', views.review_search, name='review_search'),
 
     # 리뷰 수정, 삭제, 좋아요, 싫어요
     # 리뷰 수정은 content만 가능하므로 content만 넣어주면 됩니다.
