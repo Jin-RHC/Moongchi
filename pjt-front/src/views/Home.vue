@@ -66,7 +66,7 @@ export default {
     // }
   },
   created () {
-    // this.getMainMovies()    
+    console.log(this.$store.state.token)
   }
 }
 </script>

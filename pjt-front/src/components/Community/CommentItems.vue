@@ -61,7 +61,7 @@ export default {
 				url: api + `review/${this.$route.params.reviewId}/`				
 			})
 				.then(res => {					
-					this.comments = res.data.comment_set
+					this.comments = res.data.comment_set.slice(0, 5)
 				})
 		},
     

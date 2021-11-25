@@ -38,7 +38,7 @@
   
   <div class="title-hd-sm" style="margin-top: 100px;">
     <h3 style="font-family: sans-serif;">한줄평 </h3>
-    <a href="#" class="time">총 <span>{{ oneLineComments.length }}</span> 건 <i class="ion-ios-arrow-right"></i></a>
+    <span href="#" class="time">총 <span>{{ oneLineComments.length }}</span> 건 <i class="ion-ios-arrow-right"></i></span>
   </div>
   <!-- movie user review -->
       <div class="mv-user-review-item" >
@@ -87,7 +87,7 @@
         <div class="sb-it">
           <h6>Genres:</h6>
           <p> 
-            <a href="" v-for="genre in movieGenres" :key="genre.id">{{ genre }}, </a>
+            <a href="" v-for="genre in genresList" :key="genre.id">{{ genre }} | </a>
           </p>
         </div>
         <div class="sb-it">
@@ -100,7 +100,7 @@
           <p>{{ movie.country}}</p>
         </div>
         <div class="sb-it">
-          <h6>Run Time:</h6>
+          <!-- <h6>Run Time:</h6> -->
           <!-- <p>{{ movie.runtime }} min</p> -->
         </div>
         <div class="sb-it">
@@ -211,6 +211,34 @@ export default {
     // oneLineComments () {
     //   return this.movieData.rating_set
     // }
+    genresList () {
+      const data = []
+      const genreData = {
+        12: '모험',
+        14: '판타지',
+        16: '애니메이션',
+        18: '드라마',
+        27: '공포',
+        28: '액션',
+        35: '코미디',
+        36: '역사',
+        37: '서부',
+        53: '스릴러',
+        80: '범죄',
+        99: '다큐멘터리',
+        878: 'SF',
+        9648: '미스터리',
+        10402: '음악',
+        10749: '로맨스',
+        10751: '가족',
+        10752: '전쟁',
+        10770: 'TV 영화'
+      }
+      this.movieGenres.forEach(movieGenre => {
+        data.push(genreData[movieGenre])
+      })
+      return data
+    }
   
   },
   

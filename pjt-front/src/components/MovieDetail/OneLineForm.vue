@@ -58,6 +58,10 @@ export default {
             this.content = null
             console.log('한줄평 작성 신호 보냄')
           })
+          .catch(err => {
+            console.log(err)
+            alert('더 이상 한줄평을 작성할 수 없습니다.')
+          })
 
       }
     }
