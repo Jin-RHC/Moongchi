@@ -45,12 +45,11 @@ export default {
   },
   name: 'MovieItems',
   props: {
-    popularMovies: Array
   },
   data () {
     return {
       slides: 20,
-			movieItems: this.popularMovies
+			movieItems: null
     }
   },
   created () {

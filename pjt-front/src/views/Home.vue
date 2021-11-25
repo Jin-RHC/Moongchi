@@ -1,20 +1,20 @@
 <template>
   <div class="home">
     <section>
-      <slider-movie-items :nowPlaying="nowPlaying"></slider-movie-items>
+      <slider-movie-items></slider-movie-items>
     </section>
     <div class="buster-light">
       <div class="movie-items">
         <div class="container">
           <div class="row ipad-width">
             <section>
-              <popular-movies :popularMovies="popularMovies"></popular-movies>
+              <popular-movies></popular-movies>
             </section>    
             <!-- <section>
               <recommended-movies></recommended-movies>
             </section> -->
             <section>
-              <playlist-movies :HighRatesMovies="HighRatesMovies"></playlist-movies>
+              <playlist-movies></playlist-movies>
             </section>
           </div>
         </div>
@@ -25,14 +25,14 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 import PlaylistMovies from '../components/Home/PlaylistMovies.vue'
 import popularMovies from '../components/Home/PopularMovies.vue'
 // import RecommendedMovies from '../components/Home/RecommendedMovies.vue'
 import SliderMovieItems from '../components/Home/SliderMovieItems.vue'
 // @ is an alias to /src
 
-const api = 'http://127.0.0.1:8000/api/v1/movies/mainmovies/'
+// const api = 'http://127.0.0.1:8000/api/v1/movies/mainmovies/'
 
 export default {
   name: 'Home',
@@ -47,27 +47,26 @@ export default {
   data () {
     return {      
       // mainMovies: [],
-      nowPlaying: [],
-      HighRatesMovies: [],
-      popularMovies: []
+      // nowPlaying: [],
+      // HighRatesMovies: [],
+      // popularMovies: []
     }
   },
   methods: {
-    getMainMovies () {
-      axios({
-        method: 'get',
-        url: api 
-      })
-        .then(res => {
-          // this.mainMovies = res.data
-          this.nowPlaying = res.data['now-playing']
-          this.HighRatesMovies = res.data['high-rates']
-          this.popularMovies = res.data['popular']
-        })
-    }
+    // getMainMovies () {
+    //   axios({
+    //     method: 'get',
+    //     url: api 
+    //   })
+    //     .then(res => {          
+    //       this.nowPlaying = res.data['now-playing']
+    //       this.HighRatesMovies = res.data['high-rates']
+    //       this.popularMovies = res.data['popular']
+    //     })
+    // }
   },
   created () {
-    this.getMainMovies()    
+    // this.getMainMovies()    
   }
 }
 </script>

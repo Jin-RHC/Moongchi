@@ -45,11 +45,11 @@ export default {
   },
   name: 'PlaylistMovies',
   props: {
-    HighRatesMovies: Array
+    
   },
   data () {
     return {
-      movieItems: this.HighRatesMovies,
+      movieItems: null,
       slides: 20,
 			
     }

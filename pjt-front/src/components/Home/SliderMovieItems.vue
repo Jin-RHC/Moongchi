@@ -41,8 +41,9 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 import { Carousel3d, Slide } from 'vue-carousel-3d';
+const api = 'http://127.0.0.1:8000/api/v1/movies/mainmovies/'
 
 // import SliderMovieItem from './SliderMovieItem.vue'
 export default {
@@ -53,14 +54,25 @@ export default {
 		},
   name: 'SliderMovieItems',
 	props: {
-		nowPlaying: Array
 	},
 	data () {
     return {
-      movieItems: this.nowPlaying,
+      movieItems: null,
 			slides: 20,
     }
   },
+	methods: {
+		getMainMovies () {
+      axios({
+        method: 'get',
+        url: api 
+      })
+        .then(res => {          
+          this.movieItems = res.data['now-playing']   
+					console.log(this.movieItems)       
+        })
+    }
+	},
   created () {
   //   const API_KEY = 'e856b3ac18eec7abd7cf6099f977bbff'
   //   axios({
@@ -70,7 +82,8 @@ export default {
   //     .then(res => {
   //       this.slides = res.data.results
   //       // console.log(this.movieItems)
-  //     })		
+  //     })
+		this.getMainMovies()
   },
 		
 }
