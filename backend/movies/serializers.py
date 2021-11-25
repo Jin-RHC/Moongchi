@@ -68,6 +68,17 @@ class MovieSearchListSerializer(serializers.ModelSerializer):
 
 
 
+class CelebSerializer(serializers.ModelSerializer):
+    
+    movies = MovieListSerializer(many=True, read_only=True)
+    movies_count = serializers.IntegerField(
+        source='movies.count',
+        read_only=True
+    )
+
+    class Meta:
+        model = Actor
+        fields = '__all__'
 
 
 

@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404, render
 
-from rest_framework import status
+from rest_framework import serializers, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -10,7 +10,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import User
 
 from .serializers import UserSerializer, MyTokenObtainPairSerializer, UserReportListSerializer, UserProfileSerializer
-import hashlib
+import re
 
 # Create your views here.
 
@@ -89,19 +89,34 @@ def report_list(request, username):
 #     encrypted_pwd = hashlib.sha256(pwd.encode()).hexdigest()
 #     print('새 암호', encrypted_pwd)
 
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def change_password(request):
-# 	# 1-1. Client에서 온 데이터를 받아서
-#     password = request.data.get('password')
-#     password_confirmation = request.data.get('passwordConfirmation')
-		
-# 	# 1-2. 패스워드 일치 여부 체크
-#     if password != password_confirmation:
-#         return Response({'error': '비밀번호가 일치하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-		
-#     request.user.set_password(request.data.get('password'))
 
-#     request.user.save()
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def change_password(request):
 
-#     return Response({'message': '비밀번호가 성공적으로 변경되었습니다.'}, status=status.HTTP_201_CREATED)
+	# 1-1. Client에서 온 데이터를 받아서
+    password = request.data.get('newPassword')
+    password_confirmation = request.data.get('newPasswordConfirmation')
+		
+	# 1-2. 패스워드 일치 여부 체크
+    if password != password_confirmation:
+        return Response({'error': '비밀번호가 일치하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+	
+    # 길이 체크
+    if len(password) < 8 or len(password) > 30:
+        return Response({'error': '비밀번호 길이가 너무 짧습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    data = {
+        'username': request.user.username,
+        'nickname': request.user.nickname,
+        'password': password
+    }
+
+    serializer = UserSerializer(request.user, data=data)
+
+    if serializer.is_valid():
+        user = serializer.save()
+        user.set_password(password)
+        user.save()
+
+    return Response({'message': '비밀번호가 성공적으로 변경되었습니다.'}, status=status.HTTP_201_CREATED)
