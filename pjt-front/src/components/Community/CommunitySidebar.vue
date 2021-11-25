@@ -43,7 +43,7 @@ export default {
   methods: {
     searchReview () {
       if (this.searchKeyword.length) {
-        this.$router.push({ name: 'CommunitySearch', query: {keyword: `${this.searchKeyword}` }}).catch(()=>{})
+        this.$router.push({ name: 'CommunitySearch', query: {query: `${this.searchKeyword}` }}).catch(()=>{})
       }      
       
     },

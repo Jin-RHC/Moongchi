@@ -46,7 +46,7 @@
 				</div>
 			</div>
 			<div class="col-md-9 col-sm-12 col-xs-12">
-        <user-profile-detail v-if="currentTab == 0"></user-profile-detail>
+        <user-profile-detail v-if="currentTab == 0" :userData="userData"></user-profile-detail>
         <user-favorite-movies v-if="currentTab == 1"></user-favorite-movies>
         <user-rated-movies v-if="currentTab == 2"></user-rated-movies>
 				<user-change-form v-if="currentTab == 3"></user-change-form>
@@ -58,10 +58,12 @@
 </template>
 
 <script>
+import axios from 'axios'
 import UserChangeForm from '../components/Profile/UserChangeForm.vue'
 import UserFavoriteMovies from '../components/Profile/UserFavoriteMovies.vue'
 import UserProfileDetail from '../components/Profile/UserProfileDetail.vue'
 import UserRatedMovies from '../components/Profile/UserRatedMovies.vue'
+const api = 'http://127.0.0.1:8000/api/v1/accounts/'
 export default {
   name: 'UserProfile',
   components: {
@@ -73,9 +75,36 @@ export default {
   data () {
     return {
       currentTab: 0,      
-      accountsDetail: ['Profile', 'Favorite Movies', 'Rated Movies']
+      accountsDetail: ['Profile', 'Favorite Movies', 'Rated Movies'],
+			userData: null
     }
-  }
+  },
+	methods: {
+		setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+		getProfile () {
+			axios({
+				method: 'get',
+				url: api + `${this.$route.params.username}/`,
+				headers: this.setToken()
+			})
+				.then(res => {
+					console.log(res.data)
+					this.userData = res.data
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		}
+	},
+	created () {
+		this.getProfile()
+	}
 }
 </script>
 

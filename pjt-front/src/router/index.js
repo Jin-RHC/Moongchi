@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import MovieList from '../views/MovieList.vue'
+import MovieListSearch from '../views/MovieListSearch.vue'
 import MovieDetail from '../views/MovieDetail.vue'
 import Community from '../views/Community.vue'
 import CommunitySearch from '../views/CommunitySearch.vue'
@@ -30,13 +31,18 @@ const routes = [
     props: true, 
   },
   {
+    path: '/movielist/search',
+    name: 'MovieListSearch',
+    component: MovieListSearch
+  },
+  {
     path: '/community',
     name: 'Community',
     component: Community,
     props: true
   },
   {
-    path: '/comunitysearch',
+    path: '/comunity/search',
     name: 'CommunitySearch',
     component: CommunitySearch
   },

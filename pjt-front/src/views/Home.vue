@@ -1,20 +1,20 @@
 <template>
   <div class="home">
     <section>
-      <slider-movie-items></slider-movie-items>
+      <slider-movie-items :nowPlaying="nowPlaying"></slider-movie-items>
     </section>
     <div class="buster-light">
       <div class="movie-items">
         <div class="container">
           <div class="row ipad-width">
             <section>
-              <popular-movies></popular-movies>
+              <popular-movies :popularMovies="popularMovies"></popular-movies>
             </section>    
-            <section>
+            <!-- <section>
               <recommended-movies></recommended-movies>
-            </section>
+            </section> -->
             <section>
-              <playlist-movies></playlist-movies>
+              <playlist-movies :HighRatesMovies="HighRatesMovies"></playlist-movies>
             </section>
           </div>
         </div>
@@ -25,12 +25,14 @@
 </template>
 
 <script>
+import axios from 'axios'
 import PlaylistMovies from '../components/Home/PlaylistMovies.vue'
 import popularMovies from '../components/Home/PopularMovies.vue'
-import RecommendedMovies from '../components/Home/RecommendedMovies.vue'
+// import RecommendedMovies from '../components/Home/RecommendedMovies.vue'
 import SliderMovieItems from '../components/Home/SliderMovieItems.vue'
 // @ is an alias to /src
 
+const api = 'http://127.0.0.1:8000/api/v1/movies/mainmovies/'
 
 export default {
   name: 'Home',
@@ -38,9 +40,34 @@ export default {
 
     SliderMovieItems,
     popularMovies,
-    RecommendedMovies,
+    // RecommendedMovies,
     PlaylistMovies
     
+  },
+  data () {
+    return {      
+      // mainMovies: [],
+      nowPlaying: [],
+      HighRatesMovies: [],
+      popularMovies: []
+    }
+  },
+  methods: {
+    getMainMovies () {
+      axios({
+        method: 'get',
+        url: api 
+      })
+        .then(res => {
+          // this.mainMovies = res.data
+          this.nowPlaying = res.data['now-playing']
+          this.HighRatesMovies = res.data['high-rates']
+          this.popularMovies = res.data['popular']
+        })
+    }
+  },
+  created () {
+    this.getMainMovies()    
   }
 }
 </script>

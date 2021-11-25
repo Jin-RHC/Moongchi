@@ -64,18 +64,17 @@ export default {
     getReview () {      
       axios({
 				method: 'get',
-				url: api + `${this.$route.query.keyword}/`
+				url: api + `${this.$route.query.query}/`
 			})
 				
 				.then((res) => {   
-          console.log(res.data.message)
+          console.log(res)
           if (res.data.message === '검색 결과가 없습니다ㅠ') {
             alert(`${res.data.message}`)
-            this.$router.push('Community')
-          }        
-          this.reviews = res.data
-        
-        
+            this.$router.push({ name: 'Community'})
+          } else {
+						this.reviews = res.data
+					}       
 
       })
         

@@ -1,14 +1,14 @@
 <template>
 <div>
 
-  <div style="display: flex; margin-top: 50px;">
+  <div style="display: flex;">
     <span></span>
-    <div style="margin-right: 50px; width: 0px;">
-      <h6><a @click.prevent="" href="">{{ commentData.user }} </a></h6>
+    <div style="margin-right: 50px;">
+      <h6><a @click.prevent="$router.push({ name: 'UserProfile', params: { username: comment.user.username }})" href="">{{ commentData.user.username }} </a></h6>
     </div>
     
     <p style="white-space: pre-line; width: 650px;">{{ commentData.content }}</p>
-    <div style="margin-right: ">
+    <div style="">
       <span style="" class="time">{{ commentData.created_at.slice(0, 10) + '   ' + comment.created_at.slice(11, 19)}}</span> 
       <a @click.prevent="deleteComment" href="" class="time" style="border: thin solid;">X</a>
       <div style="display: flex; justify-content: end; margin-top: 20px;">

@@ -16,7 +16,7 @@
               <h6 class="mb-0">Followings</h6>
             </div>
             <div class="col-sm-9 text-secondary">
-              0
+              {{ userData.followings_count }}
             </div>
           </div>
           <hr>
@@ -25,7 +25,7 @@
               <h6 class="mb-0">Followers</h6>
             </div>
             <div class="col-sm-9 text-secondary">
-              0
+              {{ userData.followers_count }}
             </div>
           </div>
           <hr>
@@ -49,10 +49,10 @@
           <hr>
           <div class="row">
             <div class="col-sm-3">
-              <h6 class="mb-0">Mobile</h6>
+              <h6 class="mb-0">Nickname</h6>
             </div>
             <div class="col-sm-9 text-secondary">
-              (320) 380-4539
+              {{ userData.nickname }}
             </div>
           </div>
           <hr>
@@ -141,7 +141,10 @@
 
 <script>
 export default {
-  name: 'UserProfileDetail'
+  name: 'UserProfileDetail',
+  props: {
+    userData: Object
+  }
 }
 </script>
 

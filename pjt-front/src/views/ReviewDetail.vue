@@ -30,7 +30,7 @@
           </div>
           <hr>
 					<div style="display: flex; justify-content: space-between;">
-						<span class="time" style=" font-weight: bold; font-size: 1em;">{{ item.user.username }}</span><span class="time">{{ createdAt }}</span>						
+						<a @click.prevent="$router.push({ name: 'UserProfile', params: {username: item.user.username }})" href=""><span class="time" style=" font-weight: bold; font-size: 1em;">{{ item.user.username }}</span><span class="time">{{ createdAt }}</span></a>
 					</div>
 					<br>
 
