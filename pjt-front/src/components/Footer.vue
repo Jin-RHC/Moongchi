@@ -4,10 +4,10 @@
 	<div class="container">
 		<div class="flex-parent-ft">
 			<div class="flex-child-ft item1">
-				 <a href="index-2.html"><img class="logo" src="images/logo1.png" alt=""></a>
-				 <p>5th Avenue st, manhattan<br>
-				New York, NY 10001</p>
-				<p>Call us: <a href="#">(+01) 202 342 6789</a></p>
+				 <a href="#"><img class="logo" src="@/assets/moongchi.png" alt=""></a>
+				 <p>경기도 용인시,<br>
+				그런데 이제 성남시를 곁들인</p>
+				<p>Call us: <a href="#">(+82) 02 730 5800</a></p>
 			</div>
 			<div class="flex-child-ft item2">
 				<h4>Resources</h4>
@@ -39,7 +39,7 @@
 			</div>
 			<div class="flex-child-ft item5">
 				<h4>Newsletter</h4>
-				<p>Subscribe to our newsletter system now <br> to get latest news from us.</p>
+				<p>뉴스는 없지만 열심히 하겠습니다! 지켜봐 주세욤 <br> 잘 부탁드립니다. </p>
 				<form action="#">
 					<input type="text" placeholder="Enter your email...">
 				</form>

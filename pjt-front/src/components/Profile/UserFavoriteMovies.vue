@@ -13,24 +13,24 @@
 				
 					
 
-				<div class="movie-items" v-for="i in 3" :key="i" style="padding: 10px 0;">
+				<div class="movie-items" v-for="i in 1" :key="i" style="padding: 10px 0;">
 					<label class="" 
 					style="display: inline-block;					
 					font-size: 24px;
 					line-height: 30px;
-					font-weight: 700;" for="">영화 뭉치 1</label>
+					font-weight: 700;" for="">좋아한 영화들</label>
 					<carousel-3d disable3d="true" :space="250" :autoplay="false" :autoplay-timeout="5000" :display="20" :controlsVisible="true" :clickable="false" :width="230" :height="325"> 
-						<slide v-for="(slide, i) in movies" :index="i" :key="i">
+						<slide v-for="(slide, i) in favoriteMovies" :index="i" :key="i">
 							<template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
 								<div class="movie-item" style="width: 100%;">								
 									<img :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="`https://image.tmdb.org/t/p/original${slide.poster_path}`">
 									<div class="hvr-inner">
-										<a @click.prevent="$router.push({ path: `detail-${slide.id}` })" href="moviesingle.html"> Read more <i class="ion-android-arrow-dropright"></i> </a>
+										<a @click.prevent="$router.push({name: 'MovieDetail', params: {id: slide.id}})" href="moviesingle.html"> Read more <i class="ion-android-arrow-dropright"></i> </a>
 									</div>
 							
 									<div class="title-in" style="margin-bottom: 40px;">    
-										<h6><a href="#">Interstellar</a></h6>
-										<p><i class="ion-android-star"></i><span>7.4</span> /10</p>
+										<h6><a href="#">{{ slide.title }}</a></h6>
+										<p><i class="ion-android-star"></i><span>{{ slide.rating_average }}</span> /10</p>
 									</div>
 								</div>
 							</template>
@@ -275,7 +275,7 @@
 						<option value="saab">10 Movies</option>
 					</select>
 					
-					<div class="pagination2">
+					<!-- <div class="pagination2">
 						<span>Page 1 of 2:</span>
 						<a class="active" href="#">1</a>
 						<a href="#">2</a>
@@ -284,7 +284,7 @@
 						<a href="#">78</a>
 						<a href="#">79</a>
 						<a href="#"><i class="ion-arrow-right-b"></i></a>
-					</div>
+					</div> -->
 				</div>
 			</div>
 </template>
@@ -304,17 +304,35 @@ export default {
 			movies: 20,
 		}
 	},
+	props: {
+		favoriteMovies: Array
+	},
 	created () {
-    const API_KEY = 'e856b3ac18eec7abd7cf6099f977bbff'
+    // const API_KEY = 'e856b3ac18eec7abd7cf6099f977bbff'
+		const ROOT_URL = 'http://127.0.0.1:8000/'
     axios({
       method: 'get',
-      url: `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=ko-KR&page=1`
+      url: `${ROOT_URL}/api/v1/accounts/${this.$router.params}/`
     })
       .then(res => {
+				console.log(res)
         this.movies = res.data.results
         // console.log(this.movieItems)
       })
   },
+	// updated () {
+  //   // const API_KEY = 'e856b3ac18eec7abd7cf6099f977bbff'
+	// 	const ROOT_URL = 'http://127.0.0.1:8000/'
+  //   axios({
+  //     method: 'get',
+  //     url: `${ROOT_URL}/api/v1/accounts/${username}/`
+  //   })
+  //     .then(res => {
+	// 			console.log(res)
+  //       this.movies = res.data.results
+  //       // console.log(this.movieItems)
+  //     })
+  // },
 }
 </script>
 
