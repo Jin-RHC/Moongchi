@@ -60,11 +60,11 @@ export default {
           headers: this.setToken()
         })
         .then(res => {
-          console.log(res.data)
+          // console.log(res.data)
           this.slides = res.data
         })
-        .catch(err => {
-          console.log(err)
+        .catch(() => {
+          // console.log(err)
         })
     }
   },

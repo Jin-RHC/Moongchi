@@ -32,7 +32,7 @@
 							
 						</li>
 						<li class="dropdown first">
-							<a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
+							<a @click.prevent="$router.push({name: 'Celebs'})" class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
 							celebrities</a>
 							
 						</li>
@@ -107,7 +107,7 @@ export default {
     },
     username : function(){
 			// throw new Error(`${this.token}`)
-			console.log(this.token)
+			// console.log(this.token)
       return jwt_decode(this.token).username
     }
   },
