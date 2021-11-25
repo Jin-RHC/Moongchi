@@ -8,7 +8,7 @@ from accounts.models import User
 from justwatch import JustWatch
 from moongchi.my_settings import MY_SECRET
 from .serializers import (MovieListSerializer, MovieDetailSerializer, MovieSearchListSerializer,
-    CelebSerializer, )
+    CelebSerializer, MovieRecommendedSerializer)
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -129,7 +129,7 @@ def movie_detail(request, movie_id):
 def movie_detail_recommended(request, movie_id):
     
     recommended_movies = Movie.objects.filter(pk__in=recommendations.get(movie_id)).order_by('-rating_average')[:3]
-    serializer = MovieListSerializer(recommended_movies, many=True)
+    serializer = MovieRecommendedSerializer(recommended_movies, many=True)
 
     return Response(serializer.data, status=status.HTTP_200_OK)
 

@@ -82,7 +82,13 @@ class CelebSerializer(serializers.ModelSerializer):
 
 
 
+class MovieRecommendedSerializer(serializers.ModelSerializer):
 
+    # rate = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Movie
+        fields = '__all__'
 
 
 
