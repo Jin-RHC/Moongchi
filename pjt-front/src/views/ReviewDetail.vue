@@ -30,7 +30,8 @@
           </div>
           <hr>
 					<div style="display: flex; justify-content: space-between;">
-						<a @click.prevent="$router.push({ name: 'UserProfile', params: {username: item.user.username }})" href=""><span class="time" style=" font-weight: bold; font-size: 1em;">{{ item.user.username }}</span><span class="time">{{ createdAt }}</span></a>
+						<a @click.prevent="$router.push({ name: 'UserProfile', params: {username: item.user.username }})" href=""><div class="time" style=" font-weight: bold; font-size: 1em;">{{ item.user.username }}</div></a>
+						<span class="time">{{ createdAt }}</span>
 					</div>
 					<br>
 
@@ -63,18 +64,16 @@
 							<a href="#"><i class="ion-social-pinterest"></i></a>
 							<a href="#"><i class="ion-social-linkedin"></i></a>
 						</div>
-						<!-- <div class="right-it">
-							<h4>Tags</h4>
-							<a href="#">Gray,</a>
-							<a href="#">Film,</a>
-							<a href="#">Poster</a>
-						</div> -->
+						<span>
+							<a @click.prevent="updateReview" href=""><button>수정</button></a>
+							<a @click.prevent="deleteReview" href=""><button>삭제</button></a>
+						</span>
 					</div>
 					<!-- comment items -->
 					<comment-items :comments="comments"></comment-items>
 					<!-- comment form -->
-          <comment-form @noti-comment="getData"></comment-form>
-					
+          <comment-form v-show="isLogin" @noti-comment="getData"></comment-form>
+					<textarea type="text" placeholder="로그인 하세요" disabled v-show="!isLogin"></textarea>
 					
 				</div>
 			</div>
@@ -104,6 +103,10 @@ export default {
     return {
       comments: null,
 			item: null,
+			isLogin: false,
+
+			content: null,
+
     }
   },
   methods: {    
@@ -126,6 +129,7 @@ export default {
 				})
 				.catch(err => {
 					console.log(err)
+					alert('로그인하세요')
 				})
 
 		},
@@ -141,6 +145,7 @@ export default {
 				})
 				.catch(err => {
 					console.log(err)
+					alert('로그인하세요')
 				})
 		},
 		getData () {
@@ -150,14 +155,46 @@ export default {
 			})
 				.then(res => {
 					this.item = res.data
-					this.comments = res.data.comment_set
+					this.comments = res.data.comment_set,
+					this.content = res.data.content
 				})
 		},
+		deleteReview () {
+			axios({
+				method: 'delete',
+				url: api + `${this.item.movie.id}/review/${this.$route.params.reviewId}/`,
+				headers: this.setToken()				
+			})
+				.then(res => {
+					console.log(res)
+					this.$router.push({ name: 'Community'})
+				})
+				.catch(err => {
+					console.log(err)
+					alert('삭제할 수 없습니다.')
+				})
+		},
+		updateReview () {  
+			this.$router.push(
+				{ name: 'ReviewForm', 
+					params: 
+						{	reviewId: this.$route.params.reviewId, 
+							movieTitle: this.item.movie.title, 
+							movieId: this.item.movie.id,
+							reviewTitle: this.item.title,
+							reviewContent: this.item.content
+						}
+				}
+			)
+		}
 
 
   },
 	created () {
 		this.getData()
+		if (this.$store.state.token) {
+			this.isLogin = true
+		}
 	},
 	computed: {
     createdAt () {

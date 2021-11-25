@@ -47,7 +47,7 @@
 	
 						</li>
 					</ul>
-					<ul @user-login="getUsername" class="nav navbar-nav flex-child-menu menu-right">
+					<ul class="nav navbar-nav flex-child-menu menu-right">
 					
 						<li @click.prevent="showModal" v-if="!isLogin" class=""><a href="#">Log in</a></li>
 						<li @click.prevent="showModal" v-if="!isLogin" class="btn signupLink"><a href="#">sign up</a></li>

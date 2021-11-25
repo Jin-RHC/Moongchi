@@ -63,7 +63,7 @@ export default {
           })
           .catch(err => {
             console.log(err)
-            // alert('댓글을 작성할 수 없습니다.')
+            alert('댓글을 그렇게 길게 작성할 수 없습니다.')
           })
       }
 

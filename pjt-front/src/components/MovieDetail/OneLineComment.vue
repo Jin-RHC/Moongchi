@@ -27,25 +27,7 @@
       <br>
       
       </div>
-    </li>
-    <!-- <div style="margin: 0 1em; width: 100%">
-        
-        <p style="white-space: pre-line;">{{ oneLineComment.content }}</p>
-        
-        <p class="time" >
-          <a href="#" style="margin: 0 5px"> {{ oneLineComment.user.nickname }} </a> | <span style="margin: 0 5px;"> {{ createdAt }} </span> | <a href="#" style="margin: 0 5px;">신고</a>
-        </p>
-        <div style="display: flex; justify-content: end;">
-          <a @click.prevent="likeOneLineComment" href="" class="time" style="border: solid; border-width: thin; border-radius: 2px; margin-right: 5px;"><font-awesome-icon :icon="['far', 'thumbs-up']" size="1x" style="margin-left: 7px; margin-right: 7px;" />
-            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineCommentLike }}</strong> 
-          </a>
-          <a @click.prevent="dislikeOneLineComment" href="" class="time" style="font-weight: bolder; border: solid; border-width: thin; border-radius: 2px;"><font-awesome-icon :icon="['far', 'thumbs-down']" size="1x" style=" margin-right: 7px; margin-left: 7px;" />
-            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ oneLineCommentDislike }}</strong> 
-          </a>
-        </div>
-      <br>
-      
-      </div> -->
+    </li>    
 </template>
 
 <script>
@@ -89,6 +71,7 @@ export default {
           })
           .catch(err => {
             console.log(err)
+            alert('로그인하세요')
           })
     },
     dislikeOneLineComment () {
@@ -103,6 +86,7 @@ export default {
           })
           .catch(err => {
             console.log(err)
+            alert('로그인하세요')
           })
     },   
   },

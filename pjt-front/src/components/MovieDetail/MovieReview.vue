@@ -5,8 +5,8 @@
             <h3>Related Movies To</h3>
           <h2>Skyfall: Quantum of Spectre</h2>
           </div> -->
-          <div style="display: flex; flex-direction: row-reverse; margin-bottom: 1em;">
-            <a @click.prevent="$router.push({ name: 'ReviewForm', params:{title: movie.title, id: movie.id }})" href="#" class="redbtn">Write Review</a>
+          <div v-show="isLogin" style="display: flex; flex-direction: row-reverse; margin-bottom: 1em;">
+            <a @click.prevent="$router.push({ name: 'ReviewForm', params:{movieTitle: movie.title, movieId: movie.id }})" href="#" class="redbtn">Write Review</a>
             <!-- <router-link :to="{ name: 'ReviewForm', params: { title: `${movie.title}`, movieId: `${movie.id}` }}" class="redbtn">Write Reivew</router-link> -->
           </div>
         </div>
@@ -65,6 +65,7 @@ export default {
   data () {
     return {
       review: null,
+      isLogin: false
     }
   },
   props: {
@@ -79,6 +80,11 @@ export default {
       return config
     },
 
+  },
+  created () {
+    if (this.$store.state.token) {
+      this.isLogin = true
+    }
   } 
 }
 </script>

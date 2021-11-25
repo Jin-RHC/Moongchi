@@ -7,7 +7,7 @@
 			<div class="col-md-12">
 				<div class="hero-ct">
 					
-					<h1> Community - Reviews </h1>
+					<h1><a @click.prevent="this.$router.push({ name: 'Community'})" href="">Community - Reviews </a></h1>
 					<ul class="breadcumb">
 						<li @click.prevent="$router.push({name: 'Home'})" class="active"><a href="#">Home</a></li>
 						<li><span class="ion-ios-arrow-right"></span> Community</li>

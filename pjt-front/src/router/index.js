@@ -47,7 +47,7 @@ const routes = [
     component: CommunitySearch
   },
   {
-    path: '/review-create',
+    path: '/review-create/:reviewId?',
     name: 'ReviewForm',
     component: ReviewForm
   },
