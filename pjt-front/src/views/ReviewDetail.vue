@@ -31,8 +31,8 @@
           <hr>
 					<div style="display: flex; justify-content: space-between;">
 						<a @click.prevent="$router.push({ name: 'UserProfile', params: {username: item.user.username }})" href=""><div class="time" style=" font-weight: bold; font-size: 1em;">{{ item.user.username }}</div></a>
-						<span class="time">{{ createdAt }}</span>
-					</div>
+						<span class="time">{{ createdAt }} | <a @click.prevent="reportReview" href=""><span class="time"> 신고 </span></a></span>
+					</div>					
 					<br>
 
 					<p>관련 영화: <a @click.prevent="$router.push({ name: 'MovieDetail', params: {id: item.movie.id }})" href=""> {{ item.movie.title }} </a></p>
@@ -187,6 +187,21 @@ export default {
 						}
 				}
 			)
+		},
+		reportReview () {
+			axios({
+				method: 'post',
+				url: 'http://127.0.0.1:8000/api/v1/reports/review/' + `${this.$route.params.reviewId}/`,
+				headers: this.setToken()				
+			})
+				.then(res => {
+					console.log(res)
+					alert('신고가 접수되었습니다.')
+				})
+				.catch(err => {
+					console.log(err)
+					alert('이미 신고한 게시물입니다.')
+				})
 		}
 
 

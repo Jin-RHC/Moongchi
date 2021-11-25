@@ -1,7 +1,7 @@
 <template>
   
     
-  <div style="display: flex; margin-top: 10px; margin-left: 50px;">
+  <div style="display: flex; margin-top: 10px; margin-left: 50px;">    
     <div style="width: 100px;">
       <h6>└   <a @click.prevent="" href="">{{ nestedComment.user.username }}</a></h6>
     </div>
@@ -14,6 +14,8 @@
         <a @click.prevent="deleteNestedComment" href="" class="time" style="border: thin solid; height:50%">X</a>
       </div>            
       <div style="display: flex; justify-content: end;">
+        <a @click.prevent="reportNestedComment" href=""><h6 class="time" style="margin-top: 5px; margin-right: 5px;">신고</h6></a>
+
         <a @click.prevent="likeNestedComment" href="" class="time" style="border: solid; border-width: thin; border-radius: 2px; margin-right: 5px;"><font-awesome-icon :icon="['far', 'thumbs-up']" size="1x" style="margin-left: 7px; margin-right: 7px;" />
           <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ nestedComment.like_users.length }}</strong> 
         </a>
@@ -92,6 +94,21 @@ export default {
         .catch(err => {
           console.log(err)
           alert('댓글을 삭제할 권한이 없습니다.')
+        })
+    },
+    reportNestedComment () {
+      axios({
+        method: 'post',
+        url: 'http://127.0.0.1:8000/api/v1/reports/nestedcomment/' + `${this.nestedComment.id}/`,        
+        headers: this.setToken() // Authorization: JWT tokensdjiadnoiqwnd
+      })
+        .then(res => {
+          console.log(res)
+          alert('신고가 접수되었습니다.')
+        })
+        .catch(err => {
+          console.log(err)
+          alert('이미 신고된 댓글입니다.')
         })
     }
   }

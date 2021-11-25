@@ -23,10 +23,10 @@
     </select>
   </div>
   <div class="mv-user-review-item" v-for="review in reviews" :key="review.id">
-    <div class="user-infor" style="display: flex;">
+    <div class="" style="">
       <!-- <img src="images/uploads/userava1.jpg" alt=""> -->
       <div>
-        <a @click.prevent="$router.push({ name: 'ReviewDetail', params: { reviewId: review.id }})" href=""><h3>{{ review.title }}</h3></a>
+      <div>
         <div class="no-star" style="margin-top: 20px;">
           <i class="ion-android-star"></i>
           <i class="ion-android-star"></i>
@@ -40,14 +40,20 @@
           <i class="ion-android-star last"></i>
         </div>
       </div>
-      <div>
-          <a @click.prevent="$router.push({ name: 'UserProfile', params: { username: review.user.username }})" href="#" style="margin-left:20px"> <h6> {{ review.user.username }} </h6> </a>
+      <div style="margin: 10px; 100px;">
+
+        <a @click.prevent="$router.push({ name: 'ReviewDetail', params: { reviewId: review.id }})" href=""><h3>{{ review.title }}</h3></a>
       </div>
-        <p class="time" style="display: flex; margin-top: 10px; width: 95%;">          
-          <span style="margin-left: 50px;"> | {{ review.updated_at.slice(0, 9)}} </span>
+      </div>
+    </div > 
+      <div style="display: flex; margin-top: 20px;">
+
+        <p class="time" style="display: flex; margin-top: 10px;">          
+          <a @click.prevent="$router.push({ name: 'UserProfile', params: { username: review.user.username }})" href="#" style="margin-left:20px"> <h6> {{ review.user.username }} </h6> </a>
+          <span style="margin-left: 50px;"> {{ review.updated_at.slice(0, 10)}} {{ review.updated_at.slice(11, 16)}} </span>
         </p>
-    </div> 
     
+      </div>
     <!-- <p style="width: 95%;">This is by far one of my favorite movies from the MCU. The introduction of new Characters both good and bad also makes the movie more exciting. giving the characters more of a back story can also help audiences relate more to different characters better, and it connects a bond between the audience and actors or characters. Having seen the movie three times does not bother me here as it is as thrilling and exciting every time I am watching it. In other words, the movie is by far better than previous movies (and I do love everything Marvel), the plotting is splendid (they really do out do themselves in each film, there are no problems watching it more than once.</p> -->
     <hr>
   </div>
