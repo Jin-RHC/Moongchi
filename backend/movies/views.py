@@ -7,7 +7,8 @@ from pprint import pprint
 from accounts.models import User
 from justwatch import JustWatch
 from moongchi.my_settings import MY_SECRET
-from .serializers import MovieListSerializer, MovieDetailSerializer, MovieSearchListSerializer
+from .serializers import (MovieListSerializer, MovieDetailSerializer, MovieSearchListSerializer,
+    CelebSerializer, )
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -17,6 +18,7 @@ from collections import Counter
 import requests
 import pickle
 import datetime
+
 
 
 with open('movies/recommendations.p', 'rb') as file:
@@ -99,6 +101,18 @@ def movie_list(request, page):
 
     return Response(serializer.data)
 
+# @api_view(['GET',])
+# def movie_list(request, page):
+#     try:
+#         movies = Movie.objects.all().order_by('-popularity')[60 * (page - 1): 60 * page]
+
+#     except:
+#         movies = Movie.objects.all()[-40:]
+
+#     serializer = MovieListSerializer(movies, many=True)
+
+#     return Response(serializer.data)
+
 
 
 # 영화 상세 조회
@@ -107,8 +121,18 @@ def movie_detail(request, movie_id):
 
     movie = get_object_or_404(Movie, pk=movie_id)
     serializer = MovieDetailSerializer(movie)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
-    return Response(serializer.data)
+# 해당 영화에 대한 줄거리 기반 추천
+@api_view(['GET',])
+def movie_detail_recommended(request, movie_id):
+    
+    recommended_movies = Movie.objects.filter(pk__in=recommendations.get(movie_id)).order_by('-rating_average')[:3]
+    serializer = MovieListSerializer(recommended_movies, many=True)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 @api_view(['GET',])
@@ -117,11 +141,14 @@ def movie_search(request, title):
     movie_list = Movie.objects.filter(Q(title__istartswith=title) | Q(title__icontains=title))
     serializer = MovieSearchListSerializer(movie_list, many=True)
 
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
-
+@api_view(['GET',])
+def celebs(request):
+    celebs = Actor.objects.annotate(movies_count=Count('movies')).order_by('-movies_count')[:5]
+    serializer = CelebSerializer(celebs, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 

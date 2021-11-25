@@ -9,6 +9,10 @@ urlpatterns = [
     # "popular": 인기순 리스트} 식으로 응답이 올 겁니다!!
     path('mainmovies/', views.mainmovies, name='mainmovies'),
 
+    # 작품 많은 배우 순서로 5명!
+    # 배우 id, name, movies_count, movies, profile_path
+    path('celebs/', views.celebs, name='celebs'),
+
 
     # 고객별 맞춤 추천리스트
     path('recommended/', views.recommended_movie_list, name='recommended_movie_list'),
@@ -19,6 +23,9 @@ urlpatterns = [
 
     # 영화 상세 조회
     path('movie/<int:movie_id>/', views.movie_detail, name='movie_detail'),
+    # 그와 짝을 이루는 줄거리 기반 추천영화 3개
+    path('movie/<int:movie_id>/recommended/', views.movie_detail_recommended, name='movie_detail_recommended'),
+
 
     # 영화 검색
     path('moviesearch/<str:title>/', views.movie_search, name='movie_search'),

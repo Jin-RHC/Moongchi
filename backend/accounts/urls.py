@@ -11,8 +11,8 @@ app_name = 'accounts'
 urlpatterns = [
     path('signup/', views.signup),
 
-    # # 비밀번호를 변경합니다. 새 비밀번호가 필요합니다. 모두!!
-    # path('changepassword/', views.change_password, name='password_change'),
+    # 비밀번호를 변경합니다. 새 비밀번호와 비밀번호 확인이 필요합니다. 
+    path('changepassword/', views.change_password, name='password_change'),
 
     # 사용자의 신고 내역을 보여줍니다.
     path('<str:username>/report-list/', views.report_list),
