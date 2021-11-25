@@ -83,6 +83,8 @@ export default {
 		logout () {
 			this.isLogin = false
       localStorage.removeItem('jwt')
+			this.$store.dispatch('logout')
+			this.$router.push({name: 'Home'})
       this.$router.go()
 		},
 		showModal () {
@@ -98,10 +100,6 @@ export default {
         },
       )
     },
-		getUsername (username) {
-			this.username = username
-			console.log('드디어!!!!', username)
-		},	
 	},
 	computed:{
     token : function () {

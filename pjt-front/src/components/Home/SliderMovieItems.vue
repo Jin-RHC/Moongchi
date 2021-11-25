@@ -4,10 +4,10 @@
 		<div class="row">
 			<div class="social-link">			
 				<p>Follow us: </p>
-				<a href="#"><i class="ion-social-facebook"></i></a>
-				<a href="#"><i class="ion-social-twitter"></i></a>
-				<a href="#"><i class="ion-social-googleplus"></i></a>
-				<a href="#"><i class="ion-social-youtube"></i></a>
+				<a href="https://ko-kr.facebook.com/zuck"><i class="ion-social-facebook"></i></a>
+				<a href="https://twitter.com/jack"><i class="ion-social-twitter"></i></a>
+				<!-- <a href="#"><i class="ion-social-googleplus"></i></a> -->
+				<a href="https://www.youtube.com/c/%EC%8A%B9%EC%9A%B0%EC%95%84%EB%B9%A0"><i class="ion-social-youtube"></i></a>
 			</div>
 	    	<!-- <div  class="slick-multiItemSlider"> -->
 					<!-- <slider-movie-item 

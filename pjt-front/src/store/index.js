@@ -17,10 +17,19 @@ export default new Vuex.Store({
       state.token = token
       // throw new Error(`${state.token}`)
     },
+    LOGOUT: function (state) {
+      state.token = ''
+      // throw new Error(`${state.token}`)
+    },
   },
   actions: {
     loginCompleted: function (context, res) {
       context.commit('LOGIN_COMPLETED', res)
+      // console.log(username)
+      // console.log(context)
+    },
+    logout: function (context) {
+      context.commit('LOGOUT')
       // console.log(username)
       // console.log(context)
     },

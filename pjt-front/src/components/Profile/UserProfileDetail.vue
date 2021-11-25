@@ -7,7 +7,7 @@
               <h6 class="mb-0">Full Name</h6>
             </div>
             <div class="col-sm-9 text-secondary">
-              Kenneth Valdez
+              김싸피
             </div>
           </div>
           <hr>
@@ -34,7 +34,7 @@
               <h6 class="mb-0">Email</h6>
             </div>
             <div class="col-sm-9 text-secondary">
-              fip@jukmuh.al
+              {{ userData.username }}@ssafy.edu
             </div>
           </div>
           <hr>
@@ -61,7 +61,7 @@
               <h6 class="mb-0">Address</h6>
             </div>
             <div class="col-sm-9 text-secondary">
-              Bay Area, San Francisco, CA
+              당신의 마음속
             </div>
           </div>
           <hr>

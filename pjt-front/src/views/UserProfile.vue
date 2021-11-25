@@ -47,7 +47,7 @@
 			</div>
 			<div class="col-md-9 col-sm-12 col-xs-12">
         <user-profile-detail v-if="currentTab == 0" :userData="userData"></user-profile-detail>
-        <user-favorite-movies v-if="currentTab == 1"></user-favorite-movies>
+        <user-favorite-movies :favorite-movies="favoriteMovies" v-if="currentTab == 1"></user-favorite-movies>
         <user-rated-movies v-if="currentTab == 2"></user-rated-movies>
 				<user-change-form v-if="currentTab == 3"></user-change-form>
 			</div>
@@ -76,7 +76,8 @@ export default {
     return {
       currentTab: 0,      
       accountsDetail: ['Profile', 'Favorite Movies', 'Rated Movies'],
-			userData: null
+			userData: null,
+			favoriteMovies: null,
     }
   },
 	methods: {
@@ -96,6 +97,7 @@ export default {
 				.then(res => {
 					console.log(res.data)
 					this.userData = res.data
+					this.favoriteMovies = res.data.like_movies
 				})
 				.catch(err => {
 					console.log(err)
