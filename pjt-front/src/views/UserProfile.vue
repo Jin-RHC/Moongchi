@@ -42,8 +42,8 @@
 					<div class="user-fav">
 						<p>Others</p>
 						<ul>
-							<li :class="{ active: currentTab === 3}"><a @click.prevent="currentTab = 3" href="#">Change information</a></li>
-							<li><a href="#">Log out</a></li>
+							<li v-if="this.$route.params.username === myname" :class="{ active: currentTab === 3}"><a @click.prevent="currentTab = 3" href="#">Change information</a></li>
+							<li v-if="this.$route.params.username === myname"><a href="#">Log out</a></li>
 						</ul>
 					</div>
 				</div>

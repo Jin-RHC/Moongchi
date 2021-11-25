@@ -45,28 +45,28 @@
       </div>	
     </form>
     <form action="#" class="password">
-      <h4>02. Change password</h4>
+      <h4>비밀번호 변경</h4>
       <div class="row">
         <div class="col-md-6 form-it">
-          <label>Old Password</label>
-          <input type="text" placeholder="**********">
+          <label>기존 비밀번호</label>
+          <input v-model="oldPassword" type="password" placeholder="**********">
         </div>
       </div>
       <div class="row">
         <div class="col-md-6 form-it">
-          <label>New Password</label>
-          <input type="text" placeholder="***************">
+          <label>새 비밀번호</label>
+          <input v-model="newPassword" type="password" placeholder="***************">
         </div>
       </div>
       <div class="row">
         <div class="col-md-6 form-it">
-          <label>Confirm New Password</label>
-          <input type="text" placeholder="*************** ">
+          <label>비밀번호 확인</label>
+          <input v-model="newPasswordConfirmation" type="password" placeholder="*************** ">
         </div>
       </div>
       <div class="row">
         <div class="col-md-2">
-          <input class="submit" type="submit" value="change">
+          <input @click.prevent="changePassword" class="submit" type="submit" value="change">
         </div>
       </div>	
     </form>
@@ -74,8 +74,81 @@
 </template>
 
 <script>
+import axios from 'axios'
+import jwt_decode from 'jwt-decode'
+
 export default {
-  name: 'UserChangeForm'
+  name: 'UserChangeForm',
+  data () {
+    return {
+      username: null,
+      oldPassword: null,
+      newPassword: null,
+      newPasswordConfirmation: null,
+      // passwordChangeCredentials: {
+      //   username: null,
+      //   oldPassword: null,
+      //   newPassword: null,
+      //   newPasswordConfirmation: null,
+        
+      // },
+      // signupCredentials: {
+      //   username: null,
+      //   nickname: null,
+      //   password: null,
+      //   passwordConfirmation: null,
+      // },
+      // loginChecked: true,
+      // signupChecked: false,
+    }
+  },
+  methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+    changePassword: function () {
+      if (this.newPassword != this.newPasswordConfirmation) {
+        alert('비밀번호와 비밀번호 확인에 같은 비밀번호를 입력하셨는지 확인해 주세요.')
+      } else if (!this.newPassword) {
+        alert('값을 입력했는지 확인해 주세요.')
+      } else {
+      axios({
+        method: 'post',
+        url: 'http://127.0.0.1:8000/api/token/',
+        data: {username: jwt_decode(localStorage.getItem('jwt')).username,
+          password: this.oldPassword}
+      })
+        .then(res => {
+          localStorage.setItem('jwt', res.data.access)
+					this.$store.dispatch('loginCompleted', res) 
+					// this.$router.go()
+        })
+        .then(() => {
+          axios({
+            method: 'post',
+            url: 'http://127.0.0.1:8000/api/v1/accounts/changepassword/',
+            headers: this.setToken(),
+            data: {newPassword: this.newPassword,
+              newPasswordConfirmation: this.newPasswordConfirmation}
+          })
+            .then(() => {
+              alert('비밀번호가 성공적으로 변경되었습니다.')
+            })
+            .catch(() =>{
+              alert('비밀번호는 최소 8자 이상입니다. 잘 작성하셨는지 확인해 주세요.')
+            })
+        })
+        .catch(err => {
+					alert(err)
+        })
+        
+        }
+    },
+  },
 }
 </script>
 

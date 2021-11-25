@@ -1,6 +1,6 @@
 from django.db.models.aggregates import Avg
 from rest_framework import serializers
-from .models import Movie, Director, Actor
+from .models import Movie, Director, Actor, Genre
 from community.models import Rating
 from django.contrib.auth import get_user_model
 
@@ -41,11 +41,17 @@ class MovieDetailSerializer(serializers.ModelSerializer):
             model = Rating
             exclude = ('reported_users', 'movie')
 
+    class GenreSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Genre
+            fields = '__all__'
+
     
     directors = DirectorSerializer(many=True, read_only=True)
     actors = ActorSerializer(many=True, read_only=True)
     rate = serializers.SerializerMethodField()
     rating_set = RatingSerializer(many=True, read_only=True)
+    genres = GenreSerializer(many=True)
 
     class Meta:
         model = Movie
@@ -58,10 +64,21 @@ class MovieSearchListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movie
-        fields = ('id', 'title',  'poster_path')
+        fields = ('id', 'title', 'rating_average', 'poster_path')
 
 
 
+class CelebSerializer(serializers.ModelSerializer):
+    
+    movies = MovieListSerializer(many=True, read_only=True)
+    movies_count = serializers.IntegerField(
+        source='movies.count',
+        read_only=True
+    )
+
+    class Meta:
+        model = Actor
+        fields = '__all__'
 
 
 

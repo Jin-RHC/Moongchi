@@ -5,7 +5,8 @@
       <option value="movies">영화</option>
       <option value="others">기타</option>
     </select>
-    <input @keydown.enter="search" :value="searchKeyword" @input="changeKeyword" type="text" placeholder="검색어를 입력해 주세요">
+    <!-- <input @input="search" @keydown.enter="search" :value="searchKeyword" @input="changeKeyword" type="text" placeholder="검색어를 입력해 주세요"> -->
+    <input @keydown.enter="searchEnter" :value="searchKeyword" @input="changeKeyword" type="text" placeholder="검색어를 입력해 주세요">
     </div>
 </template>
 
@@ -27,21 +28,30 @@ export default {
       }
     },    
     searchMovie () {
-      if (this.searchKeyword.length) {
+      if (this.searchKeyword.trim().length >= 1) {
         this.$router.push({ name: 'MovieListSearch', query: {query: `${this.searchKeyword}` }}).catch(()=>{})        
       } 
-      this.searchKeyword = null     
+      // this.searchKeyword = null    
       
     },
     searchReview () {
-      if (this.searchKeyword.length) {
+      if (this.searchKeyword.trim().length) {
         this.$router.push({ name: 'CommunitySearch', query: {query: `${this.searchKeyword}` }}).catch(()=>{})
       } 
-      this.searchKeyword = null     
+      // this.searchKeyword = null     
       
     },
+    searchEnter () {
+      this.searchKeyword = null
+    }, 
+
+
     changeKeyword (e) {
       this.searchKeyword = e.target.value
+      this.search(this.searchKeyword)
+      // if (this.searchKeyword.length >= 2) {
+      //   this.search(this.searchKeyword)
+      // }
     }
   }
 }
