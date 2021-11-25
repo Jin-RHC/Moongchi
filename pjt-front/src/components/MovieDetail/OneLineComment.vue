@@ -71,7 +71,7 @@ export default {
           })
           .catch(err => {
             console.log(err)
-            alert('로그인하세요')
+            alert('로그인이 필요합니다.')
           })
     },
     dislikeOneLineComment () {
@@ -86,7 +86,7 @@ export default {
           })
           .catch(err => {
             console.log(err)
-            alert('로그인하세요')
+            alert('로그인이 필요합니다.')
           })
     },   
   },
@@ -95,7 +95,7 @@ export default {
   computed: {
     createdAt () {
       return this.oneLineComment.created_at.slice(0, 10) + '   ' + this.oneLineComment.created_at.slice(11, 19)
-    }
+    },
   }
 }
 </script>

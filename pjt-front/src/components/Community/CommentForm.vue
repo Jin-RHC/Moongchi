@@ -2,18 +2,7 @@
   <div class="comment-form">
     <h4>Leave a comment</h4>
     <form action="#">
-      <div class="row">
-        <!-- <div class="col-md-4">
-          <input v-model.trim="author" type="text" placeholder="Your name">
-        </div> -->
-
-
-        <!-- <div class="col-md-4">
-          <input type="text" placeholder="Your email">
-        </div> -->
-        <!-- <div class="col-md-4">
-          <input type="text" placeholder="Website">
-        </div> -->
+      <div class="row"> 
       </div>
       <div class="row">
         <div class="col-md-12">

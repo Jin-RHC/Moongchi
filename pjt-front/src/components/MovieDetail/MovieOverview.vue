@@ -48,7 +48,7 @@
         <span v-else>
           <ul>
             <one-line-comment 
-              v-for="(oneLineComment, index) in oneLineComments.reverse().slice(0, 5)" 
+              v-for="(oneLineComment, index) in oneLineComments.slice(0, 5)" 
               :key="index" 
               :oneLineComment="oneLineComment" 
               :movie="movie"
@@ -190,7 +190,7 @@ export default {
         // this.movieData = res.data
 				this.like = res.data.like_users
         this.dislike = res.data.dlike_users
-        this.oneLineComments = res.data.rating_set
+        this.oneLineComments = res.data.rating_set.reverse()
 				console.log(this.oneLineComments, '데이터 갱신 완료!')
 			})
 		},    
