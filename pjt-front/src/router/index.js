@@ -11,6 +11,7 @@ import ReviewDetail from '../views/ReviewDetail.vue'
 import CommingSoon from '../views/CommingSoon.vue'
 import UserProfile from '../views/UserProfile.vue'
 import NotFoundComponent from '../views/NotFoundComponent.vue'
+import Celebs from '../views/Celebs.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -65,6 +66,11 @@ const routes = [
     path: '/profile/:username',
     name: 'UserProfile',
     component: UserProfile
+  },
+  {
+    path: '/celebs',
+    name: 'Celebs',
+    component: Celebs
   },
   {
     path: "/page-not-found",

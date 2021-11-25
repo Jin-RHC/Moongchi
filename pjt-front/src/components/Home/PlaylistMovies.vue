@@ -58,7 +58,7 @@ export default {
       })
         .then(res => {          
           this.slides = res.data['high-rates']
-          console.log(this.slides)
+          // console.log(this.slides)
         })
   },
 }
