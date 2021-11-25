@@ -88,7 +88,7 @@
         <div class="sb-it">
           <h6>Genres:</h6>
           <p> 
-            <a href="" v-for="genre in genresList" :key="genre.id">{{ genre }} | </a>
+            <a href="" v-for="genre in movieGenres" :key="genre.id">{{ genre.name }} | </a>
           </p>
         </div>
         <div class="sb-it">
