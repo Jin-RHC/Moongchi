@@ -5,8 +5,8 @@
       <div style="display: flex;">        
         <star-rating :max-rating=10	:rating="oneLineComment.rating" :star-size="15" :read-only="true"></star-rating>
 
-        <p class="time" >
-          <a href="#" style="margin: 0 5px"> {{ oneLineComment.user.nickname }} </a> | <span style="margin: 0 5px;"> {{ createdAt }} </span> | <a href="#" style="margin: 0 5px;">신고</a>
+        <p class="time" >          
+          <a @click.prevent="$router.push({ name: 'UserProfile', params: {username: oneLineComment.user.username }})" href="#" style="margin: 0 5px"> {{ oneLineComment.user.nickname }} </a> | <span style="margin: 0 5px;"> {{ createdAt }} </span> | <a href="#" style="margin: 0 5px;">신고</a>
         </p>
       </div>
 
@@ -77,7 +77,6 @@ export default {
       }
       return config
     },
-    // 한줄평 좋아요 싫어요 미구현 
     likeOneLineComment () {
       axios({
           method: 'post',

@@ -10,9 +10,9 @@
             <section>
               <popular-movies></popular-movies>
             </section>    
-            <!-- <section>
+            <section>
               <recommended-movies></recommended-movies>
-            </section> -->
+            </section>
             <section>
               <playlist-movies></playlist-movies>
             </section>
@@ -28,7 +28,7 @@
 // import axios from 'axios'
 import PlaylistMovies from '../components/Home/PlaylistMovies.vue'
 import popularMovies from '../components/Home/PopularMovies.vue'
-// import RecommendedMovies from '../components/Home/RecommendedMovies.vue'
+import RecommendedMovies from '../components/Home/RecommendedMovies.vue'
 import SliderMovieItems from '../components/Home/SliderMovieItems.vue'
 // @ is an alias to /src
 
@@ -40,7 +40,7 @@ export default {
 
     SliderMovieItems,
     popularMovies,
-    // RecommendedMovies,
+    RecommendedMovies,
     PlaylistMovies
     
   },
@@ -66,7 +66,7 @@ export default {
     // }
   },
   created () {
-    // this.getMainMovies()    
+    console.log(this.$store.state.token)
   }
 }
 </script>

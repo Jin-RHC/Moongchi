@@ -6,7 +6,7 @@
 	</div>
 	<div class="row">
 		<carousel-3d :disable3d="true" :space="395" :autoplay="true" :autoplay-timeout="5000" :display="20" :controlsVisible="true" :height="510" :clickable="false">
-			<slide v-for="(slide, i) in recommendedMovies" :index="i" :key="i">
+			<slide v-for="(slide, i) in slides" :index="i" :key="i">
 				<template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">												
           <div class="movie-item" style="width: 100%;">
             <img :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="`https://image.tmdb.org/t/p/original${slide.poster_path}`">
@@ -31,19 +31,14 @@
 <script>
 import axios from 'axios'
 import { Carousel3d, Slide } from 'vue-carousel-3d';
-// import TheaterMovieItem from './TheaterMovieItem.vue'
 const api = 'http://127.0.0.1:8000/api/v1/movies/recommended/'
 
 export default {
   components: {
-    // TheaterMovieItem 
 		Carousel3d,
     Slide
   },
   name: 'RecommendedMovies',
-  props: {
-    recommendedMovies: Array
-  },
   data () {
     return {
       slides: 20,
@@ -66,6 +61,7 @@ export default {
         })
         .then(res => {
           console.log(res.data)
+          this.slides = res.data
         })
         .catch(err => {
           console.log(err)

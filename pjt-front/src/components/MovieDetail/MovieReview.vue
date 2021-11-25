@@ -27,7 +27,7 @@
       <!-- <img src="images/uploads/userava1.jpg" alt=""> -->
       <div>
         <h3>Best Marvel movie in my opinion</h3>
-        <div class="no-star" style="margin-top: 20px;">
+        <!-- <div class="no-star" style="margin-top: 20px;">
           <i class="ion-android-star"></i>
           <i class="ion-android-star"></i>
           <i class="ion-android-star"></i>
@@ -38,10 +38,10 @@
           <i class="ion-android-star"></i>
           <i class="ion-android-star"></i>
           <i class="ion-android-star last"></i>
-        </div>
-        <p class="time" style="display: flex; margin-top: 10px; justify-content: space-between; width: 95%;">
+        </div> -->
+        <p class="time" style="display: flex; margin-top: 10px; width: 95%;">
           <a href="#" style="margin-left:20px"> <h6> user     </h6> </a>
-           <span style=""> 2016-11-20 </span>
+           <span style="margin-left: 50px;"> | 2016-11-20 </span>
         </p>
       </div>
     </div> 

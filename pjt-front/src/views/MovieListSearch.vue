@@ -20,7 +20,7 @@
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="topbar-filter fw">
-					<p>Found <span>1,608 movies</span> in total</p>
+					<p>Found <span>{{ movies.length }} movies</span> in total</p>
 					<label>Sort by:</label>
 					<select>
 						<option value="popularity">Popularity Descending</option>
@@ -30,8 +30,8 @@
 						<option value="date">Release date Descending</option>
 						<option value="date">Release date Ascending</option>
 					</select>
-					<a href="movielist.html" class="list"><i class="ion-ios-list-outline "></i></a>
-					<a href="moviegridfw.html" class="grid"><i class="ion-grid active"></i></a>
+					<a href="#" class="list"><i class="ion-ios-list-outline "></i></a>
+					<a href="#" class="grid"><i class="ion-grid active"></i></a>
 				</div>
 				<div class="flex-wrap-movielist mv-grid-fw">
             <movie-list-item v-for="movie in movies" :key="movie.id" :movie="movie"></movie-list-item>									

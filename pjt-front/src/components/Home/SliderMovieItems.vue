@@ -14,7 +14,7 @@
 						:movieItem="movieItem"
 					></slider-movie-item> -->
 					<carousel-3d :autoplay="true" :autoplay-timeout="5000" :display="20" :controlsVisible="true" :width="350" :height="490">
-						<slide v-for="(slide, i) in movieItems" :index="i" :key="i">      
+						<slide v-for="(slide, i) in slides" :index="i" :key="i">      
 							<template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
 								<div class="movie-item" style="width: 100%;">
 									<img :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="`https://image.tmdb.org/t/p/original${slide.poster_path}`" style="height: 490px;">
@@ -53,25 +53,13 @@ export default {
 		Slide
 		},
   name: 'SliderMovieItems',
-	props: {
-	},
 	data () {
     return {
-      movieItems: null,
 			slides: 20,
     }
   },
 	methods: {
-		getMainMovies () {
-      axios({
-        method: 'get',
-        url: api 
-      })
-        .then(res => {          
-          this.movieItems = res.data['now-playing']   
-					console.log(this.movieItems)       
-        })
-    }
+
 	},
   created () {
   //   const API_KEY = 'e856b3ac18eec7abd7cf6099f977bbff'
@@ -83,7 +71,13 @@ export default {
   //       this.slides = res.data.results
   //       // console.log(this.movieItems)
   //     })
-		this.getMainMovies()
+		axios({
+        method: 'get',
+        url: api 
+      })
+        .then(res => {          
+          this.slides = res.data['now-playing']
+        })
   },
 		
 }
