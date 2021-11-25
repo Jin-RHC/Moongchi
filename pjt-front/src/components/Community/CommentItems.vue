@@ -88,7 +88,11 @@ export default {
   },
   computed: {
     commentsCount () {
-      return this.comments.length
+      let count = this.comments.length
+      this.comments.forEach(comment => {
+        count += comment.nestedcomment_set.length
+      })
+      return count
     }
   },
   created () {
