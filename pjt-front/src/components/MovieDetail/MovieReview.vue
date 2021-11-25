@@ -11,7 +11,7 @@
           </div>
         </div>
         <div class="topbar-filter">
-    <p>Found <span>56 reviews</span> in total</p>
+    <p>Found <span>{{ reviews.length }} reviews</span> in total</p>
     <label>Filter by:</label>
     <select>
       <option value="popularity">Popularity Descending</option>
@@ -22,12 +22,12 @@
       <option value="date">Release date Ascending</option>
     </select>
   </div>
-  <div class="mv-user-review-item">
-    <div class="user-infor">
+  <div class="mv-user-review-item" v-for="review in reviews" :key="review.id">
+    <div class="user-infor" style="display: flex;">
       <!-- <img src="images/uploads/userava1.jpg" alt=""> -->
       <div>
-        <h3>Best Marvel movie in my opinion</h3>
-        <!-- <div class="no-star" style="margin-top: 20px;">
+        <a @click.prevent="$router.push({ name: 'ReviewDetail', params: { reviewId: review.id }})" href=""><h3>{{ review.title }}</h3></a>
+        <div class="no-star" style="margin-top: 20px;">
           <i class="ion-android-star"></i>
           <i class="ion-android-star"></i>
           <i class="ion-android-star"></i>
@@ -38,15 +38,17 @@
           <i class="ion-android-star"></i>
           <i class="ion-android-star"></i>
           <i class="ion-android-star last"></i>
-        </div> -->
-        <p class="time" style="display: flex; margin-top: 10px; width: 95%;">
-          <a href="#" style="margin-left:20px"> <h6> user     </h6> </a>
-           <span style="margin-left: 50px;"> | 2016-11-20 </span>
-        </p>
+        </div>
       </div>
+      <div>
+          <a @click.prevent="$router.push({ name: 'UserProfile', params: { username: review.user.username }})" href="#" style="margin-left:20px"> <h6> {{ review.user.username }} </h6> </a>
+      </div>
+        <p class="time" style="display: flex; margin-top: 10px; width: 95%;">          
+          <span style="margin-left: 50px;"> | {{ review.updated_at.slice(0, 9)}} </span>
+        </p>
     </div> 
     
-    <p style="width: 95%;">This is by far one of my favorite movies from the MCU. The introduction of new Characters both good and bad also makes the movie more exciting. giving the characters more of a back story can also help audiences relate more to different characters better, and it connects a bond between the audience and actors or characters. Having seen the movie three times does not bother me here as it is as thrilling and exciting every time I am watching it. In other words, the movie is by far better than previous movies (and I do love everything Marvel), the plotting is splendid (they really do out do themselves in each film, there are no problems watching it more than once.</p>
+    <!-- <p style="width: 95%;">This is by far one of my favorite movies from the MCU. The introduction of new Characters both good and bad also makes the movie more exciting. giving the characters more of a back story can also help audiences relate more to different characters better, and it connects a bond between the audience and actors or characters. Having seen the movie three times does not bother me here as it is as thrilling and exciting every time I am watching it. In other words, the movie is by far better than previous movies (and I do love everything Marvel), the plotting is splendid (they really do out do themselves in each film, there are no problems watching it more than once.</p> -->
     <hr>
   </div>
   
@@ -55,16 +57,15 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
-// const api = 'http://127.0.0.1:8000/api/v1/community/'
-// const id = this.$route.params.id
+const api = 'http://127.0.0.1:8000/api/v1/community/'
 
 export default {
   name: 'MovieReview',
   data () {
     return {
-      review: null,
+      reviews: [],
       isLogin: false
     }
   },
@@ -79,9 +80,23 @@ export default {
       }
       return config
     },
+    getReview () {
+      axios({
+        method: 'get',
+        url: api + `${this.$route.params.id}/review/`,
+        headers: this.setToken()
+      })
+        .then(res => {
+          this.reviews = res.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
 
   },
   created () {
+    this.getReview()
     if (this.$store.state.token) {
       this.isLogin = true
     }
