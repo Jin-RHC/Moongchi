@@ -1,16 +1,17 @@
 <template>
   <div>
     <div class="topbar-filter">
-      <p>Found <span>3 rates</span> in total</p>
+      <p>Found <span>{{ userData.review_set.length }} reviews</span> in total</p>
       <label>Sort by:</label>
       <select>
         <option value="range">-- Choose option --</option>
         <option value="saab">-- Choose option 2--</option>
       </select>
     </div>
+    <user-reviews v-for="review in userData.review_set" :key="review.id" :review="review"></user-reviews>
 
 
-    <div class="movie-item-style-2 userrate">
+    <!-- <div class="movie-item-style-2 userrate">
       <img src="images/uploads/mv1.jpg" alt="">
       <div class="mv-item-infor">
         <h6><a href="#">oblivion <span>(2012)</span></a></h6>
@@ -59,14 +60,22 @@
         <a class="active" href="#">1</a>
         <a href="#"><i class="ion-arrow-right-b"></i></a>
       </div>
-    </div>
+    </div> -->
 
   </div>
 </template>
 
 <script>
+import UserReviews from '@/components/Profile/UserReviews.vue'
+
 export default {
-  name: 'UserRatedMovies'
+  name: 'UserRatedMovies',
+  components: {
+    UserReviews
+  },
+  props: {
+		userData: Array
+	},
 }
 </script>
 

@@ -22,8 +22,11 @@
 			<div class="col-md-3 col-sm-12 col-xs-12">
 				<div class="user-information">
 					<div class="user-img">
-						<a href="#"><img src="images/uploads/user-img.png" alt=""><br></a>
-						<a href="#" class="redbtn">프로필 바꾸기</a>
+						<a @click.prevent="none" href="#"><img src="images/uploads/user-img.png" alt=""><br></a>
+						<div v-if="userData.username != myname">
+							<a v-show="!isFollowing" @click.prevent="follow" href="#" class="redbtn" style="background:pink;">팔로우</a>
+							<a v-show="isFollowing" @click.prevent="follow" href="#" class="redbtn" style="background:grey;">팔로우한 사람입니다.</a>
+						</div>
 					</div>
 					<div class="user-fav">
 						<p>Account Details</p>
@@ -48,7 +51,7 @@
 			<div class="col-md-9 col-sm-12 col-xs-12">
         <user-profile-detail v-if="currentTab == 0" :userData="userData"></user-profile-detail>
         <user-favorite-movies :favorite-movies="favoriteMovies" v-if="currentTab == 1"></user-favorite-movies>
-        <user-rated-movies v-if="currentTab == 2"></user-rated-movies>
+        <user-rated-movies v-if="currentTab == 2" :userData="userData"></user-rated-movies>
 				<user-change-form v-if="currentTab == 3"></user-change-form>
 			</div>
 		</div>
@@ -63,6 +66,7 @@ import UserChangeForm from '../components/Profile/UserChangeForm.vue'
 import UserFavoriteMovies from '../components/Profile/UserFavoriteMovies.vue'
 import UserProfileDetail from '../components/Profile/UserProfileDetail.vue'
 import UserRatedMovies from '../components/Profile/UserRatedMovies.vue'
+import jwt_decode from "jwt-decode"
 const api = 'http://127.0.0.1:8000/api/v1/accounts/'
 export default {
   name: 'UserProfile',
@@ -75,14 +79,17 @@ export default {
   data () {
     return {
       currentTab: 0,      
-      accountsDetail: ['Profile', 'Favorite Movies', 'Rated Movies'],
+      accountsDetail: ['Profile', 'Favorite Movies', 'Reviewed Movies'],
 			userData: null,
 			favoriteMovies: null,
+			myname: null,
+			isFollowing: true,
     }
   },
 	methods: {
 		setToken: function () {
       const token = localStorage.getItem('jwt')
+			this.myname = jwt_decode(token).username
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -98,15 +105,48 @@ export default {
 					console.log(res.data)
 					this.userData = res.data
 					this.favoriteMovies = res.data.like_movies
+					for (let curr of this.userData.followers) {
+						if (this.myname === curr.username) {
+							this.isFollowing = true
+						}
+					}
 				})
 				.catch(err => {
 					console.log(err)
+					alert('로그인하셔야 볼 수 있습니다.')
 				})
-		}
+		},
+		follow () {
+			axios({
+				method: 'POST',
+				url: api + `${this.$route.params.username}/follow/`,
+				headers: this.setToken()
+			})
+				.then(() => {
+					if (this.isFollowing === false) {
+						this.isFollowing = true
+						this.userData.followers_count = this.userData.followers_count + 1
+					} else {
+						this.isFollowing = false
+						this.userData.followers_count = this.userData.followers_count - 1
+					}				
+				})
+				.catch(err => {
+					console.log(err)
+					alert('로그인하셔야 볼 수 있습니다.')
+				})
+		},
+
+		none: function () {
+			
+		},
 	},
+
 	created () {
 		this.getProfile()
-	}
+		console.log('태어났다!!!')
+		
+	},
 }
 </script>
 
