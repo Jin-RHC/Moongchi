@@ -43,7 +43,7 @@ class ReviewListSerializer(serializers.ModelSerializer):
     class MovieSerializer(serializers.ModelSerializer):
         class Meta:
             model = Movie
-            fields = ('title', 'poster_path', 'id')
+            fields = ('title', 'poster_path', 'id', 'release_date')
 
 
     # 해당 리뷰의 사용자를 보여주기 위한 serializer
