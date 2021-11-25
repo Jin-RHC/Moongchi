@@ -6,6 +6,7 @@ from reports.serializers import (ReviewReportSerializer, CommentReportSerializer
     RatingReportSerializer)
 
 from community.serializers import ReviewListSerializer
+from movies.serializers import MovieListSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -52,7 +53,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     followings = FollowUserSerializer(many=True, read_only=True)
     followers = FollowUserSerializer(many=True, read_only=True)
     review_set = ReviewListSerializer(many=True, read_only=True)
-
+    like_movies = MovieListSerializer(many=True, read_only=True)
 
     followers_count = serializers.IntegerField(
         source='followers.count',
@@ -68,4 +69,4 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ('id', 'username', 'nickname', 'followings', 'followers', 'review_set', 'followers_count', 
-            'followings_count')
+            'followings_count', 'like_movies')

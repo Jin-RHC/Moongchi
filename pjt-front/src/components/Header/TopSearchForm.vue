@@ -2,10 +2,10 @@
   <!-- top search form -->
   <div class="top-search">
     <select v-model="category">
-      <option value="movies">Movies</option>
-      <option value="others">Others</option>
+      <option value="movies">영화</option>
+      <option value="others">기타</option>
     </select>
-    <input @keydown.enter="search" :value="searchKeyword" @input="changeKeyword" type="text" placeholder="Search for a movie, reviews or celebrity that you are looking for">
+    <input @keydown.enter="search" :value="searchKeyword" @input="changeKeyword" type="text" placeholder="검색어를 입력해 주세요">
     </div>
 </template>
 
