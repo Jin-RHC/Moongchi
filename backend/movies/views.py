@@ -28,14 +28,14 @@ A_K = MY_SECRET['TMDB_KEY']
 @api_view(['GET',])
 def mainmovies(request):
     # 현재 상영중인 영화
-    now_movies = Movie.objects.filter(release_date__gte=datetime.datetime.now() - datetime.timedelta(days=60)).filter(
-        release_date__lte=datetime.datetime.now().date()).order_by('-popularity')[:10]
+    now_movies = Movie.objects.filter(release_date__gte=datetime.datetime.now() - datetime.timedelta(days=100)).filter(
+        release_date__lte=datetime.datetime.now().date()).order_by('-popularity')[:25]
     
     # 높은 평점 영화
-    high_rating_movies = Movie.objects.order_by('-rating_average')[:10]
+    high_rating_movies = Movie.objects.order_by('-rating_average')[:20]
     
     # 평점이 많은 영화
-    popular_movies = Movie.objects.annotate(ratings_count=Count('rating')).order_by('-ratings_count')[:10]
+    popular_movies = Movie.objects.annotate(ratings_count=Count('rating')).order_by('-ratings_count')[:20]
 
     now_serializer = MovieListSerializer(now_movies, many=True)
     high_rating_serializer = MovieListSerializer(high_rating_movies, many=True)
@@ -56,10 +56,10 @@ def recommended_movie_list(request):
     for movie in request.user.like_movies.all():
         good_movie_set.add(movie.pk)
     
-    if len(good_movie_set) < 2  or len(good_movie_set) > 50:
-        recommended_movies = Movie.objects.filter(release_date__gte=datetime.datetime.now() - datetime.timedelta(days=150)).filter(
-            release_date__lte=datetime.datetime.now().date()).order_by('-rating_average')[:10]
-        serializer = MovieListSerializer(recommended_movies[:10])
+    if len(good_movie_set) < 3  or len(good_movie_set) > 50:
+        recommended_movies = Movie.objects.filter(release_date__gte=datetime.datetime.now() - datetime.timedelta(days=200)).filter(
+            release_date__lte=datetime.datetime.now().date()).order_by('-rating_average')[:20]
+        serializer = MovieListSerializer(recommended_movies[:20])
         return Response(serializer.data)
             
     else:
@@ -73,12 +73,12 @@ def recommended_movie_list(request):
             if value >= 2:
                 temp_chosen_movie_set.add(key)
         recommended_movies = Movie.objects.filter(pk__in=temp_chosen_movie_set).order_by('-rating_average')
-        if len(temp_chosen_movie_set) >= 10:
-            serializer = MovieListSerializer(recommended_movies[:10], many=True)
+        if len(temp_chosen_movie_set) >= 20:
+            serializer = MovieListSerializer(recommended_movies[:20], many=True)
             return Response(serializer.data)
         
         else:
-            number = 10 - len(temp_chosen_movie_set)
+            number = 20 - len(temp_chosen_movie_set)
             temp_another_set = set(temp) - temp_chosen_movie_set # 2번 이상 추천되지 않은 영화들을 추가합니다.
             other_recommended_movies = Movie.objects.filter(pk__in=temp_another_set).order_by('-rating_average')[:number]
             result = recommended_movies | other_recommended_movies
