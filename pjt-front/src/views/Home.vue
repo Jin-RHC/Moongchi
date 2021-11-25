@@ -11,7 +11,7 @@
               <popular-movies></popular-movies>
             </section>    
             <section>
-              <recommended-movies></recommended-movies>
+              <recommended-movies v-show="isLoginUser"></recommended-movies>
             </section>
             <section>
               <playlist-movies></playlist-movies>
@@ -46,27 +46,16 @@ export default {
   },
   data () {
     return {      
-      // mainMovies: [],
-      // nowPlaying: [],
-      // HighRatesMovies: [],
-      // popularMovies: []
+      isLoginUser: false
     }
   },
   methods: {
-    // getMainMovies () {
-    //   axios({
-    //     method: 'get',
-    //     url: api 
-    //   })
-    //     .then(res => {          
-    //       this.nowPlaying = res.data['now-playing']
-    //       this.HighRatesMovies = res.data['high-rates']
-    //       this.popularMovies = res.data['popular']
-    //     })
-    // }
+
   },
   created () {
-    console.log(this.$store.state.token)
+    if (this.$store.state.token) {
+      this.isLoginUser = true
+    }
   }
 }
 </script>

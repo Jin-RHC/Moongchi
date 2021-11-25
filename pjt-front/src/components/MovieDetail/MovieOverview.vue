@@ -48,8 +48,9 @@
         <span v-else>
           <ul>
             <one-line-comment 
-              v-for="(oneLineComment, index) in oneLineComments" 
-              :key="index" :oneLineComment="oneLineComment" 
+              v-for="(oneLineComment, index) in oneLineComments.reverse().slice(0, 5)" 
+              :key="index" 
+              :oneLineComment="oneLineComment" 
               :movie="movie"
               @get-one-line-comment-like="getData"
               @get-one-line-comment-dislike="getData"
@@ -57,7 +58,7 @@
           </ul>
         </span>
       </div>
-     <one-line-form @noti-one-line-comment="getData"></one-line-form>
+     <one-line-form @noti-one-line-comment="getData" v-show="isLogin"></one-line-form>
   </div>
 
 
@@ -108,16 +109,6 @@
           <p>{{ movie.popularity }}</p>
         </div>
 
-        <!-- <div class="sb-it">
-          <h6>Plot Keywords:</h6>
-          <p class="tags">
-            <span class="time"><a href="#">superhero</a></span>
-      <span class="time"><a href="#">marvel universe</a></span>
-      <span class="time"><a href="#">comic</a></span>
-      <span class="time"><a href="#">blockbuster</a></span>
-      <span class="time"><a href="#">final battle</a></span>
-          </p>
-        </div> -->
       
       </div>
     </div>
@@ -141,6 +132,7 @@ export default {
   },
   data () {
     return {
+      isLogin: false,
       like: this.movie.like_users,
       dislike: this.movie.dlike_users,
       oneLineComments: this.movie.rating_set,
@@ -238,10 +230,14 @@ export default {
         data.push(genreData[movieGenre])
       })
       return data
-    }
-  
+    },
+
   },
-  
+  created () {
+    if (this.$store.state.token) {
+      this.isLogin = true
+    }
+  }
 
 }
 </script>
