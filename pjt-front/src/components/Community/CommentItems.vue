@@ -2,7 +2,7 @@
   <!-- comment items -->
   <div class="comments">
     
-    <h4 v-show="comments.length">{{ comments.length }} Comments</h4>
+    <h4 v-show="comments.length">{{ commentsCount }} Comments</h4>
 
     <div class="" style="margin-top: 30px;">
       <!-- <img src="images/uploads/author.png" alt=""> -->
@@ -10,13 +10,14 @@
         v-for="(comment, index) in comments" 
         :key="index" 
         :comment="comment"        
-        @noti-like-comment="getReviewData"
-        @noti-dislike-comment="getReviewData"
-        @noti-nested-comment-like-dislike="getReviewData"
+        @noti-comment-like="getReviewData"
+        @noti-comment-dislike="getReviewData"
+        @noti-comment-delete="getReviewData"
+        @noti-nested-comment="getReviewData"
       ></comment-item>
       
       <div v-if="isCommentForm">
-        <comment-form></comment-form>  
+        <comment-form @noti-comment="getReviewData"></comment-form>  
       </div>   
       
     </div>
@@ -42,9 +43,9 @@ export default {
   },
   data () {
     return {      
-      commentChild: true,
+      // commentChild: true,
       isCommentForm: false,
-      
+      // commentsData: this.comments,
     }
   },
   methods: {
@@ -61,15 +62,38 @@ export default {
 				url: api + `review/${this.$route.params.reviewId}/`				
 			})
 				.then(res => {					
-					this.comments = res.data.comment_set.slice(0, 5)
+					this.comments = res.data.comment_set
+          // console.log('CommentItems에서 데이터 갱신 완료', this.commentsData)
+          
 				})
+        .catch(err => {
+          console.log(err)
+        })
+		},
+    getData () {
+			axios({
+				method: 'get',
+				url: api + `review/${this.$route.params.reviewId}/`				
+			})
+				.then(res => {					
+					this.comments = res.data.comment_set
+          // console.log('CommentItems에서 데이터 갱신 완료', this.commentsData)
+          
+				})
+        .catch(err => {
+          console.log(err)
+        })
 		},
     
   },
   computed: {
-    
-      
+    commentsCount () {
+      return this.comments.length
     }
+  },
+  created () {
+    this.getReviewData()
+  }
 }
 </script>
 

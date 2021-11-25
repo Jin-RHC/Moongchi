@@ -17,7 +17,7 @@
 	</div>
 </div>
 <!-- Review detail section-->
-<div class="page-single">
+<div class="page-single" v-if="item">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-9 col-sm-12 col-xs-12">
@@ -101,15 +101,27 @@ export default {
   name: 'ReviewDetail',
   data () {
     return {
-      comments: null,
-			item: null,
+      comments: [],
+			item: [],
 			isLogin: false,
 
-			content: null,
+			content: [],
 
     }
   },
-  methods: {    
+  methods: {
+		getData () {
+			axios({
+				method: 'get',
+				url: api + `review/${this.$route.params.reviewId}/`				
+			})
+				.then(res => {
+					this.item = res.data
+					this.comments = res.data.comment_set,
+					this.content = res.data.content
+					console.log('ReviewDetail에서 데이터 갱신 성공')
+				})
+		},    
 		setToken: function () {
       const token = localStorage.getItem('jwt')
       const config = {
@@ -129,7 +141,7 @@ export default {
 				})
 				.catch(err => {
 					console.log(err)
-					alert('로그인하세요')
+					alert('로그인이 필요합니다.')
 				})
 
 		},
@@ -145,20 +157,9 @@ export default {
 				})
 				.catch(err => {
 					console.log(err)
-					alert('로그인하세요')
+					alert('로그인이 필요합니다.')
 				})
-		},
-		getData () {
-			axios({
-				method: 'get',
-				url: api + `review/${this.$route.params.reviewId}/`				
-			})
-				.then(res => {
-					this.item = res.data
-					this.comments = res.data.comment_set,
-					this.content = res.data.content
-				})
-		},
+		},		
 		deleteReview () {
 			axios({
 				method: 'delete',
@@ -171,7 +172,7 @@ export default {
 				})
 				.catch(err => {
 					console.log(err)
-					alert('삭제할 수 없습니다.')
+					alert('삭제할 권한이 없습니다.')
 				})
 		},
 		updateReview () {  
