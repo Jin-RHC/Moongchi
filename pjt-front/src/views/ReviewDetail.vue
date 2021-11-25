@@ -64,7 +64,7 @@
 							<a href="#"><i class="ion-social-pinterest"></i></a>
 							<a href="#"><i class="ion-social-linkedin"></i></a>
 						</div>
-						<span>
+						<span v-if="same">
 							<a @click.prevent="updateReview" href=""><button>수정</button></a>
 							<a @click.prevent="deleteReview" href=""><button>삭제</button></a>
 						</span>
@@ -90,6 +90,7 @@
 <script>
 import StarRating from 'vue-star-rating';
 import axios from 'axios'
+import jwt_decode from "jwt-decode";
 
 import CommentForm from '../components/Community/CommentForm.vue'
 import CommentItems from '../components/Community/CommentItems.vue'
@@ -106,7 +107,7 @@ export default {
 			isLogin: false,
 
 			content: [],
-
+			same: false
     }
   },
   methods: {
@@ -210,6 +211,11 @@ export default {
 		this.getData()
 		if (this.$store.state.token) {
 			this.isLogin = true
+			const token = this.$store.state.token
+			const decoded = jwt_decode(token)
+			if (decoded.username === this.item.user.username ) {
+				this.same = true
+			}
 		}
 	},
 	computed: {

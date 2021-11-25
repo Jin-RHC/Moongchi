@@ -161,8 +161,8 @@ export default {
           this.getData()
         })
         .cactch(err => {
-          alert('좋아요를 누를 수 없습니다')
           console.log(err)
+          alert('좋아요를 누를 수 없습니다')
         })
     },
     addDislike () {

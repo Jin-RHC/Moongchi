@@ -2,8 +2,10 @@
   <div class="row">
     <!-- <h3>Related Movies To</h3>
     <h2>Skyfall: Quantum of Spectre</h2> -->
+    <div v-if="isLogin">
+
     <div class="topbar-filter">
-      <p>Found <span>12 movies</span> in total</p>
+      <p>Found <span>3 movies</span> in total</p>
       <label>Sort by:</label>
       <select>
         <option value="popularity">Popularity Descending</option>
@@ -34,6 +36,10 @@
         <a href="#"><i class="ion-arrow-right-b"></i></a>
       </div>
     </div>
+    </div>
+    <div v-else>
+      <h3>로그인이 필요한 페이지입니다.</h3>
+    </div>
 </div>
 </template>
 
@@ -46,7 +52,8 @@ export default {
   name: 'MovieRelated',
   data () {
     return {
-      recommendedMovies: []
+      recommendedMovies: [],
+      isLogin: false
     }
   },
   methods: {
@@ -70,6 +77,9 @@ export default {
   }},
   created () {
     this.getMovies()
+    if (this.$store.state.token) {
+      this.isLogin = true
+    }
   }
 
 
