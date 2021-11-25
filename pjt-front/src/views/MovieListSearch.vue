@@ -98,8 +98,8 @@ export default {
 				.then((res) => {    
           console.log(res.data.length)      
           if (res.data.length === 0) {
-            alert('검색 결과가 없습니다.')
-            this.$router.push({ name: 'MovieList'})            
+            // alert('검색 결과가 없습니다.')
+            // this.$router.push({ name: 'MovieList'})            
           } else {
             this.movies = res.data
           }

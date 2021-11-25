@@ -59,7 +59,7 @@ def recommended_movie_list(request):
     if len(good_movie_set) < 3  or len(good_movie_set) > 50:
         recommended_movies = Movie.objects.filter(release_date__gte=datetime.datetime.now() - datetime.timedelta(days=200)).filter(
             release_date__lte=datetime.datetime.now().date()).order_by('-rating_average')[:20]
-        serializer = MovieListSerializer(recommended_movies[:20])
+        serializer = MovieListSerializer(recommended_movies, many=True)
         return Response(serializer.data)
             
     else:
