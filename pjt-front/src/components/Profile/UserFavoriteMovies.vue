@@ -1,14 +1,16 @@
 <template>
 			<div>
 				<div class="topbar-filter user">
-					<p>Found <span>1,608 movies</span> in total</p>
+					<p>Found <span>{{ favoriteMovies.length }}movies</span> in total</p>
 					<label>Sort by:</label>
 					<select>
 						<option value="range">-- Choose option --</option>
 						<option value="saab">-- Choose option 2--</option>
 					</select>
-					<a href="userfavoritelist.html" class="list"><i class="ion-ios-list-outline "></i></a>
-					<a  href="userfavoritegrid.html" class="grid"><i class="ion-grid active"></i></a>
+					<a href="" class="list" @click.prevent="none"><i class="ion-ios-list-outline "></i></a>
+					<a href="" class="grid" @click.prevent="none"><i class="ion-grid active"></i></a>
+					<!-- <a href="userfavoritelist.html" class="list"><i class="ion-ios-list-outline "></i></a>
+					<a  href="userfavoritegrid.html" class="grid"><i class="ion-grid active"></i></a> -->
 				</div>
 				
 					
@@ -306,6 +308,12 @@ export default {
 	},
 	props: {
 		favoriteMovies: Array
+	},
+	methods: {
+		none: function () {
+			const favoriteMovies = this.props.favoriteMovies
+			this.movies = favoriteMovies.length
+		},
 	},
 	created () {
     // const API_KEY = 'e856b3ac18eec7abd7cf6099f977bbff'
