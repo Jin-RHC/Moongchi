@@ -10,6 +10,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import User
 
 from .serializers import UserSerializer, MyTokenObtainPairSerializer, UserReportListSerializer, UserProfileSerializer
+import hashlib
 
 # Create your views here.
 
@@ -78,4 +79,29 @@ def report_list(request, username):
     user = get_object_or_404(get_user_model(), username=username)
     serializer = UserReportListSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
+
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def password_change(request):
+#     print(request.user.password)
+#     pwd = request.data.get('password')
+#     encrypted_pwd = hashlib.sha256(pwd.encode()).hexdigest()
+#     print('새 암호', encrypted_pwd)
+
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def change_password(request):
+# 	# 1-1. Client에서 온 데이터를 받아서
+#     password = request.data.get('password')
+#     password_confirmation = request.data.get('passwordConfirmation')
+		
+# 	# 1-2. 패스워드 일치 여부 체크
+#     if password != password_confirmation:
+#         return Response({'error': '비밀번호가 일치하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+		
+#     request.user.set_password(request.data.get('password'))
+
+#     request.user.save()
+
+#     return Response({'message': '비밀번호가 성공적으로 변경되었습니다.'}, status=status.HTTP_201_CREATED)
