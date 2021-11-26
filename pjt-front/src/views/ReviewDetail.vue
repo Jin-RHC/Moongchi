@@ -65,8 +65,8 @@
 							<a href="#"><i class="ion-social-linkedin"></i></a>
 						</div>
 						<span v-if="same">
-							<a @click.prevent="updateReview" href=""><button>수정</button></a>
-							<a @click.prevent="deleteReview" href=""><button>삭제</button></a>
+							<a @click.prevent="updateReview" href=""><button class="redbtn" style="background:grey;">수정</button></a>
+							<a @click.prevent="deleteReview" href=""><button class="redbtn">삭제</button></a>
 						</span>
 					</div>
 					<!-- comment items -->
@@ -115,10 +115,14 @@ export default {
 			})
 				.then(res => {
 					this.item = res.data
-					// this.comments = res.data.comment_set,
-					// this.content = res.data.content
+					this.comments = res.data.comment_set,
+					this.content = res.data.content
+					const token = this.$store.state.token
+					const decoded = jwt_decode(token)
+					if (decoded.username === this.item.user.username ) {
+					this.same = true
 					console.log('ReviewDetail에서 데이터 갱신 성공')
-				})
+				}})
 		},    
 		setToken: function () {
       const token = localStorage.getItem('jwt')
@@ -208,11 +212,11 @@ export default {
 		this.getData()
 		if (this.$store.state.token) {
 			this.isLogin = true
-			const token = this.$store.state.token
-			const decoded = jwt_decode(token)
-			if (decoded.username === this.item.user.username ) {
-				this.same = true
-			}
+			// const token = this.$store.state.token
+			// const decoded = jwt_decode(token)
+			// if (decoded.username === this.item.user.username ) {
+			// 	this.same = true
+			// }
 		}
 	},
 	computed: {
