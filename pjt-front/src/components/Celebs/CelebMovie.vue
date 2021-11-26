@@ -7,7 +7,7 @@
       line-height: 30px;
       font-weight: 700;" for="">좋아한 영화들</label>
       <carousel-3d disable3d="true" :space="250" :autoplay="false" :autoplay-timeout="5000" :display="20" :controlsVisible="true" :clickable="false" :width="230" :height="325"> 
-        <slide v-for="(slide, i) in favoriteMovies" :index="i" :key="i">
+        <slide v-for="(slide, i) in movies" :index="i" :key="i">
           <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
             <div class="movie-item" style="width: 100%;">								
               <img :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="`https://image.tmdb.org/t/p/original${slide.poster_path}`">
@@ -29,8 +29,11 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { Carousel3d, Slide } from 'vue-carousel-3d';
+
 export default {
-  name: 'CelebItem',
+  name: 'CelebMovie',
   props: {
     celeb: Object
   },
