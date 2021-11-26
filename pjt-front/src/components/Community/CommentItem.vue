@@ -4,16 +4,15 @@
   <div style="display: flex; margin-top: 30px;">
     
     <div style="width: 100px;">
-      <a @click.prevent="$router.push({ name: 'UserProfile', params: { username: commentData.user.username }})" href=""><h6>{{ commentData.user.username }}</h6></a>
+      <a @click.prevent="$router.push({ name: 'UserProfile', params: { username: this.comment.user.username }})" href=""><h6>{{ this.comment.user.username }}</h6></a>
        
     </div>
     
-    <p style="white-space: pre-line; width: 600px; padding: 0px">{{ commentData.content }}</p>
+    <p style="white-space: pre-line; width: 600px; padding: 0px">{{ this.comment.content }}</p>
     <div style="">
       <div style="display: flex; justify-content: center;">
         <span style="" class="time">
-          {{ commentData.created_at.slice(0, 10) + '   ' + commentData.created_at.slice(11, 19)}}
-          <!-- 2000-01-15 -->
+          {{ this.comment.created_at.slice(0, 10) + '   ' + this.comment.created_at.slice(11, 19)}}
         </span>
         <a @click.prevent="deleteComment" href="" class="time" style="border: thin solid; height:50%">X</a>
       </div>
@@ -29,13 +28,13 @@
     </div>            
   </div>    
     
-    <div v-show="nestedComments.length">
+    <div v-show="this.comment.nestedcomment_set.length">
       <nested-comment-items
         v-for="nestedComment in comment.nestedcomment_set" 
         :key="nestedComment.id"
         :nestedComment="nestedComment"
         :commentId="comment.id"
-        @noti-nested-comment="notiNestedComment"        
+        @noti-comment="notiNestedComment"        
       ></nested-comment-items>
     </div>    
   <a @click.prevent="openCommentForm" href="">답글</a>
@@ -67,26 +66,12 @@ export default {
   },
   data () {
     return {
-      // nestedComments: this.comment.nestedcomment_set,
-      commentData: this.comment,
-      nestedComments: this.comment.nestedcomment_set,
       isNested: false,
       nestedContent: '',
-      name: this.comment.user.username
 
     }
   },
   methods: {
-    getData () {
-      axios({
-      method: 'get',
-      url: api + `review/${this.$route.params.reviewId}/`,      
-    })
-      .then(res => {
-        console.log(res.data)
-        this.commentData = res.data.comment_set
-      })
-    },
     setToken: function () {
       const token = localStorage.getItem('jwt')
       const config = {
@@ -102,8 +87,7 @@ export default {
       })
         .then(res => {
           console.log(res)
-          this.$emit('noti-comment-like')
-          // this.getData()
+          this.$emit('noti-comment')
         })
         .catch(err => {
           console.log(err)
@@ -118,8 +102,7 @@ export default {
       })
         .then(res => {
           console.log(res)
-          this.$emit('noti-comment-dislike')
-          // this.getData()
+          this.$emit('noti-comment')
         })
         .catch(err => {
           console.log(err)
@@ -130,13 +113,12 @@ export default {
     deleteComment () {
       axios({
         method: 'delete',
-        url: api + `${this.$route.params.reviewId}/comment/${this.commentData.id}/`,
+        url: api + `${this.$route.params.reviewId}/comment/${this.comment.id}/`,
         headers: this.setToken()
       })
         .then(res => {
           console.log(res)
-          this.$emit('noti-comment-delete')
-          // this.getData()          
+          this.$emit('noti-comment')
         })
         .catch(err => {
           alert('댓글을 삭제할 권한이 없습니다.')
@@ -144,7 +126,7 @@ export default {
         })
     },
     notiNestedComment () {
-      this.$emit('noti-nested-comment')
+      this.$emit('noti-comment')
 
     },
     openCommentForm () {
@@ -187,7 +169,8 @@ export default {
           console.log(err)
           alert('이미 신고된 댓글입니다.')
         })
-    }
+    },
+    
     
   
   },
@@ -198,13 +181,9 @@ export default {
     commentDislike () {
       return this.comment.dlike_users.length
     },
-    // commentData () {
-    //   return this.comment
-    // }
+
   },
-  // created () {
-  //   this.getData()
-  // }
+  
    
 }
 

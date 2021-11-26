@@ -61,7 +61,7 @@ export default {
       })
         .then(res => {
           console.log(res)          
-          this.$emit('noti-nested-comment')
+          this.$emit('noti-comment')
         })
         .catch(err => {
           console.log(err)
@@ -75,7 +75,7 @@ export default {
       })
         .then(res => {
           console.log(res)
-          this.$emit('noti-nested-comment')
+          this.$emit('noti-comment')
         })
         .catch(err => {
           console.log(err)
@@ -89,7 +89,7 @@ export default {
       })
         .then(res => {
           console.log(res)
-          this.$emit('noti-nested-comment')
+          this.$emit('noti-comment')
         })
         .catch(err => {
           console.log(err)
