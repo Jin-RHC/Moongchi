@@ -10,10 +10,7 @@
         v-for="(comment, index) in comments" 
         :key="index" 
         :comment="comment"        
-        @noti-comment-like="getReviewData"
-        @noti-comment-dislike="getReviewData"
-        @noti-comment-delete="getReviewData"
-        @noti-nested-comment="getReviewData"
+        @noti-comment="getReviewData"
       ></comment-item>
       
       <div v-if="isCommentForm">
@@ -27,11 +24,11 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 import CommentForm from './CommentForm.vue'
 import CommentItem from './CommentItem.vue'
 
-const api = 'http://127.0.0.1:8000/api/v1/community/'
+// const api = 'http://127.0.0.1:8000/api/v1/community/'
 export default {
   name: 'CommentItems',
   components: {
@@ -43,9 +40,7 @@ export default {
   },
   data () {
     return {      
-      // commentChild: true,
       isCommentForm: false,
-      // commentsData: this.comments,
     }
   },
   methods: {
@@ -57,34 +52,9 @@ export default {
       return config
     },
     getReviewData () {
-			axios({
-				method: 'get',
-				url: api + `review/${this.$route.params.reviewId}/`				
-			})
-				.then(res => {					
-					this.comments = res.data.comment_set
-          // console.log('CommentItems에서 데이터 갱신 완료', this.commentsData)
-          
-				})
-        .catch(err => {
-          console.log(err)
-        })
+      this.$emit('noti-comment')			
 		},
-    getData () {
-			axios({
-				method: 'get',
-				url: api + `review/${this.$route.params.reviewId}/`				
-			})
-				.then(res => {					
-					this.comments = res.data.comment_set
-          // console.log('CommentItems에서 데이터 갱신 완료', this.commentsData)
-          
-				})
-        .catch(err => {
-          console.log(err)
-        })
-		},
-    
+
   },
   computed: {
     commentsCount () {

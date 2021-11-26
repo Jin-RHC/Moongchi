@@ -70,7 +70,7 @@
 						</span>
 					</div>
 					<!-- comment items -->
-					<comment-items :comments="comments"></comment-items>
+					<comment-items :comments="item.comment_set" @noti-comment="getData"></comment-items>
 					<!-- comment form -->
           <comment-form v-show="isLogin" @noti-comment="getData"></comment-form>
 					<textarea type="text" placeholder="로그인 하세요" disabled v-show="!isLogin"></textarea>
@@ -102,11 +102,8 @@ export default {
   name: 'ReviewDetail',
   data () {
     return {
-      comments: [],
 			item: [],
 			isLogin: false,
-
-			content: [],
 			same: false
     }
   },
@@ -118,8 +115,8 @@ export default {
 			})
 				.then(res => {
 					this.item = res.data
-					this.comments = res.data.comment_set,
-					this.content = res.data.content
+					// this.comments = res.data.comment_set,
+					// this.content = res.data.content
 					console.log('ReviewDetail에서 데이터 갱신 성공')
 				})
 		},    
