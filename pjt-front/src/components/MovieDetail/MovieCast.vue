@@ -74,7 +74,7 @@
     <div class="cast-it">
       <div class="cast-left">
         <img :src="`https://image.tmdb.org/t/p/w45${actor.profile_path}`" alt="">
-        <a href="#">{{ actor.name }}</a>
+        <a @click.prevent="" href="#">{{ actor.name }}</a>
       </div>
       <p>...  {{ actor.name }}</p>
     </div>											

@@ -8,7 +8,7 @@
 				<div class="hero-ct">
 					<h1> Review detail</h1>
 					<ul class="breadcumb">
-						<li class="active"><a href="#">Community</a></li>
+						<li class="active"><a @click.prevent="$router.push({ name: 'Community' })" href="#">Community</a></li>
 						<li> <span class="ion-ios-arrow-right"></span> Review </li>
 					</ul>
 				</div>
@@ -26,7 +26,7 @@
           <div style="display: flex; justify-content: space-between;">
 						        <star-rating :rating="3" :star-size="15" :read-only="true"></star-rating>
 
-						<span class="right-it time" style="font-weight: bold; font-size: 1em;">조회 0 | 추천 {{ item.like_users_count }} | 댓글 {{ item.comment_set.length }} </span>
+						<span class="right-it time" style="font-weight: bold; font-size: 1em;">조회 0 | 추천 {{ item.like_users_count }} | 댓글 {{ commentsCount }} </span>
           </div>
           <hr>
 					<div style="display: flex; justify-content: space-between;">
@@ -45,11 +45,11 @@
 					<div style="display: flex; justify-content: center;">
 						<div style="display: flex; flex-direction: column;">
 								<a @click.prevent="addReviewLike" href="" style=""><font-awesome-icon icon='arrow-up' size="3x" :style="{ color: '' }"/></a>
-								<div style="display: inline; margin-left: 13px; font-size: 1.5em;">{{item.like_users.length}}</div>
+								<div style="display: inline; margin-left: 13px; font-size: 1.5em;">{{item.like_users_count}}</div>
 						</div>
 						<div style="display: flex; flex-direction: column;">
 								<a @click.prevent="addReviewDislike" href="" style="margin-left: 20px;"><font-awesome-icon icon='arrow-down' size="3x" :style="{ color: '' }"/></a>
-								<div style="display: inline; margin-left: 33px; font-size: 1.5em;">{{item.dlike_users.length}}</div>
+								<div style="display: inline; margin-left: 33px; font-size: 1.5em;">{{item.dlike_users_count}}</div>
 						</div>
 							
 						
@@ -58,11 +58,10 @@
 					<div class="flex-it share-tag">
 						<div class="social-link">
 							<h4>Share it</h4>
-							<a href="#"><i class="ion-social-facebook"></i></a>
-							<a href="#"><i class="ion-social-twitter"></i></a>
-							<a href="#"><i class="ion-social-googleplus"></i></a>
-							<a href="#"><i class="ion-social-pinterest"></i></a>
-							<a href="#"><i class="ion-social-linkedin"></i></a>
+							<a href="https://ko-kr.facebook.com/zuck"><i class="ion-social-facebook"></i></a>
+							<a href="https://twitter.com/jack"><i class="ion-social-twitter"></i></a>
+							<a href="https://www.pinterest.co.kr/"><i class="ion-social-pinterest"></i></a>
+							<a href="https://kr.linkedin.com"><i class="ion-social-linkedin"></i></a>
 						</div>
 						<span v-if="same">
 							<a @click.prevent="updateReview" href=""><button class="redbtn" style="background:grey;">수정</button></a>
@@ -70,10 +69,10 @@
 						</span>
 					</div>
 					<!-- comment items -->
-					<comment-items :comments="item.comment_set" @noti-comment="getData"></comment-items>
+					<comment-items :comments="item.comment_set" :is-login="isLogin" @noti-comment="getData" @noti-comment-count="getCommentsCount"></comment-items>
 					<!-- comment form -->
           <comment-form v-show="isLogin" @noti-comment="getData"></comment-form>
-					<textarea type="text" placeholder="로그인 하세요" disabled v-show="!isLogin"></textarea>
+					<textarea type="text" placeholder="로그인 하세요" disabled v-show="!isLogin" style="margin-top: 20px;"></textarea>
 					
 				</div>
 			</div>
@@ -103,6 +102,7 @@ export default {
   data () {
     return {
 			item: [],
+			commentsCount: 0,
 			isLogin: false,
 			same: false
     }
@@ -204,6 +204,9 @@ export default {
 					console.log(err)
 					alert('이미 신고한 게시물입니다.')
 				})
+		},
+		getCommentsCount (data) {
+			this.commentsCount = data
 		}
 
 
@@ -222,7 +225,7 @@ export default {
 	computed: {
     createdAt () {
       return this.item.updated_at.slice(0, 10) + '   ' + this.item.updated_at.slice(11, 19)
-    }
+    },
   }
 }
 </script>

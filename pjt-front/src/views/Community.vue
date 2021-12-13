@@ -7,7 +7,7 @@
 			<div class="col-md-12">
 				<div class="hero-ct">
 					
-					<h1><a @click.prevent="this.$router.push({ name: 'Community'})" href="">Community - Reviews </a></h1>
+					<h1>Community</h1>
 					<ul class="breadcumb">
 						<li @click.prevent="$router.push({name: 'Home'})" class="active"><a href="#">Home</a></li>
 						<li><span class="ion-ios-arrow-right"></span> Community</li>
@@ -21,10 +21,8 @@
 <div class="page-single">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-9 col-sm-12 col-xs-12">
-				<div class="row">
-          <review-item v-for="(review, index) in reviews" :key="index" :review="review"></review-item>
-				</div>        
+			<div class="col-md-9 col-sm-12 col-xs-12">				
+          <review-item v-for="(review, index) in reviews" :key="index" :review="review"></review-item>				
 			</div>
 
 
@@ -75,6 +73,7 @@ export default {
 					// console.log(res.data)
           this.reviews = res.data
           // $state.loaded();
+					// console.log(this.reviews)
         } else {
           // $state.complete();
         }
@@ -83,11 +82,33 @@ export default {
     }
   },
 	created () {
-		this.getReviews()
+		this.getReviews()		
 	}
 }
 </script>
 
-<style>
-
+<style scoped>
+.grid { 
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 20px;
+  align-items: stretch;
+  }
+.grid > article {
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
+}
+.grid > article img {
+  max-width: 100%;
+}
+.text {
+  padding: 0 20px 20px;
+}
+.text > button {
+  background: gray;
+  border: 0;
+  color: white;
+  padding: 10px;
+  width: 100%;
+  }
 </style>

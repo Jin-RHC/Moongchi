@@ -7,7 +7,7 @@
     <div class="topbar-filter">
       <p>Found <span>3 movies</span> in total</p>
       <label>Sort by:</label>
-      <select>
+      <select disabled>
         <option value="popularity">Popularity Descending</option>
         <option value="popularity">Popularity Ascending</option>
         <option value="rating">Rating Descending</option>
@@ -23,7 +23,7 @@
     ></movie-related-item>    
 
 
-    <div class="topbar-filter">
+    <!-- <div class="topbar-filter">
       <label>Movies per page:</label>
       <select>
         <option value="range">5 Movies</option>
@@ -35,10 +35,12 @@
         <a href="#">2</a>
         <a href="#"><i class="ion-arrow-right-b"></i></a>
       </div>
-    </div>
+    </div> -->
     </div>
     <div v-else>
-      <h3>로그인이 필요한 페이지입니다.</h3>
+      
+      <span class="time" style="font-size: 20px;">로그인이 필요한 페이지입니다.</span>
+      
     </div>
 </div>
 </template>

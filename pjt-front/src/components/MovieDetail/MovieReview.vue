@@ -10,10 +10,13 @@
             <!-- <router-link :to="{ name: 'ReviewForm', params: { title: `${movie.title}`, movieId: `${movie.id}` }}" class="redbtn">Write Reivew</router-link> -->
           </div>
         </div>
-        <div class="topbar-filter">
+  <p v-if="!isLogin">
+    <span class="time" style="font-size: 20px;">로그인이 필요한 페이지입니다.</span>
+  </p>
+  <div v-else class="topbar-filter">
     <p>Found <span>{{ reviews.length }} reviews</span> in total</p>
     <label>Filter by:</label>
-    <select>
+    <select disabled>
       <option value="popularity">Popularity Descending</option>
       <option value="popularity">Popularity Ascending</option>
       <option value="rating">Rating Descending</option>

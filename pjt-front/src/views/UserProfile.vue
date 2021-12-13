@@ -24,7 +24,7 @@
 					<div class="user-img">
 						<a @click.prevent="none" href="#"><img src="images/uploads/user-img.png" alt=""><br></a>
 						<div v-if="userData.username != myname">
-							<a v-show="!isFollowing" @click.prevent="follow" href="#" class="redbtn" style="background:pink;">팔로우</a>
+							<a v-show="!isFollowing" @click.prevent="follow" href="#" class="redbtn" style="">팔로우</a>
 							<a v-show="isFollowing" @click.prevent="follow" href="#" class="redbtn" style="background:grey;">팔로우한 사람입니다.</a>
 						</div>
 					</div>
@@ -83,7 +83,7 @@ export default {
 			userData: null,
 			favoriteMovies: null,
 			myname: null,
-			isFollowing: true,
+			isFollowing: false,
     }
   },
 	methods: {
@@ -105,7 +105,7 @@ export default {
 					console.log(res.data)
 					this.userData = res.data
 					this.favoriteMovies = res.data.like_movies
-					for (let curr of this.userData.followers) {
+					for (const curr of res.data.followers) {
 						if (this.myname === curr.username) {
 							this.isFollowing = true
 						}
@@ -146,7 +146,7 @@ export default {
 		this.getProfile()
 		console.log('태어났다!!!')
 		
-	},
+	},	
 }
 </script>
 

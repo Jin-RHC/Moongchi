@@ -1,30 +1,35 @@
 <template>
   
-    
-  <div style="display: flex; margin-top: 10px; margin-left: 50px;">    
-    <div style="width: 100px;">
-      <h6>└   <a @click.prevent="" href="">{{ nestedComment.user.username }}</a></h6>
-    </div>
-    
-    <p style="white-space: pre-line; width: 450px;">{{ nestedComment.content }}</p>
-    <div>
+  <div style="">
 
-      <div style="display: flex; justify-content: center;">
-        <span style="" class="time">{{ nestedComment.created_at.slice(0,10) }} {{nestedComment.created_at.slice(11, 19) }}</span>
-        <a @click.prevent="deleteNestedComment" href="" class="time" style="border: thin solid; height:50%">X</a>
-      </div>            
-      <div style="display: flex; justify-content: end;">
-        <a @click.prevent="reportNestedComment" href=""><h6 class="time" style="margin-top: 5px; margin-right: 5px;">신고</h6></a>
-
-        <a @click.prevent="likeNestedComment" href="" class="time" style="border: solid; border-width: thin; border-radius: 2px; margin-right: 5px;"><font-awesome-icon :icon="['far', 'thumbs-up']" size="1x" style="margin-left: 7px; margin-right: 7px;" />
-          <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ nestedComment.like_users.length }}</strong> 
-        </a>
-        <a @click.prevent="dislikeNestedComment" href="" class="time" style="font-weight: bolder; border: solid; border-width: thin; border-radius: 2px;"><font-awesome-icon :icon="['far', 'thumbs-down']" size="1x" style=" margin-right: 7px; margin-left: 7px;" />
-          <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ nestedComment.dlike_users.length }}</strong> 
-        </a>          
+    <div style="display: flex; justify-content: space-between; margin-top: 10px;">    
+      <span style="">└</span>
+      <div style="width: 100px;">
+        <a @click.prevent="$router.push({name: 'UserProfile', params: { username: nestedComment.user.username }})" href=""><h6>{{ nestedComment.user.username }}</h6></a>
+      </div>      
+      <div style="margin: 0px 5px; word-break:break-all;">
+        <p style="white-space: pre-line; width: 550px;">{{ nestedComment.content }}</p>
       </div>
+
+      <div style="">
+        <span style="" class="time">{{ nestedComment.created_at.slice(0,10) }} {{nestedComment.created_at.slice(11, 19) }}</span>
+        <a @click.prevent="deleteNestedComment" href="" class="time" style="border: thin solid; margin-left: 2px;">X</a>
+        <div style="display: flex; justify-content: end; margin: 5px 0px;">
+          <a @click.prevent="reportNestedComment" href=""><h6 class="time" style="margin-top: 5px; margin-right: 5px;">신고</h6></a>
+
+          <a @click.prevent="likeNestedComment" href="" class="time" style="border: solid; border-width: thin; border-radius: 2px; margin-right: 5px;"><font-awesome-icon :icon="['far', 'thumbs-up']" size="1x" style="margin-left: 7px; margin-right: 7px;" />
+            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ nestedComment.like_users.length }}</strong> 
+          </a>
+          <a @click.prevent="dislikeNestedComment" href="" class="time" style="font-weight: bolder; border: solid; border-width: thin; border-radius: 2px;"><font-awesome-icon :icon="['far', 'thumbs-down']" size="1x" style=" margin-right: 7px; margin-left: 7px;" />
+            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ nestedComment.dlike_users.length }}</strong> 
+          </a>          
+        </div>
+      </div>          
     </div>
-</div>
+    <!-- <div style="margin: 0px 5px;">
+      <p style="white-space: pre-line; width: 550px;">{{ nestedComment.content }}</p>
+    </div> -->
+  </div>
   
   
 </template>

@@ -83,6 +83,7 @@ export default {
 		logout () {
 			this.isLogin = false
       localStorage.removeItem('jwt')
+			localStorage.removeItem('vuex')
 			this.$store.dispatch('logout')
 			this.$router.push({name: 'Home'})
       this.$router.go()

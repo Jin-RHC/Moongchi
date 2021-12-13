@@ -82,13 +82,13 @@
         <div class="sb-it">
           <h6>Stars: </h6>
           <p>
-            <a href="" v-for="actor in movieActors" :key="actor.id">{{ actor.name }}, </a> 
+            <a @click.prevent="" href="" v-for="actor in movieActors" :key="actor.id">{{ actor.name }}, </a> 
           </p>
         </div>
         <div class="sb-it">
           <h6>Genres:</h6>
           <p> 
-            <a href="" v-for="genre in movieGenres" :key="genre.id">{{ genre.name }} | </a>
+            <a @click.prevent="" href="" v-for="genre in movieGenres" :key="genre.id">{{ genre.name }} | </a>
           </p>
         </div>
         <div class="sb-it">

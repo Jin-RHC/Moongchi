@@ -10,7 +10,7 @@
 				</div>
 				<div class="group">
 					<label for="pass" class="label">Password</label>
-					<input v-model.trim="loginCredentials.password" id="pass" type="password" class="input" data-type="password" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required="required">				</div>
+					<input @keyup.enter="login" v-model.trim="loginCredentials.password" id="pass" type="password" class="input" data-type="password" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required="required">				</div>
 				<div class="group">
 					<input id="check" type="checkbox" class="check" checked>
 					<label for="check"><span class="icon"></span> Keep me Signed in</label>
@@ -38,7 +38,7 @@
 				</div>
 				<div class="group">
 					<label for="pass" class="label">Nickname</label>
-					<input v-model.trim="signupCredentials.nickname" id="pass" type="text" class="input">
+					<input @keyup.enter="signup" v-model.trim="signupCredentials.nickname" id="pass" type="text" class="input">
 				</div>
 				<div class="group">
 					<input @click="signup" type="submit" class="button" value="Sign Up" style="background-color: #dd003f; font-family: 'Dosis', sans-serif; font-weight: bold;">
@@ -84,7 +84,7 @@ export default {
           console.log(res)
           localStorage.setItem('jwt', res.data.access)
 					this.$store.dispatch('loginCompleted', res) 
-          // this.$router.push({name: 'Home'})
+          this.$router.push({name: 'Home'})					
 					this.$router.go()
         })
         .catch(err => {
@@ -101,10 +101,16 @@ export default {
         .then(() => {
           // console.log(res)
           // this.$router.go()
+					this.signupCredentials.username = null
+					this.signupCredentials.nickname = null
+					this.signupCredentials.password = null
+					this.signupCredentials.passwordConfirmation = null
 					alert('회원가입이 완료되었습니다. 다시 로그인해 주세요')
+					this.$router.go()
         })
         .catch(err => {
           console.log(err)
+					alert('정보를 정확히 입력해주세요.')
         })
     }
   },

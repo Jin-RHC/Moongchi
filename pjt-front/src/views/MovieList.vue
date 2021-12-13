@@ -23,12 +23,12 @@
 					<p>Found <span>{{ movies.length }} movies</span> in total</p>
 					<label>Sort by:</label>
 					<select>
-						<option value="popularity">Popularity Descending</option>
-						<option value="popularity">Popularity Ascending</option>
-						<option value="rating">Rating Descending</option>
-						<option value="rating">Rating Ascending</option>
-						<option value="date">Release date Descending</option>
-						<option value="date">Release date Ascending</option>
+						<option value="popularity" style="color: grey;">Popularity Descending</option>
+						<option value="popularity" style="color: grey;">Popularity Ascending</option>
+						<option value="rating" style="color: grey;">Rating Descending</option>
+						<option value="rating" style="color: grey;">Rating Ascending</option>
+						<option value="date" style="color: grey;">Release date Descending</option>
+						<option value="date" style="color: grey;">Release date Ascending</option>
 					</select>
 					<a href="#" class="list"><i class="ion-ios-list-outline "></i></a>
 					<a href="#" class="grid"><i class="ion-grid active"></i></a>

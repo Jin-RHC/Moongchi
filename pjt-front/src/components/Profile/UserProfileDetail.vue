@@ -12,20 +12,20 @@
           </div>
           <hr>
           <div class="row">
-            <div class="col-sm-3">
-              <h6 class="mb-0">Followings</h6>
+            <div class="col-sm-3" >
+              <h6 class="mb-0"><span @click="openFollowings">Followings</span></h6>
             </div>
             <div class="col-sm-9 text-secondary">
-              {{ userData.followings_count }}
+              <a @click.prevent="openFollowings" href="">{{ followingsCount }}</a>
             </div>
           </div>
           <hr>
           <div class="row">
             <div class="col-sm-3">
-              <h6 class="mb-0">Followers</h6>
+              <h6 class="mb-0"><span @click.prevent="openFollowers">Followers</span></h6>
             </div>
             <div class="col-sm-9 text-secondary">
-              {{ userData.followers_count }}
+              <a @click.prevent="openFollowers" href="">{{ followersCount }}</a>
             </div>
           </div>
           <hr>
@@ -140,11 +140,46 @@
 </template>
 
 <script>
+import UserFollowingList from './UserFollowingList.vue'
+import UserFollowerList from './UserFollowerList.vue'
+
 export default {
   name: 'UserProfileDetail',
   props: {
     userData: Object
-  }
+  },
+  methods: {
+    openFollowings () {
+      this.$modal.show(
+        UserFollowingList,  
+      { text: 'This text is passed as a property' },
+      { name: 'UserFollowingList',
+        adaptive: true,
+        width: '400',
+        height: '620',
+        },
+      )
+    },
+    openFollowers () {
+      this.$modal.show(
+        UserFollowerList,  
+      { text: 'This text is passed as a property' },
+      { name: 'UserFollowingList',
+        adaptive: true,
+        width: '400',
+        height: '620',
+        },
+      )
+    },
+  },
+  computed: {
+		followersCount () {
+			return this.userData.followers.length
+		},
+		followingsCount () {
+			return this.userData.followings.length
+		}
+	}
 }
 </script>
 

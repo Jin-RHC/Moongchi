@@ -39,15 +39,15 @@
 					
 					<div class="social-btn" style="overflow: hidden;">
 					
-						<a href="#" class="parent-btn"><i class="ion-heart"></i> Add to Playlist</a>
+						<a @click.prevent="addLike" href="" class="parent-btn"><i class="ion-heart"></i> Add to Playlist</a>
 						<div class="hover-bnt">
-							<a href="#" class="parent-btn"><i class="ion-android-share-alt"></i>share</a>																					
+							<a @click.prevent="" href="" class="parent-btn"><i class="ion-android-share-alt"></i>share</a>																					
 
 							<div class="hvr-item">
-								<a href="#" class="hvr-grow"><i class="ion-social-facebook"></i></a>
-								<a href="#" class="hvr-grow"><i class="ion-social-twitter"></i></a>
-								<a href="#" class="hvr-grow"><i class="ion-social-googleplus"></i></a>
-								<a href="#" class="hvr-grow"><i class="ion-social-youtube"></i></a>
+								<a href="https://ko-kr.facebook.com/zuck" class="hvr-grow"><i class="ion-social-facebook"></i></a>
+								<a href="https://twitter.com/jack" class="hvr-grow"><i class="ion-social-twitter"></i></a>
+								<!-- <a href="#" class="hvr-grow"><i class="ion-social-googleplus"></i></a> -->
+								<a href="https://www.youtube.com/c/%EC%8A%B9%EC%9A%B0%EC%95%84%EB%B9%A0" class="hvr-grow"><i class="ion-social-youtube"></i></a>
 							</div>
 						</div>		
 					</div>
@@ -55,7 +55,7 @@
 						<div class="rate">
 							<i class="ion-android-star"></i>
 							<p><span>{{ movie.rate.rate }}</span> /10<br>
-								<span class="rv">{{ movie.rating_set.length }} Reviews</span>
+								<span class="rv">{{ movie.rating_set.length }} Comments</span>
 							</p>
 						</div>
 						<div class="rate-star">
@@ -125,6 +125,7 @@ import MovieReview from '../components/MovieDetail/MovieReview.vue'
 import MovieCast from '../components/MovieDetail/MovieCast.vue'
 import MovieMedia from '../components/MovieDetail/MovieMedia.vue'
 import MovieRelated from '../components/MovieDetail/MovieRelated.vue'
+// import jwt_decode from "jwt-decode";
 
 const api = 'http://127.0.0.1:8000/api/v1/movies/movie/'
 
@@ -146,32 +147,55 @@ export default {
 		})
 			.then(res => {
 				this.movie = res.data
-				// console.log(this.movie)
+				console.log(this.movie)
 			})
 			.catch(err => {
 				console.log(err)
 			})
 		},
+		setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+		addLike () {
+			if (!this.$store.state.token) {
+				alert('로그인이 필요합니다.')
+				this.$router.go()
+			}	else {
+				// const token = this.$store.state.token
+				// const decoded = jwt_decode(token)
+				axios({
+							method: 'post',
+							url: 'http://127.0.0.1:8000/api/v1/community/' + `${this.$route.params.id}/like/`,
+							headers: this.setToken()
+						})
+							.then(res => {
+								console.log(res, '데이터 전송 성공')
+								if (res.data.is_like) {
+									alert('영화 뭉치에 추가했습니다.')
+								} else {
+									alert('영화 뭉치에서 제거했습니다.')
+								}
+								this.getMovie()
+								// this.$router.go()
+								// console.log(decoded)
+								// this.$router.push({name: 'UserProfile', params: {username: decoded.username}})
+							})
+							.cactch(err => {
+								console.log(err)
+								alert('좋아요를 누를 수 없습니다')
+							})											
+			}
+		}
 	},
 		
   created () {
 		this.getMovie()
 	},
-	// methods: {
-	// 	getReview () {      
-	// 		axios({
-	// 			method: 'get',
-	// 			url: api + `${id}/review/`
-	// 		})
-	// 			.then(res => {
-	// 				this.review = res.data
-	// 				console.log(this.review)
-	// 			})
-	// 			.catch(err => {
-	// 				console.log(err)
-	// 			})
-	// 		},  
-	// }
+
 }
 </script>
 

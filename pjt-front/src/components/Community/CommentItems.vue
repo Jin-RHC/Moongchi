@@ -11,6 +11,7 @@
         :key="index" 
         :comment="comment"        
         @noti-comment="getReviewData"
+        :is-login="isLogin"
       ></comment-item>
       
       <div v-if="isCommentForm">
@@ -36,7 +37,8 @@ export default {
     CommentItem
   },
   props: {
-    comments: Array
+    comments: Array,
+    isLogin: Boolean
   },
   data () {
     return {      
@@ -52,7 +54,8 @@ export default {
       return config
     },
     getReviewData () {
-      this.$emit('noti-comment')			
+      this.$emit('noti-comment')
+      this.$emit('noti-comment-count', this.commentsCount)			
 		},
 
   },

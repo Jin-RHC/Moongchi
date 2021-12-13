@@ -40,6 +40,11 @@ export default new Vuex.Store({
     //   commit('ADD_ONE_LINE_COMMENTS', item)
     // }
   },
+  getters: {
+    token (state) {
+      return state.token
+    }
+  },
   modules: {
   },
   // update () {

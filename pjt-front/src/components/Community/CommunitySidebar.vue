@@ -48,7 +48,7 @@ export default {
         url: api + `sidebar-reviews/`,
       })
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         this.topReviews = res.data
         
       })
@@ -63,7 +63,7 @@ export default {
         url: api + `sidebar-movies/`,
       })
         .then(res => {
-          console.log(res.data)
+          // console.log(res.data)
           this.topMovies = res.data
           
         })

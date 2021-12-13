@@ -1,7 +1,7 @@
 <template>
 			<div>
 				<div class="topbar-filter user">
-					<p>Found <span>{{ favoriteMovies.length }}movies</span> in total</p>
+					<p>Found <span>{{ favoriteMovies.length }} movies</span> in total</p>
 					<label>Sort by:</label>
 					<select>
 						<option value="range">-- Choose option --</option>
@@ -16,30 +16,35 @@
 					
 
 				<div class="movie-items" v-for="i in 1" :key="i" style="padding: 10px 0;">
-					<label class="" 
-					style="display: inline-block;					
-					font-size: 24px;
-					line-height: 30px;
-					font-weight: 700;" for="">좋아한 영화들</label>
-					<carousel-3d disable3d="true" :space="250" :autoplay="false" :autoplay-timeout="5000" :display="20" :controlsVisible="true" :clickable="false" :width="230" :height="325"> 
-						<slide v-for="(slide, i) in favoriteMovies" :index="i" :key="i">
-							<template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
-								<div class="movie-item" style="width: 100%;">								
-									<img :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="`https://image.tmdb.org/t/p/original${slide.poster_path}`">
-									<div class="hvr-inner">
-										<a @click.prevent="$router.push({name: 'MovieDetail', params: {id: slide.id}})" href="moviesingle.html"> Read more <i class="ion-android-arrow-dropright"></i> </a>
-									</div>
-							
-									<div class="title-in" style="margin-bottom: 40px;">    
-										<h6><a href="#">{{ slide.title }}</a></h6>
-										<p><i class="ion-android-star"></i><span>{{ slide.rating_average }}</span> /10</p>
-									</div>
-								</div>
-							</template>
-						</slide>
-					</carousel-3d>
 					
-					<hr>
+						<label class="" 
+						style="display: inline-block;					
+						font-size: 24px;
+						line-height: 30px;
+						font-weight: 700;" for="">좋아한 영화들</label>
+						<carousel-3d v-if="favoriteMovies.length" disable3d="true" :space="250" :autoplay="false" :autoplay-timeout="5000" :display="20" :controlsVisible="true" :clickable="false" :width="230" :height="325"> 
+							<slide v-for="(slide, i) in favoriteMovies" :index="i" :key="i">
+								<template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
+									<div class="movie-item" style="width: 100%;">								
+										<img :data-index="index" :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }" :src="`https://image.tmdb.org/t/p/original${slide.poster_path}`">
+										<div class="hvr-inner">
+											<a @click.prevent="$router.push({name: 'MovieDetail', params: {id: slide.id}})" href="moviesingle.html"> Read more <i class="ion-android-arrow-dropright"></i> </a>
+										</div>
+								
+										<div class="title-in" style="margin-bottom: 40px;">    
+											<h6><a href="#">{{ slide.title }}</a></h6>
+											<p><i class="ion-android-star"></i><span>{{ slide.rating_average }}</span> /10</p>
+										</div>
+									</div>
+								</template>
+							</slide>
+						</carousel-3d>
+					
+					<div v-else style="margin-top: 50px;">
+						<span class="time" style="font-size: 30px; top: 50px;">등록된 영화가 없습니다.</span>
+					</div>
+					
+					<hr> 
 					
 							<!-- <div class="slide-it">
 								<div class="movie-item">
@@ -270,24 +275,13 @@
 	            			</div>
 	            		</div> -->
 				</div>		
-				<div class="topbar-filter">
+				<!-- <div class="topbar-filter">
 					<label>Movies per page:</label>
 					<select>
 						<option value="range">20 Movies</option>
 						<option value="saab">10 Movies</option>
-					</select>
-					
-					<!-- <div class="pagination2">
-						<span>Page 1 of 2:</span>
-						<a class="active" href="#">1</a>
-						<a href="#">2</a>
-						<a href="#">3</a>
-						<a href="#">...</a>
-						<a href="#">78</a>
-						<a href="#">79</a>
-						<a href="#"><i class="ion-arrow-right-b"></i></a>
-					</div> -->
-				</div>
+					</select>					
+				</div> -->
 			</div>
 </template>
 

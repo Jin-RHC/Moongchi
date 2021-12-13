@@ -12,6 +12,8 @@ import CommingSoon from '../views/CommingSoon.vue'
 import UserProfile from '../views/UserProfile.vue'
 import NotFoundComponent from '../views/NotFoundComponent.vue'
 import Celebs from '../views/Celebs.vue'
+import store from "../store/index";
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -65,7 +67,15 @@ const routes = [
   {
     path: '/profile/:username',
     name: 'UserProfile',
-    component: UserProfile
+    component: UserProfile,
+    beforeEnter: (to, from, next) => {      
+      console.log(store)      
+      if (store.getters.token) {
+        next()
+      } else {
+        alert('로그인이 필요합니다.')
+      }
+    }
   },
   {
     path: '/celebs',

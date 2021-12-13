@@ -1,34 +1,35 @@
 <template>
 <div>
 
-  <div style="display: flex; margin-top: 30px;">
+  <div style="display: flex; justify-content: space-between; margin-top: 30px;">
     
     <div style="width: 100px;">
-      <a @click.prevent="$router.push({ name: 'UserProfile', params: { username: this.comment.user.username }})" href=""><h6>{{ this.comment.user.username }}</h6></a>
-       
+      <a @click.prevent="$router.push({ name: 'UserProfile', params: { username: comment.user.username }})" href=""><h6>{{ comment.user.username }}</h6></a>             
+    </div>
+    <div style="margin: 0px 5px;">
+      <p style="white-space: pre-line; word-break:break-all; width: 600px; padding: 0px">{{ comment.content }}</p>
+    </div>
+    <div style="">
+      <span style="height: 21px;" class="time">
+        {{ comment.created_at.slice(0, 10) + '   ' + comment.created_at.slice(11, 19)}}
+      </span>
+      <a @click.prevent="deleteComment" href="" class="time" style="border: thin solid;">X</a>
+      <div style="display: flex; justify-content: end; margin: 5px 0px;">
+        <a @click.prevent="reportComment" href=""><h6 class="time" style="margin-top: 5px; margin-right: 5px;">신고</h6></a>
+        <a @click.prevent="likeComment" href="" class="time" style="border: solid; border-width: thin; border-radius: 2px; margin-right: 5px;"><font-awesome-icon :icon="['far', 'thumbs-up']" size="1x" style="margin-left: 7px; margin-right: 7px;" />
+          <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ commentLike }}</strong> 
+        </a>
+        <a @click.prevent="dislikeComment" href="" class="time" style="font-weight: bolder; border: solid; border-width: thin; border-radius: 2px;"><font-awesome-icon :icon="['far', 'thumbs-down']" size="1x" style=" margin-right: 7px; margin-left: 7px;" />
+          <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ commentDislike }}</strong> 
+        </a>
+      </div>
     </div>
     
-    <p style="white-space: pre-line; width: 600px; padding: 0px">{{ this.comment.content }}</p>
-    <div style="">
-      <div style="display: flex; justify-content: center;">
-        <span style="" class="time">
-          {{ this.comment.created_at.slice(0, 10) + '   ' + this.comment.created_at.slice(11, 19)}}
-        </span>
-        <a @click.prevent="deleteComment" href="" class="time" style="border: thin solid; height:50%">X</a>
-      </div>
-        <div style="display: flex; justify-content: end; margin-top:;">
-          <a @click.prevent="reportComment" href=""><h6 class="time" style="margin-top: 5px; margin-right: 5px;">신고</h6></a>
-          <a @click.prevent="likeComment" href="" class="time" style="border: solid; border-width: thin; border-radius: 2px; margin-right: 5px;"><font-awesome-icon :icon="['far', 'thumbs-up']" size="1x" style="margin-left: 7px; margin-right: 7px;" />
-            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ commentLike }}</strong> 
-          </a>
-          <a @click.prevent="dislikeComment" href="" class="time" style="font-weight: bolder; border: solid; border-width: thin; border-radius: 2px;"><font-awesome-icon :icon="['far', 'thumbs-down']" size="1x" style=" margin-right: 7px; margin-left: 7px;" />
-            <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ commentDislike }}</strong> 
-          </a>
-        </div>
-    </div>            
+    
+    
   </div>    
     
-    <div v-show="this.comment.nestedcomment_set.length">
+    <div v-show="comment.nestedcomment_set.length">
       <nested-comment-items
         v-for="nestedComment in comment.nestedcomment_set" 
         :key="nestedComment.id"
@@ -37,7 +38,7 @@
         @noti-comment="notiNestedComment"        
       ></nested-comment-items>
     </div>    
-  <a @click.prevent="openCommentForm" href="">답글</a>
+  <a v-show="isLogin" @click.prevent="openCommentForm" href="" style="border: 1px solid #ddd; padding: 0px 7px;">답글</a>
   <form action="#" v-show="isNested">
    
     <div class="row">
@@ -48,7 +49,7 @@
     <div style="display: flex; justify-content: end;">
       <a @click.prevent="leaveNestedComment" placeholder="submit" href=""><button>등록</button></a>
     </div>
-  </form>
+  </form>  
   <hr>
 </div>
 </template>
@@ -62,7 +63,8 @@ export default {
   components: { NestedCommentItems },
   name: 'CommentItem',
   props: {
-    comment: Object,    
+    comment: Object,
+    isLogin: Boolean
   },
   data () {
     return {
@@ -82,7 +84,7 @@ export default {
     likeComment () {
       axios({
         method: 'post',
-        url: api + `${this.$route.params.reviewId}/comment/${this.commentData.id}/like/`,
+        url: api + `${this.$route.params.reviewId}/comment/${this.comment.id}/like/`,
         headers: this.setToken()
       })
         .then(res => {
@@ -97,7 +99,7 @@ export default {
     dislikeComment () {
       axios({
         method: 'post',
-        url: api + `${this.$route.params.reviewId}/comment/${this.commentData.id}/dlike/`,
+        url: api + `${this.$route.params.reviewId}/comment/${this.comment.id}/dlike/`,
         headers: this.setToken()
       })
         .then(res => {
@@ -147,11 +149,11 @@ export default {
         .then(res => {
           console.log(res)
           this.nestedContent = ''
-          this.$emit('noti-nested-comment') 
+          this.$emit('noti-comment') 
         })
         .catch(err => {
           console.log(err)
-          alert('답글을 작성할 권한이 없습니다.')
+          alert('답글을 그렇게 길게 작성할 수 없습니다.')
         })
       }
     },
