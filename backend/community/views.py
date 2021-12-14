@@ -20,7 +20,7 @@ from django.db.models import Q
 # 전체 리뷰 목록을 불러옵니다.
 @api_view(['GET'])
 def review_lists(request):
-    reviews = Review.objects.all()
+    reviews = Review.objects.order_by('-pk')
     serializer = ReviewListSerializer(reviews, many=True)
     return Response(serializer.data)
 
