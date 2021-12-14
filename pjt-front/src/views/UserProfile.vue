@@ -113,7 +113,8 @@ export default {
 				})
 				.catch(err => {
 					console.log(err)
-					alert('로그인하셔야 볼 수 있습니다.')
+					this.$router.push({ name: 'Home'})
+					// alert('존재하지 않는 유저입니다.')
 				})
 		},
 		follow () {
@@ -125,11 +126,12 @@ export default {
 				.then(() => {
 					if (this.isFollowing === false) {
 						this.isFollowing = true
-						this.userData.followers_count = this.userData.followers_count + 1
+						// this.userData.followers_count = this.userData.followers_count + 1
 					} else {
 						this.isFollowing = false
-						this.userData.followers_count = this.userData.followers_count - 1
-					}				
+						// this.userData.followers_count = this.userData.followers_count - 1
+					}
+					this.getProfile()
 				})
 				.catch(err => {
 					console.log(err)

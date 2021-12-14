@@ -2,11 +2,11 @@
     <!-- <h3>Best Marvel movie in my opinion</h3> -->
     <li style="margin-top: 20px;">  
 
-      <div style="display: flex;">        
+      <div style="display: flex; justify-content: space-between;">        
         <star-rating :max-rating=10	:rating="oneLineComment.rating" :star-size="15" :read-only="true"></star-rating>
 
-        <p class="time" >          
-          <a @click.prevent="$router.push({ name: 'UserProfile', params: {username: oneLineComment.user.username }})" href="#" style="margin: 0 5px"> {{ oneLineComment.user.nickname }} </a> | <span style="margin: 0 5px;"> {{ createdAt }} </span> | <a @click.prevent="report" href="#" style="margin: 0 5px;">신고</a>
+        <p class="time">          
+          <a @click.prevent="$router.push({ name: 'UserProfile', params: {username: oneLineComment.user.username }})" href="#" style="margin: 0 5px"> {{ oneLineComment.user.nickname }} </a> | <span style="margin: 0 5px;"> {{ createdAt }} </span> | <a @click.prevent="report" href="#" style="margin: 0 5px;" v-if="isLogin">신고</a>
         </p>
       </div>
 
@@ -42,7 +42,8 @@ export default {
   },
   props: {
     oneLineComment: Object,
-    movie: Object
+    movie: Object,
+    isLogin: Boolean
   },
   data () {
     return {

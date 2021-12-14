@@ -48,12 +48,13 @@
         <span v-else>
           <ul>
             <one-line-comment 
-              v-for="(oneLineComment, index) in oneLineComments.slice(0, 5)" 
+              v-for="(oneLineComment, index) in oneLineComments" 
               :key="index" 
               :oneLineComment="oneLineComment" 
               :movie="movie"
               @get-one-line-comment-like="getData"
               @get-one-line-comment-dislike="getData"
+              :is-login="isLogin"
             ></one-line-comment>
           </ul>
         </span>
@@ -135,7 +136,7 @@ export default {
       isLogin: false,
       like: this.movie.like_users,
       dislike: this.movie.dlike_users,
-      oneLineComments: this.movie.rating_set,
+      oneLineComments: this.movie.rating_set.reverse(),
       movieGenres: this.movie.genres,
       movieActors: this.movie.actors,
       // movieData: null,
@@ -160,9 +161,9 @@ export default {
           console.log(res, '데이터 전송 성공')
           this.getData()
         })
-        .cactch(err => {
+        .catch(err => {
+          alert('로그인이 필요합니다.')
           console.log(err)
-          alert('좋아요를 누를 수 없습니다')
         })
     },
     addDislike () {
@@ -175,8 +176,8 @@ export default {
           console.log(res, '데이터 전송 성공')
           this.getData()
         })
-        .cactch(err => {
-          alert('싫어요를 누를 수 없습니다.')
+        .catch(err => {
+          alert('로그인이 필요합니다.')
           console.log(err)
         })
     },

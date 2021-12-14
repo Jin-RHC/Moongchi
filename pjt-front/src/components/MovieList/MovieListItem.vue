@@ -21,7 +21,7 @@
     </div>
     <div class="mv-item-infor">
       <h6><a href="#">{{ movie.title }}</a></h6>
-      <p class="rate"><i class="ion-android-star"></i><span>{{ movie.rating_average }}</span> /10</p>
+      <p class="rate"><i class="ion-android-star"></i><span>{{ Math.round(movie.rating_average * 10) / 10 }}</span> /10</p>
     </div>
   </div>	
 </template>

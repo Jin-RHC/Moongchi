@@ -72,7 +72,7 @@
 					<comment-items :comments="item.comment_set" :is-login="isLogin" @noti-comment="getData" @noti-comment-count="getCommentsCount"></comment-items>
 					<!-- comment form -->
           <comment-form v-show="isLogin" @noti-comment="getData"></comment-form>
-					<textarea type="text" placeholder="로그인 하세요" disabled v-show="!isLogin" style="margin-top: 20px;"></textarea>
+					<textarea type="text" placeholder="로그인이 필요합니다." disabled v-show="!isLogin" style="margin-top: 20px;"></textarea>
 					
 				</div>
 			</div>
@@ -117,12 +117,12 @@ export default {
 					this.item = res.data
 					this.comments = res.data.comment_set,
 					this.content = res.data.content
-					const token = this.$store.state.token
-					const decoded = jwt_decode(token)
-					if (decoded.username === this.item.user.username ) {
-					this.same = true
-					console.log('ReviewDetail에서 데이터 갱신 성공')
-				}})
+					})
+				.catch(err => {
+					console.log(err)
+					this.$router.push({ name: 'Home'})
+					// alert('존재하지 않는 게시물입니다.')
+				})
 		},    
 		setToken: function () {
       const token = localStorage.getItem('jwt')
@@ -212,7 +212,7 @@ export default {
 
   },
 	created () {
-		this.getData()
+		this.getData() 
 		if (this.$store.state.token) {
 			this.isLogin = true
 			// const token = this.$store.state.token
@@ -220,6 +220,11 @@ export default {
 			// if (decoded.username === this.item.user.username ) {
 			// 	this.same = true
 			// }
+		}
+		const token = this.$store.state.token
+		const decoded = jwt_decode(token)
+		if (decoded.username === this.item.user.username ) {
+			this.same = true		
 		}
 	},
 	computed: {

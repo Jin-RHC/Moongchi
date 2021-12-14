@@ -13,9 +13,9 @@
 
       <div style="">
         <span style="" class="time">{{ nestedComment.created_at.slice(0,10) }} {{nestedComment.created_at.slice(11, 19) }}</span>
-        <a @click.prevent="deleteNestedComment" href="" class="time" style="border: thin solid; margin-left: 2px;">X</a>
+        <a @click.prevent="deleteNestedComment" href="" class="time" style="border: thin solid; margin-left: 2px; background-color: #F1F3F5;">X</a>
         <div style="display: flex; justify-content: end; margin: 5px 0px;">
-          <a @click.prevent="reportNestedComment" href=""><h6 class="time" style="margin-top: 5px; margin-right: 5px;">신고</h6></a>
+          <a @click.prevent="reportNestedComment" v-show="isLogin" href=""><h6 class="time" style="margin-top: 5px; margin-right: 5px;">신고</h6></a>
 
           <a @click.prevent="likeNestedComment" href="" class="time" style="border: solid; border-width: thin; border-radius: 2px; margin-right: 5px;"><font-awesome-icon :icon="['far', 'thumbs-up']" size="1x" style="margin-left: 7px; margin-right: 7px;" />
             <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ nestedComment.like_users.length }}</strong> 
@@ -42,7 +42,8 @@ export default {
   name: 'NestedCommentItems',
   props: {
     nestedComment: Object,
-    commentId: Number
+    commentId: Number,
+    isLogin: Boolean
   },
   data () {
     return {
@@ -69,6 +70,7 @@ export default {
           this.$emit('noti-comment')
         })
         .catch(err => {
+          alert('로그인이 필요합니다.')
           console.log(err)
         })
     },
@@ -83,6 +85,7 @@ export default {
           this.$emit('noti-comment')
         })
         .catch(err => {
+          alert('로그인이 필요합니다.')
           console.log(err)
         })
     },

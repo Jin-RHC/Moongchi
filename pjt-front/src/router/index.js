@@ -52,7 +52,18 @@ const routes = [
   {
     path: '/review-create/:reviewId?',
     name: 'ReviewForm',
-    component: ReviewForm
+    component: ReviewForm,
+    beforeEnter: (to, from, next) => {
+      console.log(from.params)
+      console.log(next)
+      if (from.params.id) {
+        next()
+      } else if (from.params.reviewId) {
+        next()
+      } else {
+        next('/')
+      }
+    }
   },
   {
     path: '/review/:reviewId',

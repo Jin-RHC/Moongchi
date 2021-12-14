@@ -17,7 +17,7 @@
           
             <div class="title-in" style="margin-bottom: 40px;">    
               <h6 style=""><a href="#" style="font-size: 20px;">{{ slide.title }}</a></h6>
-              <p style="margin-bottom: 50px;"><i class="ion-android-star"></i><span>{{ slide.rating_average }}</span> /10</p>
+              <p style="margin-bottom: 50px;"><i class="ion-android-star"></i><span>{{ Math.round(slide.rating_average * 10) / 10 }}</span> /10</p>
             </div>
           </div>
 				</template>

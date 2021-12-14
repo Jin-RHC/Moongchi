@@ -13,9 +13,9 @@
       <span style="height: 21px;" class="time">
         {{ comment.created_at.slice(0, 10) + '   ' + comment.created_at.slice(11, 19)}}
       </span>
-      <a @click.prevent="deleteComment" href="" class="time" style="border: thin solid;">X</a>
+      <a @click.prevent="deleteComment" href="" class="time" style="border: thin solid; background-color: #F1F3F5;">X</a>
       <div style="display: flex; justify-content: end; margin: 5px 0px;">
-        <a @click.prevent="reportComment" href=""><h6 class="time" style="margin-top: 5px; margin-right: 5px;">신고</h6></a>
+        <a @click.prevent="reportComment" href="" v-show="isLogin"><h6 class="time" style="margin-top: 5px; margin-right: 5px;">신고</h6></a>
         <a @click.prevent="likeComment" href="" class="time" style="border: solid; border-width: thin; border-radius: 2px; margin-right: 5px;"><font-awesome-icon :icon="['far', 'thumbs-up']" size="1x" style="margin-left: 7px; margin-right: 7px;" />
           <strong style="margin-right: 7px; font-family: tahoma; color: #777;">{{ commentLike }}</strong> 
         </a>
@@ -35,7 +35,8 @@
         :key="nestedComment.id"
         :nestedComment="nestedComment"
         :commentId="comment.id"
-        @noti-comment="notiNestedComment"        
+        @noti-comment="notiNestedComment" 
+        :is-login="isLogin"       
       ></nested-comment-items>
     </div>    
   <a v-show="isLogin" @click.prevent="openCommentForm" href="" style="border: 1px solid #ddd; padding: 0px 7px;">답글</a>
@@ -70,7 +71,6 @@ export default {
     return {
       isNested: false,
       nestedContent: '',
-
     }
   },
   methods: {
@@ -184,9 +184,7 @@ export default {
       return this.comment.dlike_users.length
     },
 
-  },
-  
-   
+  },   
 }
 
 </script>

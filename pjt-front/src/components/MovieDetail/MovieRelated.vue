@@ -73,7 +73,7 @@ export default {
       headers: this.setToken()
     })
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         this.recommendedMovies = res.data
       })
   }},

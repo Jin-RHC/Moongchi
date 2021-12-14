@@ -6,8 +6,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="hero-ct">
-					<h1> Review detail</h1>
-          {{ this.$route.params }}
+					<h1> Review detail</h1>          
 					<ul class="breadcumb">
 						<li class="active"><a href="#">Community</a></li>
 						<li> <span class="ion-ios-arrow-right"></span> Review </li>
@@ -89,7 +88,7 @@ export default {
       if (this.reviewTitle && this.reviewContent) {
         const reviewData = {
           title: this.reviewTitle,
-          content: this.reviewContent,          
+          content: this.reviewContent,       
         }
         axios({
           method: 'post',
@@ -121,14 +120,14 @@ export default {
 
         axios({
           method: 'put',
-          url: api + `community/${this.$route.params.movieId}/review/`,
+          url: api + `community/${this.$route.params.movieId}/review/${this.$route.params.reviewId}/`,
           data: reviewData,
           headers: this.setToken()
         })
 
           .then(res => {
             console.log(res)
-            // this.$router.push({name: 'ReviewDetail', params: {reviewId: this.$route.params.reviewId}})
+            this.$router.push({name: 'ReviewDetail', params: {reviewId: this.$route.params.reviewId}})
         })
           .catch(err => {
             console.log(err)

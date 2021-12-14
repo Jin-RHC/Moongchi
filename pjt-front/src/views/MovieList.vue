@@ -22,7 +22,7 @@
 				<div class="topbar-filter fw">
 					<p>Found <span>{{ movies.length }} movies</span> in total</p>
 					<label>Sort by:</label>
-					<select>
+					<select disabled>
 						<option value="popularity" style="color: grey;">Popularity Descending</option>
 						<option value="popularity" style="color: grey;">Popularity Ascending</option>
 						<option value="rating" style="color: grey;">Rating Descending</option>
@@ -30,8 +30,8 @@
 						<option value="date" style="color: grey;">Release date Descending</option>
 						<option value="date" style="color: grey;">Release date Ascending</option>
 					</select>
-					<a href="#" class="list"><i class="ion-ios-list-outline "></i></a>
-					<a href="#" class="grid"><i class="ion-grid active"></i></a>
+					<a @click.prevent="" href="" class="list"><i class="ion-ios-list-outline "></i></a>
+					<a @click.prevent="" href="" class="grid"><i class="ion-grid active"></i></a>
 				</div>
 				<div class="flex-wrap-movielist mv-grid-fw">
             <movie-list-item v-for="movie in movies" :key="movie.id" :movie="movie"></movie-list-item>									

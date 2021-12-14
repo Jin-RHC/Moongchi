@@ -22,7 +22,7 @@
 				<div class="topbar-filter fw">
 					<p>Found <span>{{ movies.length }} movies</span> in total</p>
 					<label>Sort by:</label>
-					<select>
+					<select disabled>
 						<option value="popularity">Popularity Descending</option>
 						<option value="popularity">Popularity Ascending</option>
 						<option value="rating">Rating Descending</option>

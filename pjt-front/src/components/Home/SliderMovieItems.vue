@@ -27,7 +27,7 @@
 											<!-- <span class="blue"><a href="#">Sci-fi</a></span> -->
 										</div>
 										<h6><a @click.prevent="$router.push({ name: 'MovieDetail', params: { id: `${slide.id}`}})" href="#" style="font-size: 25px;">{{ slide.title }}</a></h6>
-										<p><i class="ion-android-star"></i><span>{{ slide.rating_average }}</span> /10</p>
+										<p><i class="ion-android-star"></i><span>{{ Math.round(slide.rating_average * 10) / 10 }}</span> /10</p>
 									</div>            
 								</div>
 							</template>
@@ -78,8 +78,7 @@ export default {
         .then(res => {          
           this.slides = res.data['now-playing']
         })
-  },
-		
+  },		
 }
 </script>
 

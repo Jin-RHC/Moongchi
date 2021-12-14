@@ -54,7 +54,7 @@
 					<div class="movie-rate">
 						<div class="rate">
 							<i class="ion-android-star"></i>
-							<p><span>{{ movie.rate.rate }}</span> /10<br>
+							<p><span>{{ Math.round(movie.rate.rate * 10) / 10 }}</span> /10<br>
 								<span class="rv">{{ movie.rating_set.length }} Comments</span>
 							</p>
 						</div>
@@ -147,10 +147,12 @@ export default {
 		})
 			.then(res => {
 				this.movie = res.data
-				console.log(this.movie)
+				// console.log(this.movie)
 			})
 			.catch(err => {
 				console.log(err)
+				this.$router.push({ name: 'Home'})
+				alert('존재하지 않는 영화입니다.')
 			})
 		},
 		setToken: function () {
@@ -184,9 +186,9 @@ export default {
 								// console.log(decoded)
 								// this.$router.push({name: 'UserProfile', params: {username: decoded.username}})
 							})
-							.cactch(err => {
+							.catch(err => {
 								console.log(err)
-								alert('좋아요를 누를 수 없습니다')
+								alert('로그인이 필요합니다.')
 							})											
 			}
 		}
@@ -194,8 +196,7 @@ export default {
 		
   created () {
 		this.getMovie()
-	},
-
+	},	
 }
 </script>
 

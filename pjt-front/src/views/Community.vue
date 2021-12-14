@@ -73,7 +73,7 @@ export default {
 					// console.log(res.data)
           this.reviews = res.data
           // $state.loaded();
-					// console.log(this.reviews)
+					console.log(this.reviews)
         } else {
           // $state.complete();
         }
@@ -82,8 +82,8 @@ export default {
     }
   },
 	created () {
-		this.getReviews()		
-	}
+		this.getReviews()
+	},  
 }
 </script>
 

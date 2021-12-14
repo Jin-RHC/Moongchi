@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h3>Followings</h3>
     <hr>
     <ul>
@@ -106,6 +106,11 @@ h3 {
 }
 h5 {
   padding: 10px;
+}
+.container {
+  height: auto;
+  width: 400px;
+  
 }
 .user {
   margin: 2em 1.5em;
