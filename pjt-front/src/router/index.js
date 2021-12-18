@@ -61,6 +61,7 @@ const routes = [
       } else if (from.params.reviewId) {
         next()
       } else {
+        alert('잘못된 접근입니다.')
         next('/')
       }
     }
@@ -68,7 +69,14 @@ const routes = [
   {
     path: '/review/:reviewId',
     name: 'ReviewDetail',
-    component: ReviewDetail
+    component: ReviewDetail,
+    beforeEnter: (to, from, next) => {
+      if (store.state.token) {
+        next()
+      } else {
+        alert('로그인이 필요합니다.')
+      }      
+    }
   },
   {
     path: '/celebrities',
@@ -79,12 +87,11 @@ const routes = [
     path: '/profile/:username',
     name: 'UserProfile',
     component: UserProfile,
-    beforeEnter: (to, from, next) => {      
-      console.log(store)      
-      if (store.getters.token) {
+    beforeEnter: (to, from, next) => {            
+      if (store.state.token) {
         next()
       } else {
-        alert('로그인이 필요합니다.')
+        alert('로그인이 필요합니다.')        
       }
     }
   },

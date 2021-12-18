@@ -2,7 +2,7 @@
   <!-- comment items -->
   <div class="comments">
     
-    <h4 v-show="comments.length">{{ commentsCount }} Comments</h4>
+    <h4 v-show="isComment">{{ commentsCount }} Comments</h4>
 
     <div class="" style="margin-top: 30px;">
       <!-- <img src="images/uploads/author.png" alt=""> -->
@@ -20,7 +20,7 @@
       
     </div>
 
-    <h4 v-show="!comments.length" style="text-align: center;">등록된 댓글이 없습니다.</h4>
+    <h4 v-show="!isComment" style="text-align: center;">등록된 댓글이 없습니다.</h4>
   </div>
 </template>
 
@@ -43,6 +43,7 @@ export default {
   data () {
     return {      
       isCommentForm: false,
+      commentsData: this.comments,
     }
   },
   methods: {
@@ -61,15 +62,26 @@ export default {
   },
   computed: {
     commentsCount () {
-      let count = this.comments.length
-      this.comments.forEach(comment => {
-        count += comment.nestedcomment_set.length
-      })
-      return count
-    }
+      if (this.comments) {
+        let count = this.comments.length
+        this.comments.forEach(comment => {
+          count += comment.nestedcomment_set.length
+        })
+        return count
+      } else {
+        return 0
+      }
+    },
+    isComment () {
+      if (this.comments) {
+        return true
+      } else {
+        return false
+      }
+    },    
   },
   created () {
-    this.getReviewData()
+    console.log(this.comments)
   }
 }
 </script>

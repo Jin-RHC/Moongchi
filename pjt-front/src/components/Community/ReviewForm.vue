@@ -61,8 +61,7 @@
 <script>
 import axios from 'axios'
 import CommunitySidebar from './CommunitySidebar.vue'
-
-const api = 'http://127.0.0.1:8000/api/v1/'
+const API = process.env.VUE_APP_BACKEND_URL
 
 export default {
   components: { CommunitySidebar, },
@@ -92,7 +91,7 @@ export default {
         }
         axios({
           method: 'post',
-          url: api + `community/${this.$route.params.movieId}/review/`,
+          url: `${API}/api/v1/community/${this.$route.params.movieId}/review/`,
           data: reviewData,
           headers: this.setToken()
         })
@@ -102,7 +101,8 @@ export default {
           })
           .catch(err => {
             console.log(err)
-            alert('작성할 권한이 없습니다.')
+            this.$router.go(-2)
+            alert('그렇게 길게 작성할 수 없습니다.')
           })
         
         this.reviewTitle = null
@@ -120,7 +120,7 @@ export default {
 
         axios({
           method: 'put',
-          url: api + `community/${this.$route.params.movieId}/review/${this.$route.params.reviewId}/`,
+          url: `${API}/api/v1/community/${this.$route.params.movieId}/review/${this.$route.params.reviewId}/`,
           data: reviewData,
           headers: this.setToken()
         })

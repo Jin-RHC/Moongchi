@@ -1,14 +1,17 @@
 <template>
   <div>
-    <div class="topbar-filter">
-      <p>Found <span>{{ userData.review_set.length }} reviews</span> in total</p>
-      <label>Sort by:</label>
+    <div class="" style="padding: 5px 10px; background-color: #e4eaf0;">
+      <p style="margin-left: 10px;">Found <span style="color: #4280bf;">{{ userData.review_set.length }} reviews</span> in total</p>
+      <!-- <label>Sort by:</label>
       <select>
         <option value="range">-- Choose option --</option>
         <option value="saab">-- Choose option 2--</option>
-      </select>
+      </select> -->
     </div>
-    <user-reviews v-for="review in userData.review_set" :key="review.id" :review="review"></user-reviews>
+    <ul style="margin-top: 2em;">
+      <user-reviews v-for="review in userData.review_set" :key="review.id" :review="review"></user-reviews>
+
+    </ul>
 
 
     <!-- <div class="movie-item-style-2 userrate">
@@ -74,7 +77,7 @@ export default {
     UserReviews
   },
   props: {
-		userData: Array
+		userData: Object
 	},
 }
 </script>

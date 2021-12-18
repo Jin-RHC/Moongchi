@@ -21,9 +21,9 @@ export default {
     movieItem: Object
   },
   computed: {
-    posterImg () {
-      return `https://image.tmdb.org/t/p/original${this.movieItem.poster_path}`
-    }
+    // posterImg () {
+    //   return `https://image.tmdb.org/t/p/original/${this.movieItem.poster_path}`
+    // }
   }
 }
 </script>

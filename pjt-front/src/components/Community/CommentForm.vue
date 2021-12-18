@@ -18,7 +18,8 @@
 
 <script>
 import axios from 'axios'
-const api = 'http://127.0.0.1:8000/api/v1/community/'
+const API = process.env.VUE_APP_BACKEND_URL
+
 export default {
   name: 'CommentForm',
   data () {
@@ -41,7 +42,7 @@ export default {
         }
         axios({
           method: 'post',
-          url: api + `${this.$route.params.reviewId}/comment/`,
+          url: `${API}/api/v1/community/${this.$route.params.reviewId}/comment/`,
           data: comment,
           headers: this.setToken()
         })

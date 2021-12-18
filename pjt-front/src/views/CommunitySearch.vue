@@ -44,9 +44,7 @@
 import axios from 'axios'
 import CommunitySidebar from '../components/Community/CommunitySidebar.vue'
 import ReviewItem from '../components/Community/ReviewItem.vue'
-
-const api = 'http://127.0.0.1:8000/api/v1/community/reviewsearch/'
-
+const API = process.env.VUE_APP_BACKEND_URL
 
 export default {
   components: { 
@@ -64,7 +62,7 @@ export default {
     getReview () {      
       axios({
 				method: 'get',
-				url: api + `${this.$route.query.query}/`
+				url: `${API}/api/v1/community/reviewsearch/${this.$route.query.query}/`
 			})
 				
 				.then((res) => {   

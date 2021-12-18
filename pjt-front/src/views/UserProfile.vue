@@ -23,7 +23,7 @@
 				<div class="user-information">
 					<div class="user-img">
 						<a @click.prevent="none" href="#"><img src="images/uploads/user-img.png" alt=""><br></a>
-						<div v-if="userData.username != myname">
+						<div v-if="!myProfile">
 							<a v-show="!isFollowing" @click.prevent="follow" href="#" class="redbtn" style="">팔로우</a>
 							<a v-show="isFollowing" @click.prevent="follow" href="#" class="redbtn" style="background:grey;">팔로우한 사람입니다.</a>
 						</div>
@@ -42,8 +42,8 @@
 					<div class="user-fav">
 						<p>Others</p>
 						<ul>
-							<li v-if="this.$route.params.username === myname" :class="{ active: currentTab === 3}"><a @click.prevent="currentTab = 3" href="#">Change information</a></li>
-							<li v-if="this.$route.params.username === myname"><a href="#">Sign out</a></li>
+							<li v-if="this.$route.params.username === myName" :class="{ active: currentTab === 3}"><a @click.prevent="currentTab = 3" href="#">Change information</a></li>
+							<li v-if="this.$route.params.username === myName"><a href="#">Sign out</a></li>
 						</ul>
 					</div>
 				</div>
@@ -67,7 +67,8 @@ import UserFavoriteMovies from '../components/Profile/UserFavoriteMovies.vue'
 import UserProfileDetail from '../components/Profile/UserProfileDetail.vue'
 import UserRatedMovies from '../components/Profile/UserRatedMovies.vue'
 import jwt_decode from "jwt-decode"
-const api = 'http://127.0.0.1:8000/api/v1/accounts/'
+const API = process.env.VUE_APP_BACKEND_URL
+
 export default {
   name: 'UserProfile',
   components: {
@@ -82,14 +83,15 @@ export default {
       accountsDetail: ['Profile', 'Favorite Movies', 'Reviewed Movies'],
 			userData: null,
 			favoriteMovies: null,
-			myname: null,
+			myName: null,
 			isFollowing: false,
+			profileName: null,
     }
   },
 	methods: {
 		setToken: function () {
       const token = localStorage.getItem('jwt')
-			this.myname = jwt_decode(token).username
+			this.myName = jwt_decode(token).username
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -98,18 +100,20 @@ export default {
 		getProfile () {
 			axios({
 				method: 'get',
-				url: api + `${this.$route.params.username}/`,
+				url: `${API}/api/v1/accounts/${this.$route.params.username}/`,
 				headers: this.setToken()
 			})
 				.then(res => {
 					console.log(res.data)
 					this.userData = res.data
 					this.favoriteMovies = res.data.like_movies
+					this.profileName = res.data.username
 					for (const curr of res.data.followers) {
-						if (this.myname === curr.username) {
+						if (this.myName === curr.username) {
 							this.isFollowing = true
 						}
 					}
+					console.log(this.profileName)
 				})
 				.catch(err => {
 					console.log(err)
@@ -120,7 +124,7 @@ export default {
 		follow () {
 			axios({
 				method: 'POST',
-				url: api + `${this.$route.params.username}/follow/`,
+				url: `${API}/api/v1/accounts/${this.$route.params.username}/follow/`,
 				headers: this.setToken()
 			})
 				.then(() => {
@@ -146,9 +150,18 @@ export default {
 
 	created () {
 		this.getProfile()
-		console.log('태어났다!!!')
-		
-	},	
+		console.log('태어났다!!!')		
+		console.log(this.currentTab)
+	},
+	computed: {
+		myProfile () {
+			if (this.profileName === this.myName) {
+				return true
+			} else {
+				return false
+			}
+		}
+	}	
 }
 </script>
 

@@ -2,13 +2,13 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 // import { createStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
-// import axios from 'axios'
 Vue.use(Vuex)
-// const api = 'http://127.0.0.1:8000/api/v1/'
+
 export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     token: '',
+
   },
   mutations: {
     LOGIN_COMPLETED: function (state, res) {
@@ -20,7 +20,7 @@ export default new Vuex.Store({
     LOGOUT: function (state) {
       state.token = ''
       // throw new Error(`${state.token}`)
-    },
+    },   
   },
   actions: {
     loginCompleted: function (context, res) {
@@ -32,7 +32,7 @@ export default new Vuex.Store({
       context.commit('LOGOUT')
       // console.log(username)
       // console.log(context)
-    },
+    },    
     // addOneLineComments ({commit}, item) {
     //   axios({
     //     url: api + ''

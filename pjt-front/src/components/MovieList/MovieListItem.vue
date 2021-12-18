@@ -1,7 +1,7 @@
 <template>
   <div class="movie-item-style-2 movie-item-style-1">
     <img :src="`https://image.tmdb.org/t/p/original${movie.poster_path}`" alt="">
-    <div class="hvr-inner">
+    <div class="hvr-inner" style="margin-left: 3rem;">
       <!-- <router-link :to="{ 
           name: 'MovieDetail',
           params: { 
@@ -16,6 +16,7 @@
             data: movie,
           }
         }"
+        
       >Read more<i class="ion-android-arrow-dropright"></i></router-link>
       <!-- <a :href="`http://localhost:8080/detail_${movie.id}`"> Read more <i class="ion-android-arrow-dropright"></i> </a> -->
     </div>

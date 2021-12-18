@@ -67,8 +67,7 @@
 
 <script>
 import axios from 'axios'
-
-const api = 'http://127.0.0.1:8000/api/v1/community/'
+const API = process.env.VUE_APP_BACKEND_URL
 
 export default {
   name: 'MovieReview',
@@ -92,7 +91,7 @@ export default {
     getReview () {
       axios({
         method: 'get',
-        url: api + `${this.$route.params.id}/review/`,
+        url: `${API}/api/v1/community/${this.$route.params.id}/review/`,
         headers: this.setToken()
       })
         .then(res => {

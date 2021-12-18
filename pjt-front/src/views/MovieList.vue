@@ -74,8 +74,8 @@ import InfiniteLoading from 'vue-infinite-loading';
 
 import axios from 'axios'
 import MovieListItem from '../components/MovieList/MovieListItem.vue'
+const API = process.env.VUE_APP_BACKEND_URL
 
-const api = 'http://127.0.0.1:8000/api/v1/movies/movielist/'
 export default {
   components: { 
 		MovieListItem, 
@@ -92,7 +92,7 @@ export default {
     getMovies ($state) {      
       axios({
 				method: 'get',
-				url: api + `${this.page}`
+				url: `${API}/api/v1/movies/movielist/${this.page}`
 			})
 				
 				.then((res) => {   

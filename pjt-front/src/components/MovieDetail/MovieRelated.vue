@@ -48,7 +48,8 @@
 <script>
 import axios from 'axios'
 import MovieRelatedItem from './MovieRelatedItem.vue'
-const api = 'http://127.0.0.1:8000/api/v1/movies/movie/'
+const API = process.env.VUE_APP_BACKEND_URL
+
 export default {
   components: { MovieRelatedItem },
   name: 'MovieRelated',
@@ -69,7 +70,7 @@ export default {
     getMovies () {
       axios({
       method: 'get',
-      url: api + `${this.$route.params.id}/recommended/`,
+      url: `${API}/api/v1/movies/movie/${this.$route.params.id}/recommended/`,
       headers: this.setToken()
     })
       .then(res => {

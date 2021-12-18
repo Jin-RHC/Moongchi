@@ -1,13 +1,13 @@
 <template>
   <div id="app">
     <!--preloading-->
-    <!-- <div id="preloader">
-        <img class="logo" src="images/logo1.png" alt="" width="119" height="58">
+    <div id="preloader">
+        <img class="logo" src="./assets/뭉치.png" alt="" style="border-radius : 30%">
         <div id="status">
             <span></span>
             <span></span>
         </div>
-    </div> -->
+    </div>
     <!--end of preloading-->
     <!-- <login-form></login-form>
     <signup-form></signup-form> -->

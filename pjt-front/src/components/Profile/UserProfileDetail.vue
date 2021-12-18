@@ -34,7 +34,7 @@
               <h6 class="mb-0">Email</h6>
             </div>
             <div class="col-sm-9 text-secondary">
-              {{ userData.username }}@ssafy.edu
+              {{ userName }}@ssafy.edu
             </div>
           </div>
           <hr>
@@ -52,7 +52,7 @@
               <h6 class="mb-0">Nickname</h6>
             </div>
             <div class="col-sm-9 text-secondary">
-              {{ userData.nickname }}
+              {{ userNickname }}
             </div>
           </div>
           <hr>
@@ -178,11 +178,33 @@ export default {
   },
   computed: {
 		followersCount () {
-			return this.userData.followers.length
+      if (this.userData) {
+        return this.userData.followers.length
+      } else {
+        return 0
+      }
 		},
 		followingsCount () {
-			return this.userData.followings.length
-		}
+      if (this.userData) {
+        return this.userData.followings.length        
+      } else {
+        return 0
+      }
+		},
+    userName () {
+      if (this.userData) {
+        return this.userData.username
+      } else {
+        return ''
+      }
+    },
+    userNickname () {
+      if (this.userData) {
+        return this.userData.nickname
+      } else {
+        return ''
+      }
+    }
 	}
 }
 </script>

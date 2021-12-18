@@ -12,7 +12,7 @@
             <span></span>
           </div>
           </div>
-					<a @click.prevent="$router.push({name: 'Home'})" href="index_light.html"><img class="logo" src="../assets/뭉치.png" alt="" style="border-radius : 30%" width="119" height="58"></a>
+					<a @click.prevent="$router.push({name: 'Home'}).catch(err => {})" href="index_light.html"><img class="logo" src="../assets/뭉치.png" alt="" style="border-radius : 30%" width="119" height="58"></a>
           <!-- <a @click.prevent="$router.push({name: 'Home'})" href="index_light.html"><img class="logo" src="images/logo1.png" alt="" width="119" height="58"></a> -->
         </div>
 				<!-- Collect the nav links, forms, and other content for toggling -->
@@ -22,27 +22,27 @@
 							<a href="#page-top"></a>
 						</li>
 						<li class="dropdown first">
-							<a @click.prevent="$router.push({name: 'Home'})" class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown">
+							<a @click.prevent="$router.push({name: 'Home'}).catch(err => {})" class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown">
 							Home</a>
 							
 						</li>
 						<li class="dropdown first">
-							<a @click.prevent="$router.push({name: 'MovieList'})" class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
+							<a @click.prevent="$router.push({name: 'MovieList'}).catch(err => {})" class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
 							movies</a>
 							
 						</li>
 						<li class="dropdown first">
-							<a @click.prevent="$router.push({name: 'Celebs'})" class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
+							<a @click.prevent="$router.push({name: 'Celebs'}).catch(err => {})" class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
 							celebrities</a>
 							
 						</li>
 						<li class="dropdown first">
-							<a @click.prevent="$router.push({name: 'Community'})" class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
+							<a @click.prevent="$router.push({name: 'Community'}).catch(err => {})" class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
 							Community</a>
 							
 						</li>
 						<li @click.prevent="" class="dropdown first">
-							<a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
+							<a @click.prevent="$router.push({name: 'UserProfile', params: {username: username}}).catch(err => {})" class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
 							User Profile</a>
 	
 						</li>
@@ -52,7 +52,7 @@
 						<li @click.prevent="showModal" v-if="!isLogin" class=""><a href="#">Log in</a></li>
 						<li @click.prevent="showModal" v-if="!isLogin" class="btn signupLink"><a href="#">sign up</a></li>
 					
-						<li v-if="isLogin"><a @click.prevent="$router.push({name: 'UserProfile', params: {username: username}})" href="#">My Page</a></li>
+						<li v-if="isLogin"><a @click.prevent="$router.push({name: 'UserProfile', params: {username: username}}).catch(err => {})" href="#">My Page</a></li>
 						<li v-if="isLogin"><a @click.prevent="logout" href="#">Logout</a></li>
 
 					

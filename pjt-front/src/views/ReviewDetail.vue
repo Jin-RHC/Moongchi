@@ -17,26 +17,26 @@
 	</div>
 </div>
 <!-- Review detail section-->
-<div class="page-single" v-if="item">
+<div class="page-single">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-9 col-sm-12 col-xs-12">
 				<div class="blog-detail-ct">
-					<h1> {{ item.title }} </h1>
+					<h1> {{ reviewTitle }} </h1>
           <div style="display: flex; justify-content: space-between;">
-						        <star-rating :rating="3" :star-size="15" :read-only="true"></star-rating>
+						<star-rating :rating="3" :star-size="15" :read-only="true"></star-rating>
 
 						<span class="right-it time" style="font-weight: bold; font-size: 1em;">조회 0 | 추천 {{ item.like_users_count }} | 댓글 {{ commentsCount }} </span>
           </div>
           <hr>
 					<div style="display: flex; justify-content: space-between;">
-						<a @click.prevent="$router.push({ name: 'UserProfile', params: {username: item.user.username }})" href=""><div class="time" style=" font-weight: bold; font-size: 1em;">{{ item.user.username }}</div></a>
+						<a @click.prevent="$router.push({ name: 'UserProfile', params: {username: author }})" href=""><div class="time" style=" font-weight: bold; font-size: 1em;">{{ author }}</div></a>
 						<span class="time">{{ createdAt }} | <a @click.prevent="reportReview" href=""><span class="time"> 신고 </span></a></span>
 					</div>					
 					<br>
 
-					<p>관련 영화: <a @click.prevent="$router.push({ name: 'MovieDetail', params: {id: item.movie.id }})" href=""> {{ item.movie.title }} </a></p>
-					<img :src="`https://image.tmdb.org/t/p/original${item.movie.poster_path}`" alt="">
+					<p>관련 영화: <a @click.prevent="$router.push({ name: 'MovieDetail', params: {id: item.movie.id }})" href=""> {{ movieTitle }} </a></p>
+					<img :src="`https://image.tmdb.org/t/p/original${posterPath}`" alt="">
 					<!-- <a href=""><font-awesome-icon :icon="['fas', 'thumbs-up']" /></a>
 					<a href=""><font-awesome-icon :icon="['fas', 'thumbs-down']" /></a> -->
 					<p>{{ item.content }}</p>
@@ -94,8 +94,8 @@ import jwt_decode from "jwt-decode";
 import CommentForm from '../components/Community/CommentForm.vue'
 import CommentItems from '../components/Community/CommentItems.vue'
 import CommunitySidebar from '../components/Community/CommunitySidebar.vue'
+const API = process.env.VUE_APP_BACKEND_URL
 
-const api = 'http://127.0.0.1:8000/api/v1/community/'
 export default {
   components: { CommunitySidebar, CommentItems, CommentForm, StarRating },
   name: 'ReviewDetail',
@@ -104,19 +104,46 @@ export default {
 			item: [],
 			commentsCount: 0,
 			isLogin: false,
-			same: false
+			same: false,
+			author: null,
+			createdTime: null,
+			reviewTitle: '',
+			movieTitle: '',
+			posterPath: ''
     }
   },
   methods: {
 		getData () {
 			axios({
 				method: 'get',
-				url: api + `review/${this.$route.params.reviewId}/`				
+				url: `${API}/api/v1/community/review/${this.$route.params.reviewId}/`				
 			})
 				.then(res => {
 					this.item = res.data
-					this.comments = res.data.comment_set,
+					this.comments = res.data.comment_set
 					this.content = res.data.content
+					this.author = res.data.user.username
+					this.createdTime = res.data.updated_at
+					this.reviewTitle = res.data.title
+					this.movieTitle = res.data.movie.title
+					this.posterPath = res.data.movie.poster_path
+					console.log(this.item)
+					const token = this.$store.state.token
+					const decoded = jwt_decode(token)
+					// console.log(this.isLogin)
+					if (decoded) {
+						this.isLogin = true
+						if (decoded.username === this.item.user.username) {
+							this.same = true
+						} else {
+							this.same = false
+						}
+					} else {
+						this.isLogin = false
+					}			
+					return
+
+					// console.log(this.isLogin)
 					})
 				.catch(err => {
 					console.log(err)
@@ -134,7 +161,7 @@ export default {
 		addReviewLike () {
 			 axios({
         method: 'post',
-        url: api + `${this.item.movie.id}/review/${this.$route.params.reviewId}/like/`,        
+        url: `${API}/api/v1/community/${this.item.movie.id}/review/${this.$route.params.reviewId}/like/`,        
         headers: this.setToken()
       })
 				.then(res => {
@@ -150,7 +177,7 @@ export default {
 		addReviewDislike () {
 			axios({
         method: 'post',
-        url: api + `${this.item.movie.id}/review/${this.$route.params.reviewId}/dlike/`,        
+        url: `${API}/api/v1/community/${this.item.movie.id}/review/${this.$route.params.reviewId}/dlike/`,        
         headers: this.setToken()
       })
 				.then(res => {
@@ -165,7 +192,7 @@ export default {
 		deleteReview () {
 			axios({
 				method: 'delete',
-				url: api + `${this.item.movie.id}/review/${this.$route.params.reviewId}/`,
+				url: `${API}/api/v1/community/${this.item.movie.id}/review/${this.$route.params.reviewId}/`,
 				headers: this.setToken()				
 			})
 				.then(res => {
@@ -193,7 +220,7 @@ export default {
 		reportReview () {
 			axios({
 				method: 'post',
-				url: 'http://127.0.0.1:8000/api/v1/reports/review/' + `${this.$route.params.reviewId}/`,
+				url: `${API}/api/v1/reports/review/${this.$route.params.reviewId}/`,
 				headers: this.setToken()				
 			})
 				.then(res => {
@@ -207,31 +234,34 @@ export default {
 		},
 		getCommentsCount (data) {
 			this.commentsCount = data
+		},
+		checkLogin () {
+			const token = this.$store.state.token
+			const decoded = jwt_decode(token)
+			// console.log(this.isLogin)
+			if (decoded) {
+				this.isLogin = true								
+			} else {
+				this.isLogin = false
+			}			
+			return			
 		}
 
 
-  },
-	created () {
-		this.getData() 
-		if (this.$store.state.token) {
-			this.isLogin = true
-			// const token = this.$store.state.token
-			// const decoded = jwt_decode(token)
-			// if (decoded.username === this.item.user.username ) {
-			// 	this.same = true
-			// }
-		}
-		const token = this.$store.state.token
-		const decoded = jwt_decode(token)
-		if (decoded.username === this.item.user.username ) {
-			this.same = true		
-		}
-	},
+  },	
+	created () {	
+		this.getData()		
+	},	
 	computed: {
     createdAt () {
-      return this.item.updated_at.slice(0, 10) + '   ' + this.item.updated_at.slice(11, 19)
+			let dataTime = ''
+			if (this.createdTime) {
+				dataTime = this.createdTime.slice(0, 10) + '   ' + this.createdTime.slice(11, 19)
+			}
+      return dataTime
     },
-  }
+	},	
+
 }
 </script>
 

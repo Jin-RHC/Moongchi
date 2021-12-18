@@ -17,8 +17,7 @@
 <script>
 import axios from 'axios'
 import jwt_decode from "jwt-decode"
-
-const api = 'http://127.0.0.1:8000/api/v1/accounts/'
+const API = process.env.VUE_APP_BACKEND_URL
 
 export default {
   name: 'UserFollowingList',
@@ -47,7 +46,7 @@ export default {
     getProfile () {
 			axios({
 				method: 'get',
-				url: api + `${this.$route.params.username}/`,
+				url: `${API}/api/v1/accounts/${this.$route.params.username}/`,
 				headers: this.setToken()
 			})
 				.then(res => {
@@ -67,7 +66,7 @@ export default {
     follow (username) {
 			axios({
 				method: 'POST',
-				url: api + `${username}/follow/`,
+				url: `${API}/api/v1/accounts/${username}/follow/`,
 				headers: this.setToken()
 			})
 				.then(() => {
@@ -120,5 +119,17 @@ h5 {
 .flbtn {
   background:grey;
 }
-
+@media screen and (max-width: 320px) {
+  .container {
+    width: 100vw;
+  }
+  .user {
+    position: relative;
+    left: 2em;
+  }
+  h3 {
+    position: relative;
+    left: 1.5em;
+  }
+}
 </style>

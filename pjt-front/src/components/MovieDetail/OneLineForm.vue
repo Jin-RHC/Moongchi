@@ -1,6 +1,6 @@
 <template>       
   <div class="comment-box ml-2">
-    <hr>
+    <!-- <hr> -->
     <h4 style="margin-bottom: 10px;">Add a comment</h4>
     <star-rating :max-rating=10 :star-size="15" v-model.trim="rating"></star-rating>
     <div class="comment-area"> <textarea @keyup.enter="addOneLineComment" class="form-control" placeholder="한줄평을 작성하세요" rows="4" v-model.trim="oneLineComment"></textarea> </div>
@@ -19,7 +19,8 @@
 <script>
 import axios from 'axios'
 import StarRating from 'vue-star-rating';
-const api = 'http://127.0.0.1:8000/api/v1/'
+const API = process.env.VUE_APP_BACKEND_URL
+
 export default {
   name: 'OneLineForm',
   components: {
@@ -48,7 +49,7 @@ export default {
         }
         axios({
           method: 'post',
-          url: api + `community/${this.$route.params.id}/rating/`,
+          url: `${API}/api/v1/community/${this.$route.params.id}/rating/`,
           data: oneLineCommentData,
           headers: this.setToken()
         })
@@ -60,7 +61,7 @@ export default {
           })
           .catch(err => {
             console.log(err)
-            alert('더 이상 한줄평을 작성할 수 없습니다.')
+            alert('그렇게 길게 작성할 수 없습니다.')
           })
 
       }

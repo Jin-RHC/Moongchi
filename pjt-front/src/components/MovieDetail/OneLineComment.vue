@@ -1,16 +1,28 @@
 <template>
     <!-- <h3>Best Marvel movie in my opinion</h3> -->
-    <li style="margin-top: 20px;">  
+    <li id="comment-box" style="">  
 
       <div style="display: flex; justify-content: space-between;">        
+        <p class="time">          
+          <a @click.prevent="$router.push({ name: 'UserProfile', params: {username: oneLineComment.user.username }})" href="#" style="margin: 0 5px"> 
+            {{ oneLineComment.user.nickname }} 
+          </a> 
+          | 
+          <span style="margin: 0 5px;"> 
+            {{ createdAt }} 
+          </span> 
+          | 
+          <a id="delete-btn" @click.prevent="deleteOneLineComment" href="" class="time">X</a>
+          |
+          <a @click.prevent="report" href="#" style="margin: 0 5px;" v-if="isLogin">
+            신고
+          </a>
+        </p>
+
+      </div>
         <star-rating :max-rating=10	:rating="oneLineComment.rating" :star-size="15" :read-only="true"></star-rating>
 
-        <p class="time">          
-          <a @click.prevent="$router.push({ name: 'UserProfile', params: {username: oneLineComment.user.username }})" href="#" style="margin: 0 5px"> {{ oneLineComment.user.nickname }} </a> | <span style="margin: 0 5px;"> {{ createdAt }} </span> | <a @click.prevent="report" href="#" style="margin: 0 5px;" v-if="isLogin">신고</a>
-        </p>
-      </div>
-
-      <div style="margin: 2em 1em; width: 100%">
+      <div style="width: 100%">
         
         <p style="white-space: pre-line;">{{ oneLineComment.content }}</p>
         <div style="display: flex; justify-content: end;">
@@ -24,8 +36,8 @@
           </a>
         </div>
         </div>
+      <hr>
       <br>
-      
       </div>
     </li>    
 </template>
@@ -33,7 +45,8 @@
 <script>
 import axios from 'axios'
 import StarRating from 'vue-star-rating';
-const api = 'http://127.0.0.1:8000/api/v1/community/'
+const API = process.env.VUE_APP_BACKEND_URL
+
 export default {
   name: 'OneLineComment',
   components: {
@@ -63,7 +76,7 @@ export default {
     likeOneLineComment () {
       axios({
           method: 'post',
-          url: api + `${this.$route.params.id}/rating/${this.oneLineComment.id}/like/`,
+          url: `${API}/api/v1/community/${this.$route.params.id}/rating/${this.oneLineComment.id}/like/`,
           headers: this.setToken()
         })
           .then(res => {
@@ -78,7 +91,7 @@ export default {
     dislikeOneLineComment () {
       axios({
           method: 'post',
-          url: api + `${this.$route.params.id}/rating/${this.oneLineComment.id}/dlike/`,
+          url: `${API}/api/v1/community/${this.$route.params.id}/rating/${this.oneLineComment.id}/dlike/`,
           headers: this.setToken()
         })
           .then(res => {
@@ -93,7 +106,7 @@ export default {
     report () {
       axios({
           method: 'post',
-          url: 'http://127.0.0.1:8000/api/v1/' + `reports/rating/${this.oneLineComment.id}/`,
+          url: `${API}/api/v1/reports/rating/${this.oneLineComment.id}/`,
           headers: this.setToken()
         })
           .then(() => {
@@ -102,7 +115,22 @@ export default {
           .catch(() => {
             alert('이미 접수한 신고입니다.')
           })
-    }   
+    },
+    deleteOneLineComment () {
+      axios({
+        method: 'delete',
+        url: `${API}/api/v1/community/${this.movie.id}/rating/${this.oneLineComment.id}/`,
+        headers: this.setToken()
+      })
+        .then(res => {          
+          console.log(res, '데이터 전송 성공')
+          this.$emit('get-one-line-comment-delete')
+        })
+        .catch(err => {
+          alert('삭제할 권한이 없습니다.')
+          console.log(err)
+        })
+    },   
   },
   
   
@@ -110,10 +138,15 @@ export default {
     createdAt () {
       return this.oneLineComment.created_at.slice(0, 10) + '   ' + this.oneLineComment.created_at.slice(11, 19)
     },
-  }
+  },
 }
 </script>
 
-<style>
-
+<style scoped>
+  #delete-btn {
+    border: 0px solid; 
+    padding: 0.1em;
+    /* background-color: lightgrey;       */
+    text-align: center;    
+  }
 </style>

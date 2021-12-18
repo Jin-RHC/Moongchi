@@ -35,8 +35,8 @@
 <script>
 import axios from 'axios'
 import CelebItem from '@/components/Celebs/CelebItem.vue'
+const API = process.env.VUE_APP_BACKEND_URL
 
-const api = 'http://127.0.0.1:8000/'
 export default {
   name: 'Celebs',
 
@@ -54,7 +54,7 @@ export default {
   created () {
     axios({
       method: 'get',
-      url: api + 'api/v1/movies/celebs/'
+      url: `${API}/api/v1/movies/celebs/`
     })
       .then((res) =>  {
         this.celebs = res.data

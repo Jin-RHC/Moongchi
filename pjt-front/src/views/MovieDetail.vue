@@ -1,7 +1,7 @@
 <template>
 
 
-    	<div class="buster-light">
+    	<div id="main" :class="{'buster-light': size}">
 <div class="hero mv-single-hero">
 	<div class="container">
 		<div class="row">
@@ -23,8 +23,8 @@
 					<img :src="`https://image.tmdb.org/t/p/original${movie.poster_path}`" alt="">
 					<div class="movie-btn">	
 						<div class="btn-transform transform-vertical red">
-							<div><a href="#" class="item item-1 redbtn"> <i class="ion-play"></i> Watch Trailer</a></div>
-							<div><a :href="`https://www.youtube.com/embed/${movie.video_path}`" class="item item-2 redbtn fancybox-media hvr-grow"><i class="ion-play"></i></a></div>
+							<div><a @click.prevent="getVideo" :href="`https://www.youtube.com/embed/${movie.video_path}`" class="item item-1 redbtn"> <i class="ion-play"></i>Watch Trailer</a></div>
+							<div><a @click.prevent="getVideo" :href="`https://www.youtube.com/embed/${movie.video_path}`" class="item item-2 redbtn fancybox-media hvr-grow"><i class="ion-play"></i>Watch Trailer</a></div>
 						</div>
 						<!-- <div class="btn-transform transform-vertical">
 							<div><a href="#" class="item item-1 yellowbtn"> <i class="ion-card"></i> Buy ticket</a></div>
@@ -35,9 +35,9 @@
 			</div>
 			<div class="col-md-8 col-sm-12 col-xs-12">
 				<div class="movie-single-ct main-content">
-					<h1 class="bd-hd">{{ movie.title }}<span>{{ movie.release_date.slice(0, 4) }}</span> </h1>
+					<h1 class="bd-hd" id="movie-title" :style="{'color': color}">{{ movie.title }}<span>{{ movie.release_date.slice(0, 4) }}</span> </h1>
 					
-					<div class="social-btn" style="overflow: hidden;">
+					<div class="social-btn" :style="{'overflow': 'hidden', 'height': '100%', 'padding-top': paddingTop}">
 					
 						<a @click.prevent="addLike" href="" class="parent-btn"><i class="ion-heart"></i> Add to Playlist</a>
 						<div class="hover-bnt">
@@ -51,7 +51,7 @@
 							</div>
 						</div>		
 					</div>
-					<div class="movie-rate">
+					<div class="movie-rate" :style="{'background-color': backgroudColor}">
 						<div class="rate">
 							<i class="ion-android-star"></i>
 							<p><span>{{ Math.round(movie.rate.rate * 10) / 10 }}</span> /10<br>
@@ -64,13 +64,13 @@
 							<i v-for="(star2, index) in 10 - Math.round(movie.rate.rate)" :key="index + 'c'" class="ion-ios-star-outline"></i>
 						</div>
 					</div>
-
-
+					<movie-trailer v-if="false"></movie-trailer>
+	
 					<div class="movie-tabs">
 						<div class="tabs">
-							<ul class="tab-links tabs-mv">
+							<ul id="tab" class="tab-links tabs-mv" :style="{'margin-left': marginLeft + 'px'}">
 								<li v-for="(tab, idx) in tabs" :key="idx" :class="{ active: currentTab === idx }">
-									<a @click.prevent="currentTab = idx " href="#">{{ tab }}</a>
+									<a @click.prevent="currentTab = idx " href="#" >{{ tab }}</a>
 								</li>
 								<!-- <li class="active"><a @click.prevent="" href="#overview">Overview</a></li>
 								<li><a @click.prevent="" href="#reviews"> Reviews</a></li>
@@ -82,7 +82,7 @@
 
 									<!-- 줄거리 -->
 									<div v-show="currentTab == 0" id="overview" class="">							
-										<movie-overview :movie="movie"></movie-overview>
+										<movie-overview :movie="movie" :noti-one-line-conmment="getMovie"></movie-overview>
 									</div>
 
 
@@ -125,25 +125,31 @@ import MovieReview from '../components/MovieDetail/MovieReview.vue'
 import MovieCast from '../components/MovieDetail/MovieCast.vue'
 import MovieMedia from '../components/MovieDetail/MovieMedia.vue'
 import MovieRelated from '../components/MovieDetail/MovieRelated.vue'
+import MovieTrailer from '../components/MovieDetail/MovieTrailer.vue'
 // import jwt_decode from "jwt-decode";
-
-const api = 'http://127.0.0.1:8000/api/v1/movies/movie/'
+const API = process.env.VUE_APP_BACKEND_URL
 
 export default {
-  components: { MovieOverview, MovieReview, MovieCast, MovieMedia, MovieRelated },
+  components: { MovieOverview, MovieReview, MovieCast, MovieMedia, MovieRelated, MovieTrailer },
   name: 'Detail',
   data () {
     return {
       movie: null,
 			currentTab: 0,
-			tabs: ['overview', 'review', 'cast & crew', 'media', 'related movies'],
+			tabs: ['overview', 'review', 'cast', 'media', 'related movies'],
+			size: true,			
+			color: 'white',			
+			marginLeft: 0,			
+			backgroudColor: null,
+			paddingTop: null,
+		
     }
   },
 	methods: {
 		getMovie () {
 			axios({
 			method: 'get',
-			url: api + `${this.$route.params.id}/`
+			url: `${API}/api/v1/movies/movie/` + `${this.$route.params.id}/`
 		})
 			.then(res => {
 				this.movie = res.data
@@ -171,7 +177,7 @@ export default {
 				// const decoded = jwt_decode(token)
 				axios({
 							method: 'post',
-							url: 'http://127.0.0.1:8000/api/v1/community/' + `${this.$route.params.id}/like/`,
+							url: `${API}/api/v1/community/${this.$route.params.id}/like/`,
 							headers: this.setToken()
 						})
 							.then(res => {
@@ -190,16 +196,60 @@ export default {
 								console.log(err)
 								alert('로그인이 필요합니다.')
 							})											
-			}
-		}
+			}			
+		},
+		handler () {		
+			if (window.innerWidth <= 991) {
+				this.color = 'black'
+				this.marginLeft = 30
+				this.backgroudColor = 'lightgray'
+				this.paddingTop = 10 + 'px'
+			} else {
+				this.color = 'white'
+				this.marginLeft = 0
+				this.backgroudColor = null
+				this.paddingTop = null
+			}		
+		},
+		getVideo () {
+			this.$modal.show(
+      MovieTrailer,  
+      { url: `https://www.youtube.com/embed/${this.movie.video_path}` },
+      { name: 'MovieTrailer',
+				draggable: true,
+        adaptive: true,
+        resizable: true,
+        width: '70%',
+        height: '60%',
+        },
+      )
+		}		
 	},
 		
   created () {
 		this.getMovie()
-	},	
+		if (window.innerWidth <= 991) {
+			this.handler()
+		}
+	},
+  mounted () {
+		window.addEventListener('resize', this.handler)
+  }
 }
+
 </script>
 
-<style>
-
+<style scoped>
+	/* @media screen and (min-width: 300px) and (max-width: 1200px) {
+		#tab {
+			position: relative;
+			top: 5em;
+		}		
+		h1#movie-title {
+			color: black;
+		}
+		body {
+			background-color: red;
+		}
+	} */
 </style>

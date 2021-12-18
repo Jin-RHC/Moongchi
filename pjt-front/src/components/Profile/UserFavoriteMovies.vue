@@ -1,14 +1,14 @@
 <template>
 			<div>
-				<div class="topbar-filter user">
-					<p>Found <span>{{ favoriteMovies.length }} movies</span> in total</p>
-					<label>Sort by:</label>
+				<div id="container" class="" style="padding: 5px 10px; background-color: #e4eaf0;">
+					<p id="content" style="margin-left: 10px;">Found <span style="color: #4280bf;">{{ favoriteMovies.length }} movies</span> in total</p>
+					<!-- <label>Sort by:</label>
 					<select>
 						<option value="range">-- Choose option --</option>
 						<option value="saab">-- Choose option 2--</option>
 					</select>
 					<a href="" class="list" @click.prevent="none"><i class="ion-ios-list-outline "></i></a>
-					<a href="" class="grid" @click.prevent="none"><i class="ion-grid active"></i></a>
+					<a href="" class="grid" @click.prevent="none"><i class="ion-grid active"></i></a> -->
 					<!-- <a href="userfavoritelist.html" class="list"><i class="ion-ios-list-outline "></i></a>
 					<a  href="userfavoritegrid.html" class="grid"><i class="ion-grid active"></i></a> -->
 				</div>
@@ -22,7 +22,7 @@
 						font-size: 24px;
 						line-height: 30px;
 						font-weight: 700;" for="">좋아한 영화들</label>
-						<carousel-3d v-if="favoriteMovies.length" disable3d="true" :space="250" :autoplay="false" :autoplay-timeout="5000" :display="20" :controlsVisible="true" :clickable="false" :width="230" :height="325"> 
+						<carousel-3d v-if="favoriteMovies.length" :disable3d="true" :space="250" :autoplay="false" :autoplay-timeout="5000" :display="20" :controlsVisible="true" :clickable="false" :width="230" :height="325"> 
 							<slide v-for="(slide, i) in favoriteMovies" :index="i" :key="i">
 								<template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
 									<div class="movie-item" style="width: 100%;">								
@@ -33,7 +33,7 @@
 								
 										<div class="title-in" style="margin-bottom: 40px;">    
 											<h6><a href="#">{{ slide.title }}</a></h6>
-											<p><i class="ion-android-star"></i><span>{{ slide.rating_average }}</span> /10</p>
+											<p><i class="ion-android-star"></i><span>{{ Math.round(slide.rating_average * 10) / 10 }}</span> /10</p>
 										</div>
 									</div>
 								</template>
@@ -286,8 +286,10 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
+import jwt_decode from "jwt-decode"
 import { Carousel3d, Slide } from 'vue-carousel-3d';
+// const API = process.env.VUE_APP_BACKEND_URL
 
 export default {
   name: 'UserFavoriteMovies',
@@ -308,19 +310,27 @@ export default {
 			const favoriteMovies = this.props.favoriteMovies
 			this.movies = favoriteMovies.length
 		},
+		setToken: function () {
+      const token = localStorage.getItem('jwt')
+			this.myName = jwt_decode(token).username
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
 	},
 	created () {
     // const API_KEY = 'e856b3ac18eec7abd7cf6099f977bbff'
-		const ROOT_URL = 'http://127.0.0.1:8000/'
-    axios({
-      method: 'get',
-      url: `${ROOT_URL}/api/v1/accounts/${this.$router.params}/`
-    })
-      .then(res => {
-				console.log(res)
-        this.movies = res.data.results
-        // console.log(this.movieItems)
-      })
+		// const ROOT_URL = `${API}`
+    // axios({
+    //   method: 'get',
+    //   url: `${ROOT_URL}/api/v1/accounts/${this.$router.params}/`,
+		// 	headers: this.setToken()
+    // })
+    //   .then(res => {
+		// 		console.log(res)
+    //     this.movies = res.data.results
+    //   })
   },
 	// updated () {
   //   // const API_KEY = 'e856b3ac18eec7abd7cf6099f977bbff'
@@ -338,6 +348,5 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
 </style>

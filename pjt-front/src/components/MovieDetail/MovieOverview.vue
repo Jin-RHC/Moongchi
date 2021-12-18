@@ -38,7 +38,7 @@
   
   <div class="title-hd-sm" style="margin-top: 100px;">
     <h3 style="font-family: sans-serif;">한줄평 </h3>
-    <span href="#" class="time">총 <span>{{ oneLineComments.length }}</span> 건 <i class="ion-ios-arrow-right"></i></span>
+    <span href="#" class="time">총 <span>{{ commentsData.length }}</span> 건 <i class="ion-ios-arrow-right"></i></span>
   </div>
   <!-- movie user review -->
       <div class="mv-user-review-item" >
@@ -54,12 +54,14 @@
               :movie="movie"
               @get-one-line-comment-like="getData"
               @get-one-line-comment-dislike="getData"
+              @get-one-line-comment-delete="getData"
               :is-login="isLogin"
             ></one-line-comment>
           </ul>
         </span>
+        <a id="moreBtn" v-show="moreItems" @click.prevent="getMoreComments" href=""><button>더보기</button></a>
       </div>
-     <one-line-form @noti-one-line-comment="getData" v-show="isLogin"></one-line-form>
+     <one-line-form @noti-one-line-comment="getData" v-show="(isLogin) && (!writer)"></one-line-form>
   </div>
 
 
@@ -118,9 +120,11 @@
 
 <script>
 import axios from 'axios'
+import jwt_decode from "jwt-decode"
 import OneLineComment from './OneLineComment.vue'
 import OneLineForm from './OneLineForm.vue'
-const api = 'http://127.0.0.1:8000/api/v1/'
+const API = process.env.VUE_APP_BACKEND_URL
+
 export default {
   name: 'MovieOverview',
   components: {
@@ -134,12 +138,15 @@ export default {
   data () {
     return {
       isLogin: false,
+      writer: false,
       like: this.movie.like_users,
       dislike: this.movie.dlike_users,
-      oneLineComments: this.movie.rating_set.reverse(),
+      oneLineComments: [],
       movieGenres: this.movie.genres,
       movieActors: this.movie.actors,
-      // movieData: null,
+      commentsData: this.movie.rating_set.reverse(),
+      page: 1,
+      moreItems: false
     }
   },
   methods: {
@@ -154,7 +161,7 @@ export default {
     addLike () {
       axios({
         method: 'post',
-        url: api + `community/${this.$route.params.id}/like/`,
+        url: `${API}/api/v1/community/${this.$route.params.id}/like/`,
         headers: this.setToken()
       })
         .then(res => {
@@ -169,7 +176,7 @@ export default {
     addDislike () {
       axios({
         method: 'post',
-        url: api + `community/${this.$route.params.id}/dlike/`,
+        url: `${API}/api/v1/community/${this.$route.params.id}/dlike/`,
         headers: this.setToken()
       })
         .then(res => {          
@@ -180,30 +187,50 @@ export default {
           alert('로그인이 필요합니다.')
           console.log(err)
         })
-    },
-
+    },    
     getData () {
+      // this.$emit('noti-one-line-comment')
 			axios({
 			method: 'get',
-			url: api + `movies/movie/${this.$route.params.id}/`
+			url: `${API}/api/v1/movies/movie/${this.$route.params.id}/`
 		})
 			.then(res => {
-        // this.movieData = res.data
 				this.like = res.data.like_users
         this.dislike = res.data.dlike_users
-        this.oneLineComments = res.data.rating_set.reverse()
+        this.oneLineComments = res.data.rating_set.reverse().slice(0, 3 * this.page)
 				console.log(this.oneLineComments, '데이터 갱신 완료!')
+        this.checkWriter()
 			})
-		},    
+		},
+    getMoreComments () {
+      this.page += 1
+      this.getData()
+      console.log(this.oneLineComments)
+
+    },
+    checkWriter () {
+      const token = this.$store.state.token
+      const decoded = jwt_decode(token)
+      const name = this.oneLineComments.find(comment => decoded.username === comment.user.username)
+      console.log(name)
+      if (name) {
+        this.writer = true
+      } else {
+        this.writer = false
+      }
+      if (this.oneLineComments.length < this.commentsData.length) {
+        this.moreItems = true
+      } else {
+        this.moreItems = false
+      }
+    }    
   },
   computed: {
 
     percentage () {
       return Math.round((this.like.length / (this.like.length + this.dislike.length)) * 100)
     },
-    // oneLineComments () {
-    //   return this.movieData.rating_set
-    // }
+
     genresList () {
       const data = []
       const genreData = {
@@ -235,14 +262,20 @@ export default {
 
   },
   created () {
+    this.oneLineComments = this.commentsData.slice(0, 3)
+    this.checkWriter()
     if (this.$store.state.token) {
       this.isLogin = true
     }
-  }
-
+  },
 }
 </script>
 
 <style scoped>
-
+  #moreBtn {
+    display: flex; 
+    justify-content: center;
+    position: relative;
+    bottom: 50px;
+  }
 </style>

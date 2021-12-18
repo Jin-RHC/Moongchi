@@ -34,7 +34,7 @@
 <script>
 import axios from 'axios'
 import { Carousel3d, Slide } from 'vue-carousel-3d';
-const api = 'http://127.0.0.1:8000/api/v1/movies/mainmovies/'
+const API = process.env.VUE_APP_BACKEND_URL
 
 export default {
   components: {
@@ -52,7 +52,7 @@ export default {
   created () {    
     axios({
         method: 'get',
-        url: api 
+        url: `${API}/api/v1/movies/mainmovies/` 
       })
         .then(res => {          
           this.slides = res.data['popular']

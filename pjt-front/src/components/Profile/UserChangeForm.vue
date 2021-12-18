@@ -76,6 +76,7 @@
 <script>
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
+const API = process.env.VUE_APP_BACKEND_URL
 
 export default {
   name: 'UserChangeForm',
@@ -118,7 +119,7 @@ export default {
       } else {
       axios({
         method: 'post',
-        url: 'http://127.0.0.1:8000/api/token/',
+        url: `${API}/api/token/`,
         data: {username: jwt_decode(localStorage.getItem('jwt')).username,
           password: this.oldPassword}
       })
@@ -130,7 +131,7 @@ export default {
         .then(() => {
           axios({
             method: 'post',
-            url: 'http://127.0.0.1:8000/api/v1/accounts/changepassword/',
+            url: `${API}/api/v1/accounts/changepassword/`,
             headers: this.setToken(),
             data: {newPassword: this.newPassword,
               newPasswordConfirmation: this.newPasswordConfirmation}

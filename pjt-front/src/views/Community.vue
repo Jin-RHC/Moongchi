@@ -33,56 +33,81 @@
 		</div>
 	</div>
 </div>
-		<!-- <infinite-loading @infinite="getMovies"></infinite-loading> -->
+		<infinite-loading @infinite="getReviews" spinner="waveDots" :distance="500" ></infinite-loading>
 		</div>
 </template>
 
 <script>
-// import InfiniteLoading from 'vue-infinite-loading';
 import axios from 'axios'
+import InfiniteLoading from 'vue-infinite-loading';
+
 import CommunitySidebar from '../components/Community/CommunitySidebar.vue'
 import ReviewItem from '../components/Community/ReviewItem.vue'
-
-const api = 'http://127.0.0.1:8000/api/v1/community/review/'
-
+const API = process.env.VUE_APP_BACKEND_URL
 
 export default {
   components: { 
     CommunitySidebar,
     ReviewItem,
-		// InfiniteLoading 
+		InfiniteLoading 
   },
   name: 'Community',
   data () {
     return {
+      page: 1,
       reviews: [],
     }
   },
 	methods: {
-    getReviews () {      
+    getReviews ($state) {      
       axios({
 				method: 'get',
-				url: api
+				url: `${API}/api/v1/community/reviewlist/${this.page}/`
 			})
 				
-				.then((res) => {   
-        
-        if (res.data.length) {
-          // this.page += 1;
-          // this.$store.dispatch('getMovies', this.page)
-					// console.log(res.data)
-          this.reviews = res.data
-          // $state.loaded();
-					console.log(this.reviews)
-        } else {
-          // $state.complete();
-        }
+      .then((res) => {
+        setTimeout(() => {
+          if (res.data.length) {
+            // console.log(this.page, res.data)
+            this.page += 1;
+            // this.$store.dispatch('getMovies', this.page)            
+            this.reviews.push(...res.data)
+            console.log(this.reviews)
+            $state.loaded();
+          } else {
+            $state.complete();
+          }
+        }, 250)
+      }
 
-      });
-    }
+      );
+    },
+    getFirst () {
+      axios({
+				method: 'get',
+				url: `${API}/api/v1/community/reviewlist/${this.page}/`
+			})
+
+      .then((res) => {
+        this.page += 1
+        this.reviews.push(...res.data)
+      })
+    }    
   },
 	created () {
-		this.getReviews()
+    // this.$emit('infinite')    
+    // this.getReviews()
+    // axios({
+    //   method: 'get',
+    //   url: `${API}/api/v1/community/reviewlist/${this.page}/`
+    // })
+      
+    // .then((res) => {
+    //   if (res.data.length) {
+    //     this.page += 1;
+    //     this.reviews.push(...res.data)
+    //   }
+    // })
 	},  
 }
 </script>

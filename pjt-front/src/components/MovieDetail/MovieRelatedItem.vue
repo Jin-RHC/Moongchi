@@ -1,14 +1,16 @@
 <template>
-  <div class="movie-item-style-2" style="margin-top: 50px;">        
+  <div class="movie-item-style-2" style="">        
       <img :src="`https://image.tmdb.org/t/p/original${movie.poster_path}`" alt="">
-      <div class="mv-item-infor">
+      <div :class="{'mv-item-infor': size}" style="padding: 1em 1em;">
         <h3 style="margin-bottom: 20px;"><a @click.prevent="$router.push({ name: 'MovieDetail', params: { id: movie.id }})" href="#">{{ movie.title }} <span>({{movie.release_date.slice(0, 4)}})</span></a></h3>
-        <p class="rate"><i class="ion-android-star"></i><span>{{movie.rating_average}}</span> /10</p>
+        <p class="rate"><i class="ion-android-star" style="color: #f5b50a; font-size: 22px; margin-right: 5px;"></i><span>{{Math.round(movie.rating_average * 10) / 10}}</span> /10</p>
         <p class="describe">{{ movie.overview.slice(0, 250)}}...</p>
-        <p>Genres: <span v-for="genre in genresList" :key="genre.id">  {{ genre }} |</span></p>
-        <p class="run-time">Release: {{movie.release_date}}</p>
-        <p>Country: <a href="#">{{ movie.country }}</a></p>
-        <p class="run-time">Popularity: {{movie.popularity}}</p>
+        <div>          
+          <p>Genres: <span v-for="genre in genresList" :key="genre.id">  {{ genre }} |</span></p>
+          <p class="run-time">Release: {{movie.release_date}}</p>
+          <p>Country: {{ movie.country }}</p>
+          <p class="run-time">Popularity: {{movie.popularity}}</p>
+        </div>
         <!-- <p>Stars: <a href="#">Robert Downey Jr.,</a> <a href="#">Chris Evans,</a> <a href="#">  Chris Hemsworth</a></p> -->
       </div>
     </div>
@@ -19,6 +21,20 @@ export default {
   name: 'MovieRelatedItem',
   props: {
     movie: Object
+  },
+  data () {
+    return {
+      size: true
+    }
+  },
+  methods: {
+    handler () {
+      if (window.innerWidth <= 767) {
+        this.size = false
+      } else {
+        this.size = true
+      }
+    }
   },
   computed: {
     genresList () {
@@ -49,6 +65,12 @@ export default {
       })
       return data
     },
+  },
+  created () {
+    this.handler()
+  },
+  mounted () {
+    window.addEventListener('resize', this.handler)
   }
 }
 </script>

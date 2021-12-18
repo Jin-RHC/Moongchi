@@ -54,6 +54,7 @@
 
 <script>
 import axios from 'axios'
+const API = process.env.VUE_APP_BACKEND_URL
 
 export default {
   name: 'LoginForm2',
@@ -77,7 +78,7 @@ export default {
     login: function () {
       axios({
         method: 'post',
-        url: 'http://127.0.0.1:8000/api/token/',
+        url: `${API}/api/token/`,
         data: this.loginCredentials,
       })
         .then(res => {
@@ -95,7 +96,7 @@ export default {
     signup: function () {
       axios({
         method: 'post',
-        url: 'http://127.0.0.1:8000/api/v1/accounts/signup/',
+        url: `${API}/api/v1/accounts/signup/`,
         data: this.signupCredentials
       })
         .then(() => {

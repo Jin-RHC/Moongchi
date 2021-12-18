@@ -31,7 +31,7 @@
 <script>
 import axios from 'axios'
 import { Carousel3d, Slide } from 'vue-carousel-3d';
-const api = 'http://127.0.0.1:8000/api/v1/movies/recommended/'
+const API = process.env.VUE_APP_BACKEND_URL
 
 export default {
   components: {
@@ -56,7 +56,7 @@ export default {
     getRecommended () {
       axios({
           method: 'get',
-          url: api,          
+          url: `${API}/api/v1/movies/recommended/`,          
           headers: this.setToken()
         })
         .then(res => {
