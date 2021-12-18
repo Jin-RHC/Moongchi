@@ -5,7 +5,7 @@ app_name = 'community'
 
 urlpatterns = [
     # 영화 전체 리뷰
-    path('review/', views.review_lists, name='review_lists'),
+    path('reviewlist/<int:page>/', views.review_lists, name='review_lists'),
 
     # 리뷰 상세 조회
     path('review/<int:review_id>/', views.review_detail, name='review_detail'),

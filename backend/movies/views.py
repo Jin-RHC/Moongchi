@@ -90,13 +90,13 @@ def recommended_movie_list(request):
             
 
 @api_view(['GET',])
-def movie_list(request, page):
+def movie_list(request, page):    
     try:
         movies = Movie.objects.all().order_by('-popularity')[60 * (page - 1): 60 * page]
 
     except:
-        movies = Movie.objects.all()[-40:]
-
+        movies = Movie.objects.all().order_by('-popularity')[60 * page:]    
+        
     serializer = MovieListSerializer(movies, many=True)
 
     return Response(serializer.data)

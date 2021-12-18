@@ -18,12 +18,22 @@ from django.db.models import Q
 # Create your views here.
 
 # 전체 리뷰 목록을 불러옵니다.
+# @api_view(['GET'])
+# def review_lists(request):
+#     reviews = Review.objects.order_by('-pk')
+#     serializer = ReviewListSerializer(reviews, many=True)
+#     return Response(serializer.data)
+
+# 전체 리뷰 목록을 페이지 별로 불러옵니다.
 @api_view(['GET'])
-def review_lists(request):
-    reviews = Review.objects.order_by('-pk')
+def review_lists(request, page):
+    try:
+        reviews = Review.objects.order_by('-pk')[3 * (page - 1): 3 * page]
+    except:
+        reviews = Review.objects.order_by('-pk')[3 * page:]
+        
     serializer = ReviewListSerializer(reviews, many=True)
     return Response(serializer.data)
-
 
 # 리뷰 상세 페이지를 불러옵니다.
 @api_view(['GET'])
