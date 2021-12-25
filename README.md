@@ -139,7 +139,10 @@ JYtorch: 프론트엔드 전반
 
 ## v. 배포 서버 URL 
 
-해당 사항 없음
+- 프론트(netlify로 배포)
+  - https://moongchi.netlify.app/
+- 백엔드(heroku로 배포)
+  - https://moongchi-server.herokuapp.com
 
 
 
